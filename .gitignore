@@ -1,0 +1,57 @@
+# Flutter-related files
+.flutter/
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+generated_plugin_registrant.dart
+linux
+macos
+# Logs and debug files
+*.log
+
+# Dependency-related files
+pubspec.lock
+ios/Pods/
+.idea/
+
+# Build artifacts
+build/
+*.apk
+*.aab
+*.ipa
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+*.xcworkspace
+ios/Runner.xcworkspace
+android/.gradle/
+android/app/build/
+coverage/
+
+# IntelliJ IDE files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code files
+.vscode/
+
+# MacOS-specific files
+.DS_Store
+
+# Linux-specific files
+linux/flutter/generated_plugin_registrant.cc
+linux/build/
+
+# Windows-specific files
+windows/flutter/generated_plugin_registrant.cc
+windows/build/
+
+# Web build artifacts
+web/.dart_tool/
+web/build/
+
+# Firebase configuration files
+#google-services.json
+#ios/Runner/GoogleService-Info.plist
