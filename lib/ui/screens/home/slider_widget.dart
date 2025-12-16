@@ -1,8 +1,8 @@
 /*
 import 'dart:async';
 
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -158,18 +158,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/data/cubits/slider_cubit.dart';
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/data/model/category_model.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/data/cubits/slider_cubit.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/data/model/category_model.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 import 'package:url_launcher/url_launcher.dart' as urllauncher;
 
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
 // Import your SliderCubit and other necessary dependencies
 
 class SliderWidget extends StatefulWidget {

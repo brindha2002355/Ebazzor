@@ -1,6 +1,6 @@
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/location/countriesModel.dart';
-import 'package:BidNBuy/data/repositories/location/countries_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/location/countriesModel.dart';
+import 'package:Ebozor/data/repositories/location/countries_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

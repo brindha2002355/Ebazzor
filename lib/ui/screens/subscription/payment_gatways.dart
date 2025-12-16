@@ -1,19 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/payment/gatways/stripe_service.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/payment/gatways/stripe_service.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 
 class PaymentGateways {
   //static PaystackPlugin payStackPlugin = PaystackPlugin();

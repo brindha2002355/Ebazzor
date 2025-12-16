@@ -1,17 +1,17 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:BidNBuy/data/cubits/utility/fetch_transactions_cubit.dart';
-import 'package:BidNBuy/data/model/transaction_model.dart';
+import 'package:Ebozor/data/cubits/utility/fetch_transactions_cubit.dart';
+import 'package:Ebozor/data/model/transaction_model.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/intertitial_ads_screen.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/intertitial_ads_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionHistory extends StatefulWidget {

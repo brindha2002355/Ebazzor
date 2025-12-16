@@ -1,7 +1,7 @@
 
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/location/cityModel.dart';
-import 'package:BidNBuy/data/repositories/location/cities_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/location/cityModel.dart';
+import 'package:Ebozor/data/repositories/location/cities_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class FetchCitiesState {}
 

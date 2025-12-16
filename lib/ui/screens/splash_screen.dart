@@ -4,28 +4,28 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_language_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_system_settings_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/language_cubit.dart';
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_internet.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/data/repositories/system_repository.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/system/fetch_language_cubit.dart';
+import 'package:Ebozor/data/cubits/system/fetch_system_settings_cubit.dart';
+import 'package:Ebozor/data/cubits/system/language_cubit.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_internet.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/data/repositories/system_repository.dart';
 
 // import 'package:flutter/services.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
 // import '../app/routes.dart';
-import 'package:BidNBuy/data/model/system_settings_model.dart';
+import 'package:Ebozor/data/model/system_settings_model.dart';
 
-// import 'package:BidNBuy/main.dart';
+// import 'package:Ebozor/main.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -233,10 +233,11 @@ class SplashScreenState extends State<SplashScreen>
                           child: SizedBox(
                             width: 150.rw(context),
                             height: 150.rh(context),
-                            child: UiUtils.getSvg(AppIcons.splashLogo),
+                            child: Image.asset(AppIcons.splashLogo),
                           ),
                         ),
                       ),
+                      /*
                       Padding(
                         padding: EdgeInsets.only(top: 10.0.rh(context)),
                         child: Column(
@@ -253,6 +254,8 @@ class SplashScreenState extends State<SplashScreen>
                           ],
                         ),
                       ),
+
+                       */
                     ],
                   ),
                 ),

@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

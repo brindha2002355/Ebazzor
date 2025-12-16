@@ -1,4 +1,4 @@
-import 'package:BidNBuy/utils/extensions/lib/adaptive_type.dart';
+import 'package:Ebozor/utils/extensions/lib/adaptive_type.dart';
 
 class NotificationData {
   String? id;

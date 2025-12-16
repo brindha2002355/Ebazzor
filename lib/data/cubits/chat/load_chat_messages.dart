@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:BidNBuy/data/repositories/chat_repository.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
+import 'package:Ebozor/data/repositories/chat_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

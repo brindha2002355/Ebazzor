@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository {
@@ -33,6 +33,10 @@ class AuthRepository {
       url: Api.loginApi,
       parameter: parameters, /* useAuthToken: false*/
     );
+
+    print("//////////////");
+    print("login response:${response}");
+    print("//////////////");
 
     return {"token": response['token'], "data": response['data']};
   }

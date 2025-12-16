@@ -1,20 +1,20 @@
 import 'dart:ui' as ui;
 
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/data/cubits/company_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/data/cubits/company_cubit.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/custom_text_form_field.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/custom_text_form_field.dart';
 
 class ContactUs extends StatefulWidget {
   const ContactUs({super.key});

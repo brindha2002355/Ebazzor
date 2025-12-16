@@ -3,12 +3,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 
 class PickImage {
   final ImagePicker _picker = ImagePicker();

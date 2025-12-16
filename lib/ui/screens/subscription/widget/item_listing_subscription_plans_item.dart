@@ -1,25 +1,25 @@
 import 'dart:io';
 
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/ui/screens/subscription/payment_gatways.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/data/cubits/subscription/assign_free_package_cubit.dart';
-import 'package:BidNBuy/data/cubits/subscription/get_payment_intent_cubit.dart';
-import 'package:BidNBuy/data/model/subscription_pacakage_model.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/ui/screens/subscription/payment_gatways.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/subscription/assign_free_package_cubit.dart';
+import 'package:Ebozor/data/cubits/subscription/get_payment_intent_cubit.dart';
+import 'package:Ebozor/data/model/subscription_pacakage_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'package:BidNBuy/utils/payment/gatways/inAppPurchaseManager.dart';
-import 'package:BidNBuy/utils/payment/gatways/payment_webview.dart';
-import 'package:BidNBuy/utils/payment/gatways/stripe_service.dart';
-import 'package:BidNBuy/data/helper/widgets.dart';
+import 'package:Ebozor/utils/payment/gatways/inAppPurchaseManager.dart';
+import 'package:Ebozor/utils/payment/gatways/payment_webview.dart';
+import 'package:Ebozor/utils/payment/gatways/stripe_service.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
 
 
 class ItemListingSubscriptionPlansItem extends StatefulWidget {

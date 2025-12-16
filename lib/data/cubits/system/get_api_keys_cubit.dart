@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'dart:developer';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GetApiKeysCubit extends Cubit<GetApiKeysState> {

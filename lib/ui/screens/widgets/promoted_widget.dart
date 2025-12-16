@@ -1,7 +1,7 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 
 enum PromoteCardType { text, icon }
 

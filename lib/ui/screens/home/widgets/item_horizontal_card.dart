@@ -1,21 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:BidNBuy/ui/screens/widgets/promoted_widget.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/screens/widgets/promoted_widget.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/string_extenstion.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/string_extenstion.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/data/repositories/favourites_repository.dart';
-import 'package:BidNBuy/data/cubits/favorite/favorite_cubit.dart';
-import 'package:BidNBuy/data/cubits/favorite/manage_fav_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/data/repositories/favourites_repository.dart';
+import 'package:Ebozor/data/cubits/favorite/favorite_cubit.dart';
+import 'package:Ebozor/data/cubits/favorite/manage_fav_cubit.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/utils/constant.dart';
 
 class ItemHorizontalCard extends StatelessWidget {
   final ItemModel item;

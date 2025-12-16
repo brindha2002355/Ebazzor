@@ -1,6 +1,6 @@
 
-import 'package:BidNBuy/data/model/custom_field/custom_field_model.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/custom_field/custom_field_model.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
 
 class CustomFieldRepository {

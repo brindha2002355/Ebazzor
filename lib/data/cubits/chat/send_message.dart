@@ -2,10 +2,10 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:BidNBuy/utils/logger.dart';
+import 'package:Ebozor/utils/logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/data/repositories/chat_repository.dart';
+import 'package:Ebozor/data/repositories/chat_repository.dart';
 // import 'package:path/path.dart' as path;
 import 'package:http_parser/http_parser.dart';
 
@@ -62,7 +62,7 @@ class SendMessageCubit extends Cubit<SendMessageState> {
       ///If use is not uploading any text so we will upload [File].
       var message0 = message;
 
-      var result = await _chatRepostiory.sendMessageApi(
+      var result = await _chatRepostiory. sendMessageApi(
           message: message0,
           itemOfferId: itemOfferId,
           attachment: attachmentFile,

@@ -1,11 +1,11 @@
 
-import 'package:BidNBuy/ui/screens/filter_screen.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/ui/screens/filter_screen.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
 class PostedSinceFilterScreen extends StatefulWidget {
   final List<PostedSinceItem> list;

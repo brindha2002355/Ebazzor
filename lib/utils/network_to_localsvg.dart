@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';

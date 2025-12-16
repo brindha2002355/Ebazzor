@@ -1,6 +1,6 @@
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/my_review_model.dart';
-import 'package:BidNBuy/data/repositories/my_ratings_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/my_review_model.dart';
+import 'package:Ebozor/data/repositories/my_ratings_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class FetchMyRatingsState {}
 

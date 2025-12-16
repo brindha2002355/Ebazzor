@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:BidNBuy/app/app_localization.dart';
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/app/app_localization.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,18 +17,18 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mime_type/mime_type.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/screens/widgets/full_screen_image_view.dart';
-import 'package:BidNBuy/ui/screens/widgets/gallery_view.dart';
-import 'package:BidNBuy/data/cubits/home/fetch_home_all_items_cubit.dart';
-import 'package:BidNBuy/data/cubits/home/fetch_home_screen_cubit.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/screens/widgets/full_screen_image_view.dart';
+import 'package:Ebozor/ui/screens/widgets/gallery_view.dart';
+import 'package:Ebozor/data/cubits/home/fetch_home_all_items_cubit.dart';
+import 'package:Ebozor/data/cubits/home/fetch_home_screen_cubit.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/network_to_localsvg.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/network_to_localsvg.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 import 'dart:ui' as ui;
 
 class UiUtils {

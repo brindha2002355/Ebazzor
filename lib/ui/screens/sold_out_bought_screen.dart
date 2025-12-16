@@ -1,22 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/data/cubits/fetch_item_buyer_cubit.dart';
-import 'package:BidNBuy/data/model/user_model.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/data/cubits/fetch_item_buyer_cubit.dart';
+import 'package:Ebozor/data/model/user_model.dart';
+import 'package:Ebozor/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/utils/customHeroAnimation.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/data/cubits/item/change_my_items_status_cubit.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/transparant_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/utils/customHeroAnimation.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/data/cubits/item/change_my_items_status_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/transparant_route.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
 
 class SoldOutBoughtScreen extends StatefulWidget {
   final int itemId;

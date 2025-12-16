@@ -1,9 +1,9 @@
 
-import 'package:BidNBuy/data/model/system_settings_model.dart';
-import 'package:BidNBuy/data/repositories/system_repository.dart';
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/network/networkAvailability.dart';
+import 'package:Ebozor/data/model/system_settings_model.dart';
+import 'package:Ebozor/data/repositories/system_repository.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/network/networkAvailability.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class FetchSystemSettingsState {}

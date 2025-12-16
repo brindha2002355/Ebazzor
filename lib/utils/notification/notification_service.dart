@@ -2,29 +2,29 @@
 
 import 'dart:async';
 import 'dart:developer';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/model/chat/chat_message_modal.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/notification/awsomeNotification.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/model/chat/chat_message_modal.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/notification/awsomeNotification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_screen.dart';
+import 'package:Ebozor/ui/screens/chat/chat_screen.dart';
 
-import 'package:BidNBuy/ui/screens/main_activity.dart';
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/data/cubits/chat/get_buyer_chat_users_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/load_chat_messages.dart';
-import 'package:BidNBuy/data/cubits/chat/send_message.dart';
-import 'package:BidNBuy/data/model/chat/chated_user_model.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/data/cubits/chat/get_buyer_chat_users_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/load_chat_messages.dart';
+import 'package:Ebozor/data/cubits/chat/send_message.dart';
+import 'package:Ebozor/data/model/chat/chated_user_model.dart';
+import 'package:Ebozor/data/model/data_output.dart';
 
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/notification/chat_message_handler.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/notification/chat_message_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 String currentlyChatingWith = "";

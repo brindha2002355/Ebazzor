@@ -1,5 +1,5 @@
 
-import 'package:BidNBuy/data/repositories/advertisement_repository.dart';
+import 'package:Ebozor/data/repositories/advertisement_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class FetchUserPackageLimitState {}

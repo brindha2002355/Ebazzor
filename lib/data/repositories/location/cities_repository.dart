@@ -1,6 +1,6 @@
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/location/cityModel.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/location/cityModel.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
 class CitiesRepository {
   Future<DataOutput<CityModel>> fetchCities(

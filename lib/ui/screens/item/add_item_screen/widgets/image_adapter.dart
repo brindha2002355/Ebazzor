@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 class ImageAdapter extends StatelessWidget {

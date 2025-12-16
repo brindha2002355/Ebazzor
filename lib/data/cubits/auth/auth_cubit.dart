@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,4 +1,4 @@
-﻿import 'package:BidNBuy/data/repositories/add_item_review_repository.dart';
+﻿import 'package:Ebozor/data/repositories/add_item_review_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class AddItemReviewState {}

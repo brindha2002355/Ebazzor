@@ -1,5 +1,5 @@
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 

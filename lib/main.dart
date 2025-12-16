@@ -1,20 +1,20 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:BidNBuy/app/app.dart';
-import 'package:BidNBuy/app/app_localization.dart';
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/register_cubits.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/globals.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/notification/notification_service.dart';
+import 'package:Ebozor/app/app.dart';
+import 'package:Ebozor/app/app_localization.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/register_cubits.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/globals.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/notification/notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:BidNBuy/data/cubits/system/language_cubit.dart';
+import 'package:Ebozor/data/cubits/system/language_cubit.dart';
 
 
 

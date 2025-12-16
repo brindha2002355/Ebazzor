@@ -1,12 +1,12 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
 
 class HomeSearchField extends StatelessWidget {
   const HomeSearchField({super.key});

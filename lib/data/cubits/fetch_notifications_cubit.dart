@@ -1,8 +1,8 @@
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/repositories/notifications_repository_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/repositories/notifications_repository_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/data/model/notification_data.dart';
+import 'package:Ebozor/data/model/notification_data.dart';
 
 abstract class FetchNotificationsState {}
 

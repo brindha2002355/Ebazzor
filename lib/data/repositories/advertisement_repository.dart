@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
 class AdvertisementRepository {
   Future<Map<String, dynamic>> create({

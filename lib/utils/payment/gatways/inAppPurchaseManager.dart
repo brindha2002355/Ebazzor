@@ -105,17 +105,17 @@ class ExamplePaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
 
 import 'dart:async';
 
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/data/cubits/subscription/in_app_purchase_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/data/cubits/subscription/in_app_purchase_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 class InAppPurchaseManager {
   static final InAppPurchase _inAppPurchase = InAppPurchase.instance;

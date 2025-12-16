@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:BidNBuy/utils/extensions/lib/adaptive_type.dart';
+import 'package:Ebozor/utils/extensions/lib/adaptive_type.dart';
 
 class UserModel {
   String? address;

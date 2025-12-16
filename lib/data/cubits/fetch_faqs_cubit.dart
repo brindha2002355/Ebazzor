@@ -1,6 +1,6 @@
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/faqs_model.dart';
-import 'package:BidNBuy/data/repositories/faqs_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/faqs_model.dart';
+import 'package:Ebozor/data/repositories/faqs_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class FetchFaqsState {}

@@ -1,7 +1,7 @@
 
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/user_model.dart';
-import 'package:BidNBuy/data/repositories/item_buyer_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/user_model.dart';
+import 'package:Ebozor/data/repositories/item_buyer_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class GetItemBuyerListState {}

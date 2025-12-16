@@ -2,14 +2,14 @@
 
 import 'dart:io';
 
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/data/repositories/auth_repository.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/data/repositories/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/data/cubits/auth/authentication_cubit.dart';
+import 'package:Ebozor/data/cubits/auth/authentication_cubit.dart';
 
 abstract class LoginState {}
 

@@ -1,34 +1,34 @@
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/custom_field/fetch_custom_fields_cubit.dart';
-import 'package:BidNBuy/ui/screens/widgets/dynamic_field/dynamic_field.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/screens/widgets/custom_text_form_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/widgets/image_adapter.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/select_category.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/cloudState/cloud_state.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/custom_field/fetch_custom_fields_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/dynamic_field/dynamic_field.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/screens/widgets/custom_text_form_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/widgets/image_adapter.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/select_category.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/cloudState/cloud_state.dart';
+import 'package:Ebozor/utils/constant.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/imagePicker.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/imagePicker.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
-import 'package:BidNBuy/data/model/category_model.dart';
+import 'package:Ebozor/data/model/category_model.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
 class AddItemDetails extends StatefulWidget {
   final List<CategoryModel>? breadCrumbItems;

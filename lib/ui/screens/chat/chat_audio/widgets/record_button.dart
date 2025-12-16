@@ -3,20 +3,20 @@ import 'dart:io';
 
 
 
-import 'package:BidNBuy/data/helper/designs.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/audio_state.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/globals.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/flow_shader.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/lottie_animation.dart';
-import 'package:BidNBuy/utils/extensions/lib/translate.dart';
+import 'package:Ebozor/data/helper/designs.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/audio_state.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/globals.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/flow_shader.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/lottie_animation.dart';
+import 'package:Ebozor/utils/extensions/lib/translate.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vibration/vibration.dart';
 
-import 'package:flutter/material.dart';import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/extensions/lib/build_context.dart';
-import 'package:BidNBuy/utils/extensions/lib/textWidgetExtention.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:flutter/material.dart';import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/extensions/lib/build_context.dart';
+import 'package:Ebozor/utils/extensions/lib/textWidgetExtention.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 import 'package:record/record.dart';
 
 
@@ -86,7 +86,7 @@ class _RecordButtonState extends State<RecordButton> {
             .animate(
       CurvedAnimation(
         parent: widget.controller,
-        curve: const Interval(0.2, 1, curve: Curves.easeIn),
+        curve: const Interval(0.1, 1, curve: Curves.easeIn),
       ),
     );
   }

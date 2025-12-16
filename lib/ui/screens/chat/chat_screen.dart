@@ -1,42 +1,42 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/add_item_review_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/block_user_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/delete_message_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/get_buyer_chat_users_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/load_chat_messages.dart';
-import 'package:BidNBuy/data/cubits/chat/send_message.dart';
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/record_button.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/transparant_route.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/customHeroAnimation.dart';
-import 'package:BidNBuy/utils/extensions/lib/color.dart';
-import 'package:BidNBuy/utils/notification/chat_message_handler.dart';
-import 'package:BidNBuy/utils/notification/notification_service.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/add_item_review_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/block_user_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/delete_message_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/get_buyer_chat_users_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/load_chat_messages.dart';
+import 'package:Ebozor/data/cubits/chat/send_message.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/record_button.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/transparant_route.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/customHeroAnimation.dart';
+import 'package:Ebozor/utils/extensions/lib/color.dart';
+import 'package:Ebozor/utils/notification/chat_message_handler.dart';
+import 'package:Ebozor/utils/notification/notification_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:BidNBuy/data/cubits/chat/blocked_users_list_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/unblock_user_cubit.dart';
-import 'package:BidNBuy/data/model/chat/chated_user_model.dart';
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/lib/build_context.dart' show CustomContext;
-import 'package:BidNBuy/utils/extensions/lib/textWidgetExtention.dart';
-import 'package:BidNBuy/utils/extensions/lib/translate.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/chat/blocked_users_list_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/unblock_user_cubit.dart';
+import 'package:Ebozor/data/model/chat/chated_user_model.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/lib/build_context.dart' show CustomContext;
+import 'package:Ebozor/utils/extensions/lib/textWidgetExtention.dart';
+import 'package:Ebozor/utils/extensions/lib/translate.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -302,9 +302,9 @@ class _ChatScreenState extends State<ChatScreen>
               },
             ),
           ),
-          /*actions: [
+          actions: [
 
-            */ /*ElevatedButton(
+            ElevatedButton(
               onPressed: _rating >= 1
                   ? () {
                       context.read<AddItemReviewCubit>().addItemReview(
@@ -319,8 +319,8 @@ class _ChatScreenState extends State<ChatScreen>
                     : context.color.deactivateColor,
               ),
               child: Text("submitBtnLbl".translate(context)),
-            ),*/ /*
-          ],*/
+            ),
+          ],
         );
       },
     );
@@ -646,7 +646,9 @@ class _ChatScreenState extends State<ChatScreen>
                                             if (controller.text.trim().isEmpty &&
                                                 messageAttachment == null) return;
                                             //This is adding Chat widget in stream with BlocProvider , because we will need to do api process to store chat message to server, when it will be added to list it's initState method will be called
+/////////////////////////chat message added here to
 
+                                            ///send panu here the eruku
                                             ChatMessageHandler.add(
                                               BlocProvider(
                                                 key: ValueKey(DateTime.now()

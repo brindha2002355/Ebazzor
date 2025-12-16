@@ -1,6 +1,6 @@
-﻿import 'package:BidNBuy/data/repositories/seller/seller_items_repository.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+﻿import 'package:Ebozor/data/repositories/seller/seller_items_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class FetchSellerItemsState {}

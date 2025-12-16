@@ -2,8 +2,8 @@
 
 import 'package:bloc/bloc.dart';
 
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 
 class AppThemeCubit extends Cubit<ThemeState> {
   AppThemeCubit() : super(ThemeState(AppTheme.light));

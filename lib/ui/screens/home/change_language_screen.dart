@@ -1,18 +1,18 @@
-import 'package:BidNBuy/data/cubits/home/fetch_home_screen_cubit.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_language_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_system_settings_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/language_cubit.dart';
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/data/model/system_settings_model.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/home/fetch_home_screen_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/data/cubits/system/fetch_language_cubit.dart';
+import 'package:Ebozor/data/cubits/system/fetch_system_settings_cubit.dart';
+import 'package:Ebozor/data/cubits/system/language_cubit.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/data/model/system_settings_model.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/data/cubits/category/fetch_category_cubit.dart';
+import 'package:Ebozor/data/cubits/category/fetch_category_cubit.dart';
 
 class LanguagesListScreen extends StatelessWidget {
   const LanguagesListScreen({super.key});

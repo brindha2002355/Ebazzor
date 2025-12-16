@@ -1,7 +1,7 @@
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 ///Light Theme Colors
 ///This color format is different, isn't it? .You can use hex colors here also but you have to remove '#' symbol and add 0xff instead.

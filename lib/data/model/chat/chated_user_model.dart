@@ -1,6 +1,6 @@
-//import 'package:BidNBuy/data/model/item/item_model.dart';
+//import 'package:Ebozor/data/model/item/item_model.dart';
 
-import 'package:BidNBuy/data/model/seller_ratings_model.dart';
+import 'package:Ebozor/data/model/seller_ratings_model.dart';
 
 class ChatedUser {
   int? id;

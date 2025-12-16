@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 enum AppTheme { dark, light }

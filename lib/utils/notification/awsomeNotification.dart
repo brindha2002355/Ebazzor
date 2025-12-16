@@ -4,26 +4,27 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:Ebozor/utils/app_icon.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_screen.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/ui/screens/chat/chat_screen.dart';
 
-import 'package:BidNBuy/data/cubits/chat/delete_message_cubit.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/notification/notification_service.dart';
+import 'package:Ebozor/data/cubits/chat/delete_message_cubit.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/notification/notification_service.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/ui/screens/main_activity.dart';
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/data/cubits/chat/load_chat_messages.dart';
-import 'package:BidNBuy/data/cubits/chat/send_message.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/data/cubits/chat/load_chat_messages.dart';
+import 'package:Ebozor/data/cubits/chat/send_message.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LocalAwsomeNotification {
@@ -83,7 +84,7 @@ class LocalAwsomeNotification {
             content: NotificationContent(
               id: isChat ? chatId : Random().nextInt(5000),
               title: notificationData.data["title"],
-              // icon: AppIcons.aboutUs,
+               icon: AppIcons.notificatinicon,
               hideLargeIconOnExpand: true,
               summary: "${notificationData.data['user_name']}",
               locked: isLocked,

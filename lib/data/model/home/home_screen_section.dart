@@ -1,4 +1,4 @@
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
 class HomeScreenSection {
   int? sectionId;

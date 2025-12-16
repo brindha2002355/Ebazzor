@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/data/repositories/subscription_repository.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/subscription_pacakage_model.dart';
+import 'package:Ebozor/data/repositories/subscription_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/subscription_pacakage_model.dart';
 
 abstract class FetchAdsListingSubscriptionPackagesState {}
 

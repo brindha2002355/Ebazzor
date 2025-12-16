@@ -1,7 +1,7 @@
 
-import 'package:BidNBuy/data/helper/custom_exception.dart';
-import 'package:BidNBuy/data/model/company.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/data/helper/custom_exception.dart';
+import 'package:Ebozor/data/model/company.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

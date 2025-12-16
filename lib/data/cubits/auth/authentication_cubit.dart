@@ -1,15 +1,15 @@
 import 'dart:io';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/login/apple_login/apple_login.dart';
-import 'package:BidNBuy/utils/login/email_login/email_login.dart';
-import 'package:BidNBuy/utils/login/google_login/google_login.dart';
-import 'package:BidNBuy/utils/login/phone_login/phone_login.dart';
-import 'package:BidNBuy/utils/login/lib/login_system.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/login/apple_login/apple_login.dart';
+import 'package:Ebozor/utils/login/email_login/email_login.dart';
+import 'package:Ebozor/utils/login/google_login/google_login.dart';
+import 'package:Ebozor/utils/login/phone_login/phone_login.dart';
+import 'package:Ebozor/utils/login/lib/login_system.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:BidNBuy/utils/login/lib/login_status.dart';
-import 'package:BidNBuy/utils/login/lib/payloads.dart';
+import 'package:Ebozor/utils/login/lib/login_status.dart';
+import 'package:Ebozor/utils/login/lib/payloads.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum AuthenticationType {

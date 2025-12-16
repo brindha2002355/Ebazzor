@@ -4,12 +4,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:BidNBuy/data/helper/custom_exception.dart';
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/data/helper/custom_exception.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/utils/constant.dart';
 
 enum MessageType {
   success(successMessageColor),

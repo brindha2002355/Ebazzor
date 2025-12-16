@@ -1,5 +1,5 @@
-﻿import 'package:BidNBuy/data/model/verification_request_model.dart';
-import 'package:BidNBuy/data/repositories/seller/seller_verification_field_repository.dart';
+﻿import 'package:Ebozor/data/model/verification_request_model.dart';
+import 'package:Ebozor/data/repositories/seller/seller_verification_field_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class FetchVerificationRequestState {}

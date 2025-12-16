@@ -1,6 +1,6 @@
-import 'package:BidNBuy/data/model/blog_model.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/repositories/blogs_repository.dart';
+import 'package:Ebozor/data/model/blog_model.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/repositories/blogs_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 abstract class FetchBlogsState {}
 

@@ -1,10 +1,10 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/youtube_player_widget.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/youtube_player_widget.dart';
 
 class VideoViewScreen extends StatelessWidget {
   final String videoUrl;

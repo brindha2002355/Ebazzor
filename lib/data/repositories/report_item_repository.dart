@@ -1,6 +1,6 @@
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/report_item/reason_model.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/report_item/reason_model.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
 class ReportItemRepository {
   Future<DataOutput<ReportReason>> fetchReportReasonsList() async {

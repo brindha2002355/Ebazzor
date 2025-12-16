@@ -1,19 +1,19 @@
 import 'dart:io';
 import 'dart:ui' as ui;
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_system_settings_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/user_details.dart';
-import 'package:BidNBuy/ui/screens/main_activity.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_keys.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/data/cubits/chat/blocked_users_list_cubit.dart';
-import 'package:BidNBuy/data/cubits/favorite/favorite_cubit.dart';
-import 'package:BidNBuy/data/cubits/seller/fetch_verification_request_cubit.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/data/cubits/system/fetch_system_settings_cubit.dart';
+import 'package:Ebozor/data/cubits/system/user_details.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/chat/blocked_users_list_cubit.dart';
+import 'package:Ebozor/data/cubits/favorite/favorite_cubit.dart';
+import 'package:Ebozor/data/cubits/seller/fetch_verification_request_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,21 +25,21 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:BidNBuy/data/cubits/report/update_report_items_list_cubit.dart';
-import 'package:BidNBuy/data/cubits/auth/authentication_cubit.dart';
-import 'package:BidNBuy/data/cubits/auth/delete_user_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/get_buyer_chat_users_cubit.dart';
-import 'package:BidNBuy/data/model/system_settings_model.dart';
+import 'package:Ebozor/data/cubits/report/update_report_items_list_cubit.dart';
+import 'package:Ebozor/data/cubits/auth/authentication_cubit.dart';
+import 'package:Ebozor/data/cubits/auth/delete_user_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/get_buyer_chat_users_cubit.dart';
+import 'package:Ebozor/data/model/system_settings_model.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/network/apiCallTrigger.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/network/apiCallTrigger.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

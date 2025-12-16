@@ -1,8 +1,8 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 class NoInternet extends StatelessWidget {
   final VoidCallback? onRetry;
@@ -23,20 +23,11 @@ class NoInternet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  // width: 100,
-                  // height: 150,
+              Flexible(
                   child: UiUtils.getSvg(AppIcons.no_internet)),
-              const SizedBox(
-                height: 20,
-              ),
               Text("noInternet".translate(context))
                   .size(context.font.extraLarge)
-                  .color(context.color.territoryColor)
-                  .bold(weight: FontWeight.w600),
-              const SizedBox(
-                height: 10,
-              ),
+                  .color(context.color.territoryColor),
               SizedBox(
                   width: context.screenWidth * 0.8,
                   child: Text(

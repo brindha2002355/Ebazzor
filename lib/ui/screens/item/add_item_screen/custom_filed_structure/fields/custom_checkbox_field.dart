@@ -1,13 +1,13 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/validator.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/validator.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/dynamic_field/dynamic_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/custom_field.dart';
+import 'package:Ebozor/ui/screens/widgets/dynamic_field/dynamic_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/custom_field.dart';
 
 class CustomCheckboxField extends CustomField {
   @override

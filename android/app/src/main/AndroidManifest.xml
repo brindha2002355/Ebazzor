@@ -53,14 +53,16 @@
         android:allowBackup="false"
         android:fullBackupOnly="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="BidNBuy"
+        android:label="Ebozor"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA7Uy8NqoLqv6MsXdX3QR3jZOoeApK5Z2A" />
+            android:value="AIzaSyA7Uy8NqoLqv6MsXdX3QR3jZOoeApK5Z2A" />s
+
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -86,9 +88,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="admin.bidnbuy.co"
+                    android:host="admin.Ebozor.co"
                     android:pathPattern="/.."
-                    android:scheme="bidnbuy" />
+                    android:scheme="Ebozor" />
                 <data android:pathPattern="/product-details/.*" />
 
                 <!--<data

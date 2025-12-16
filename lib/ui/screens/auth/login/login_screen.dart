@@ -3,28 +3,28 @@ import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:device_region/device_region.dart';
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/routes.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/routes.dart';
 
-import 'package:BidNBuy/data/cubits/auth/authentication_cubit.dart';
-import 'package:BidNBuy/data/cubits/auth/login_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_system_settings_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/user_details.dart';
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/custom_text_form_field.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/login/lib/login_status.dart';
-import 'package:BidNBuy/utils/login/lib/payloads.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/auth/authentication_cubit.dart';
+import 'package:Ebozor/data/cubits/auth/login_cubit.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/data/cubits/system/fetch_system_settings_cubit.dart';
+import 'package:Ebozor/data/cubits/system/user_details.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/custom_text_form_field.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/login/lib/login_status.dart';
+import 'package:Ebozor/utils/login/lib/payloads.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -347,6 +347,7 @@ class LoginScreenState extends State<LoginScreen> {
                     }
 
                     if (state is LoginFailure) {
+                      ////////
                       HelperUtils.showSnackBarMessage(
                           context, state.errorMessage.toString());
                     }
@@ -366,7 +367,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 credential: state.credential,
                                 countryCode: null);
                           } else {
-                            // HelperUtils.showSnackBarMessage(context,"Please Verify Your email first" );
+                             HelperUtils.showSnackBarMessage(context,"Please Verify Your email first" );
                           }
                         } else if (state.type == AuthenticationType.phone) {
                           context.read<LoginCubit>().login(
@@ -388,6 +389,22 @@ class LoginScreenState extends State<LoginScreen> {
                       }
 
                       if (state is AuthenticationFail) {
+                        if (state is AuthenticationFail) {
+                          Widgets.hideLoder(context);
+
+                          // 🔴 EXACT LOGIN ERROR PRINT HERE
+                          debugPrint('========== LOGIN ERROR ==========');
+                          debugPrint('ERROR OBJ : ${state.error}');
+
+                          if (state.error is FirebaseAuthException) {
+                            final e = state.error as FirebaseAuthException;
+                            debugPrint('FIREBASE CODE : ${e.code}');
+                            debugPrint('FIREBASE MSG  : ${e.message}');
+                          }
+
+                          debugPrint('=================================');
+                        }
+
                         Widgets.hideLoder(context);
                       }
 

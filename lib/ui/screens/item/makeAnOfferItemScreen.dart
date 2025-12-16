@@ -1,11 +1,11 @@
 /*
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/data/cubits/chat/get_buyer_chat_users_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/make_an_offer_item_cubit.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/chat/get_buyer_chat_users_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/make_an_offer_item_cubit.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

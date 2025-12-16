@@ -1,5 +1,5 @@
 
-import 'package:BidNBuy/data/repositories/in_app_purchase_repository.dart';
+import 'package:Ebozor/data/repositories/in_app_purchase_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class InAppPurchaseState {}

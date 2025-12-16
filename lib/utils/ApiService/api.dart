@@ -1,20 +1,20 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:BidNBuy/data/cubits/system/user_details.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/network_request_interseptor.dart';
-import 'package:BidNBuy/data/cubits/chat/get_buyer_chat_users_cubit.dart';
+import 'package:Ebozor/data/cubits/system/user_details.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/network_request_interseptor.dart';
+import 'package:Ebozor/data/cubits/chat/get_buyer_chat_users_cubit.dart';
 
-import 'package:BidNBuy/data/cubits/report/update_report_items_list_cubit.dart';
-import 'package:BidNBuy/data/cubits/chat/blocked_users_list_cubit.dart';
-import 'package:BidNBuy/data/cubits/favorite/favorite_cubit.dart';
+import 'package:Ebozor/data/cubits/report/update_report_items_list_cubit.dart';
+import 'package:Ebozor/data/cubits/chat/blocked_users_list_cubit.dart';
+import 'package:Ebozor/data/cubits/favorite/favorite_cubit.dart';
 
 
-import 'package:BidNBuy/utils/errorFilter.dart';
+import 'package:Ebozor/utils/errorFilter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ApiException implements Exception {
@@ -31,9 +31,6 @@ class ApiException implements Exception {
 class Api {
   static Map<String, dynamic> headers() {
     if (!HiveUtils.isUserAuthenticated()) {
-      print("//////////////////");
-      print(!HiveUtils.isUserAuthenticated());
-      print("//////////////////");
       if (HiveUtils.getLanguage() != null ||
           HiveUtils.getLanguage()?['data'] != null) {
         return {

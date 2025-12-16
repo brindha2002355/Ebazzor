@@ -1,12 +1,12 @@
-import 'package:BidNBuy/data/helper/designs.dart';
-import 'package:BidNBuy/ui/screens/settings/notifications.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/data/helper/designs.dart';
+import 'package:Ebozor/ui/screens/settings/notifications.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
 class NotificationDetail extends StatefulWidget {
   const NotificationDetail({super.key});

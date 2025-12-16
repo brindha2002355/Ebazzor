@@ -1,4 +1,4 @@
-import 'package:BidNBuy/data/repositories/report_item_repository.dart';
+import 'package:Ebozor/data/repositories/report_item_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

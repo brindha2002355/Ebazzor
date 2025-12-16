@@ -1,4 +1,4 @@
-import 'package:BidNBuy/utils/extensions/lib/adaptive_type.dart';
+import 'package:Ebozor/utils/extensions/lib/adaptive_type.dart';
 
 extension ListExt<T> on List<T> {
   void addOrRemove(T element) {

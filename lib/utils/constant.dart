@@ -1,13 +1,13 @@
 // ignore_for_file: file_names
-import 'package:BidNBuy/data/model/category_model.dart';
-import 'package:BidNBuy/data/model/system_settings_model.dart';
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/ui/screens/filter_screen.dart';
+import 'package:Ebozor/data/model/category_model.dart';
+import 'package:Ebozor/data/model/system_settings_model.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/ui/screens/filter_screen.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/ui/screens/filter_screen.dart';
-import 'package:BidNBuy/data/model/item_filter_model.dart';
+import 'package:Ebozor/ui/screens/filter_screen.dart';
+import 'package:Ebozor/data/model/item_filter_model.dart';
 
 const String svgPath = 'assets/svg/';
 

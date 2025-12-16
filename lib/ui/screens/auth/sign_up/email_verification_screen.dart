@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/auth/authentication_cubit.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/auth/authentication_cubit.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -123,10 +123,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(AppIcons.verificationMail),
-                      const SizedBox(
-                        height: 38,
-                      ),
+                      Flexible(child: SvgPicture.asset(AppIcons.verificationMail)),
                       Text("youHaveGotEmail".translate(context))
                           .size(context.font.extraLarge)
                           .bold(weight: FontWeight.w600),

@@ -1,6 +1,6 @@
 /*
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

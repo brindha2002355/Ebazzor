@@ -1,5 +1,5 @@
 
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/register.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/register.dart';
 import 'package:flutter/material.dart';
 
 ///Structure

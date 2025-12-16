@@ -1,28 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/data/cubits/seller/fetch_seller_item_cubit.dart';
-import 'package:BidNBuy/data/cubits/seller/fetch_seller_ratings_cubit.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/data/model/seller_ratings_model.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/seller/fetch_seller_item_cubit.dart';
+import 'package:Ebozor/data/cubits/seller/fetch_seller_ratings_cubit.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/seller_ratings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/customHeroAnimation.dart';
-import 'package:BidNBuy/utils/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/customHeroAnimation.dart';
+import 'package:Ebozor/utils/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
 
-import 'package:BidNBuy/ui/screens/home/widgets/home_sections_adapter.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/home/widgets/home_sections_adapter.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 import 'dart:ui' as ui;
 import 'package:intl/intl.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/widgets/shimmerLoadingContainer.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/widgets/shimmerLoadingContainer.dart';
 
 class SellerProfileScreen extends StatefulWidget {
   final User model;

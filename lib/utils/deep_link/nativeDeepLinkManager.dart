@@ -1,11 +1,11 @@
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/deep_link/blueprint.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/deep_link/blueprint.dart';
 
 class NativeDeepLinkManager extends NativeDeepLinkUtility {
   @override

@@ -1,12 +1,12 @@
-import 'package:BidNBuy/ui/screens/item/my_item_tab_screen.dart';
-import 'package:BidNBuy/data/cubits/item/fetch_my_item_cubit.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/screens/item/my_item_tab_screen.dart';
+import 'package:Ebozor/data/cubits/item/fetch_my_item_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 class ItemsScreen extends StatefulWidget {
   const ItemsScreen({super.key});

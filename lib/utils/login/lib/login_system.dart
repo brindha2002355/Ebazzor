@@ -1,8 +1,8 @@
 
-import 'package:BidNBuy/utils/login/lib/payloads.dart';
+import 'package:Ebozor/utils/login/lib/payloads.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:BidNBuy/utils/login/lib/login_status.dart';
+import 'package:Ebozor/utils/login/lib/login_status.dart';
 
 
 int? forceResendingToken;

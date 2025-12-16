@@ -1,14 +1,14 @@
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/main_activity.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
 
 class SuccessItemScreen extends StatefulWidget {
   final ItemModel model;

@@ -4,15 +4,15 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app_links/app_links.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/item/search_item_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/fetch_system_settings_cubit.dart';
-import 'package:BidNBuy/ui/screens/widgets/maintenance_mode.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/svg/svg_edit.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/item/search_item_cubit.dart';
+import 'package:Ebozor/data/cubits/system/fetch_system_settings_cubit.dart';
+import 'package:Ebozor/ui/screens/widgets/maintenance_mode.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/svg/svg_edit.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,26 +23,26 @@ import 'package:flutter_svg/svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
+import 'package:Ebozor/utils/app_icon.dart';
 
-import 'package:BidNBuy/data/cubits/subscription/fetch_user_package_limit_cubit.dart';
+import 'package:Ebozor/data/cubits/subscription/fetch_user_package_limit_cubit.dart';
 
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/data/model/system_settings_model.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/system_settings_model.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 
-import 'package:BidNBuy/utils/errorFilter.dart';
+import 'package:Ebozor/utils/errorFilter.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/home/search_screen.dart';
-import 'package:BidNBuy/ui/screens/item/my_items_screen.dart';
-import 'package:BidNBuy/ui/screens/user_profile/profile_screen.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_list_screen.dart';
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/home/search_screen.dart';
+import 'package:Ebozor/ui/screens/item/my_items_screen.dart';
+import 'package:Ebozor/ui/screens/user_profile/profile_screen.dart';
+import 'package:Ebozor/ui/screens/chat/chat_list_screen.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
 
 List<ItemModel> myItemlist = [];
 Map<String, dynamic> searchbody = {};
@@ -90,7 +90,6 @@ class MainActivityState extends State<MainActivity>
   int currtab = 0;
   static final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final List _pageHistory = [];
-
   DateTime? currentBackPressTime;
 
 //This is rive file artboards and setting you can check rive package's documentation at [pub.dev]
@@ -432,7 +431,6 @@ class MainActivityState extends State<MainActivity>
       setState(() {});
     }
   }
-
 /*  void onItemTapped(int index) {
     addHistory(index);
 
@@ -507,7 +505,6 @@ class MainActivityState extends State<MainActivity>
                   transform: Matrix4.identity()..translate(0.toDouble(), -20),
                   child: InkWell(
                     onTap: () async {
-                      //TODO:TEMP
                       UiUtils.checkUser(
                           onNotGuest: () {
                             context

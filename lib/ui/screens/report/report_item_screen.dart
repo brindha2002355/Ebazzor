@@ -1,12 +1,12 @@
-import 'package:BidNBuy/data/cubits/report/fetch_item_report_reason_list.dart';
-import 'package:BidNBuy/data/cubits/report/item_report_cubit.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/data/cubits/report/fetch_item_report_reason_list.dart';
+import 'package:Ebozor/data/cubits/report/item_report_cubit.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/data/model/report_item/reason_model.dart';
+import 'package:Ebozor/data/model/report_item/reason_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

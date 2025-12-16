@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/utils/constant.dart';
 
 class NativeAdWidget extends StatefulWidget {
   final TemplateType type;

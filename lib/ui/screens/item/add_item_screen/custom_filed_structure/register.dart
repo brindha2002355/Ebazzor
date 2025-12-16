@@ -1,11 +1,11 @@
 
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/custom_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_checkbox_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_dropdown_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_file_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_number_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_radio_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_text_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/custom_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_checkbox_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_dropdown_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_file_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_number_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_radio_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/fields/custom_text_field.dart';
 
 class KRegisteredFields {
   ///ADD NEW FIELD HERE

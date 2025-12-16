@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:BidNBuy/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/screens/chat/chat_audio/widgets/chat_widget.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:flutter/material.dart';
 
 int sentMessages = 0;
@@ -133,8 +133,10 @@ class ChatMessageHandler {
   static updateMessageId(String identifier, int id) {
     try {
       List<Widget> msgs = _chat;
-      for (var i = 0; i < _chat.length; i++) {
-        //We will only need to change its key when it is bloc provider because we added it locally and its key was also locally so we have to replace it with server key when message send complete
+      for
+   (var i = 0; i < _chat.length; i++) {
+        //We will only need to change its key when it is bloc provider because we added it locally and its key was also locally so we have to
+        // replace it with server key when message send complete
         if (msgs[i] is BlocProvider) {
           ///Extracting chate message from bloc provider
           Widget? bloc = (msgs[i] as BlocProvider).child;
@@ -162,13 +164,12 @@ class ChatMessageHandler {
             _chatMessageStream.sink.add(msgs);
           }
         }
-      }
-    } catch (e) {}
+      }  } catch (e) {}
   }
 }
 
-/*import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+/*import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:flutter/cupertino.dart';
 import '../../Ui/screens/chat/chatAudio/widgets/chat_widget.dart';
 

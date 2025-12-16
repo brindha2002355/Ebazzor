@@ -2,17 +2,17 @@
 
 import 'dart:io';
 
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/data/cubits/chat/send_message.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/ui/screens/chat/chat_screen.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/extensions/lib/build_context.dart';
-import 'package:BidNBuy/utils/extensions/lib/textWidgetExtention.dart';
-import 'package:BidNBuy/utils/extensions/lib/translate.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/data/cubits/chat/send_message.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/ui/screens/chat/chat_screen.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/extensions/lib/build_context.dart';
+import 'package:Ebozor/utils/extensions/lib/textWidgetExtention.dart';
+import 'package:Ebozor/utils/extensions/lib/translate.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
@@ -31,9 +31,6 @@ part "parts/linkpreview.part.dart";
 
 part "parts/recordmsg.part.dart";
 
-////Please don't make changes without sufficent knowledege in this file. otherwise you will be responsable for it
-///
-//This will store and ensure that msg is already sent so we don't have to send it again
 Set sentMessages = {};
 
 class ChatMessage extends StatefulWidget {

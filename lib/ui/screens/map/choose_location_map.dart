@@ -2,13 +2,13 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/data/model/data_output.dart';
 
 
 import 'package:flutter/material.dart';

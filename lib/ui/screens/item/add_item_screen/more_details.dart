@@ -1,21 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/select_category.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/data/cubits/custom_field/fetch_custom_fields_cubit.dart';
-import 'package:BidNBuy/data/model/custom_field/custom_field_model.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/select_category.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/data/cubits/custom_field/fetch_custom_fields_cubit.dart';
+import 'package:Ebozor/data/model/custom_field/custom_field_model.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/cloudState/cloud_state.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/dynamic_field/dynamic_field.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/custom_filed_structure/custom_field.dart';
+import 'package:Ebozor/utils/cloudState/cloud_state.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/dynamic_field/dynamic_field.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/custom_filed_structure/custom_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddMoreDetailsScreen extends StatefulWidget {

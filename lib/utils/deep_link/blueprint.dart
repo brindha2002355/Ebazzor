@@ -1,5 +1,5 @@
 
-import 'package:BidNBuy/utils/deep_link/nativeDeepLinkManager.dart';
+import 'package:Ebozor/utils/deep_link/nativeDeepLinkManager.dart';
 
 abstract class NativeDeepLinkUtility {
   void handle(Uri uri, ProcessResult? result);

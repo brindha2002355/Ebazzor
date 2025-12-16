@@ -1,4 +1,4 @@
-import 'package:BidNBuy/data/repositories/seller/seller_verification_field_repository.dart';
+import 'package:Ebozor/data/repositories/seller/seller_verification_field_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

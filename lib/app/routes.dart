@@ -1,70 +1,70 @@
-import 'package:BidNBuy/ui/screens/auth/sign_up/mobile_signup_screen.dart';
-import 'package:BidNBuy/ui/screens/home/widgets/categoryFilterScreen.dart';
-import 'package:BidNBuy/ui/screens/home/widgets/postedSinceFilter.dart';
-import 'package:BidNBuy/ui/screens/home/widgets/subCategoryFilterScreen.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/widgets/pdf_viewer.dart';
-import 'package:BidNBuy/ui/screens/item/viewAll.dart';
-import 'package:BidNBuy/ui/screens/sub_category/sub_category_screen.dart';
-import 'package:BidNBuy/ui/screens/auth/login/forgot_password.dart';
-import 'package:BidNBuy/ui/screens/auth/sign_up/signup_main_screen.dart';
-import 'package:BidNBuy/ui/screens/auth/sign_up/signup_screen.dart';
-import 'package:BidNBuy/ui/screens/chat/blocked_user_list_screen.dart';
+import 'package:Ebozor/ui/screens/auth/sign_up/mobile_signup_screen.dart';
+import 'package:Ebozor/ui/screens/home/widgets/categoryFilterScreen.dart';
+import 'package:Ebozor/ui/screens/home/widgets/postedSinceFilter.dart';
+import 'package:Ebozor/ui/screens/home/widgets/subCategoryFilterScreen.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/widgets/pdf_viewer.dart';
+import 'package:Ebozor/ui/screens/item/viewAll.dart';
+import 'package:Ebozor/ui/screens/sub_category/sub_category_screen.dart';
+import 'package:Ebozor/ui/screens/auth/login/forgot_password.dart';
+import 'package:Ebozor/ui/screens/auth/sign_up/signup_main_screen.dart';
+import 'package:Ebozor/ui/screens/auth/sign_up/signup_screen.dart';
+import 'package:Ebozor/ui/screens/chat/blocked_user_list_screen.dart';
 
-import 'package:BidNBuy/ui/screens/favorite_screen.dart';
+import 'package:Ebozor/ui/screens/favorite_screen.dart';
 
-import 'package:BidNBuy/ui/screens/item/add_item_screen/add_item_details.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/confirm_location_screen.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/more_details.dart';
-import 'package:BidNBuy/ui/screens/item/items_list.dart';
-import 'package:BidNBuy/ui/screens/location/cities_screen.dart';
-import 'package:BidNBuy/ui/screens/location/countries_screen.dart';
-import 'package:BidNBuy/ui/screens/location/states_screen.dart';
-import 'package:BidNBuy/ui/screens/seller/seller_verification_complete.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/add_item_details.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/confirm_location_screen.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/more_details.dart';
+import 'package:Ebozor/ui/screens/item/items_list.dart';
+import 'package:Ebozor/ui/screens/location/cities_screen.dart';
+import 'package:Ebozor/ui/screens/location/countries_screen.dart';
+import 'package:Ebozor/ui/screens/location/states_screen.dart';
+import 'package:Ebozor/ui/screens/seller/seller_verification_complete.dart';
 
-import 'package:BidNBuy/ui/screens/ad_details_screen.dart';
-import 'package:BidNBuy/ui/screens/faqs_screen.dart';
-import 'package:BidNBuy/ui/screens/location_permission_screen.dart';
-import 'package:BidNBuy/ui/screens/my_review_screen.dart';
-import 'package:BidNBuy/ui/screens/sold_out_bought_screen.dart';
-import 'package:BidNBuy/ui/screens/user_profile/edit_profile.dart';
+import 'package:Ebozor/ui/screens/ad_details_screen.dart';
+import 'package:Ebozor/ui/screens/faqs_screen.dart';
+import 'package:Ebozor/ui/screens/location_permission_screen.dart';
+import 'package:Ebozor/ui/screens/my_review_screen.dart';
+import 'package:Ebozor/ui/screens/sold_out_bought_screen.dart';
+import 'package:Ebozor/ui/screens/user_profile/edit_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:BidNBuy/ui/screens/advertisement/my_advertisment_screen.dart';
-import 'package:BidNBuy/ui/screens/auth/login/login_screen.dart';
+import 'package:Ebozor/ui/screens/advertisement/my_advertisment_screen.dart';
+import 'package:Ebozor/ui/screens/auth/login/login_screen.dart';
 
-import 'package:BidNBuy/ui/screens/blogs/blog_details.dart';
-import 'package:BidNBuy/ui/screens/blogs/blogs_screen.dart';
+import 'package:Ebozor/ui/screens/blogs/blog_details.dart';
+import 'package:Ebozor/ui/screens/blogs/blogs_screen.dart';
 
-import 'package:BidNBuy/ui/screens/home/category_list.dart';
-import 'package:BidNBuy/ui/screens/home/change_language_screen.dart';
-import 'package:BidNBuy/ui/screens/home/search_screen.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/widgets/success_item_screen.dart';
-import 'package:BidNBuy/ui/screens/item/add_item_screen/select_category.dart';
-import 'package:BidNBuy/ui/screens/item/my_items_screen.dart';
+import 'package:Ebozor/ui/screens/home/category_list.dart';
+import 'package:Ebozor/ui/screens/home/change_language_screen.dart';
+import 'package:Ebozor/ui/screens/home/search_screen.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/widgets/success_item_screen.dart';
+import 'package:Ebozor/ui/screens/item/add_item_screen/select_category.dart';
+import 'package:Ebozor/ui/screens/item/my_items_screen.dart';
 
-import 'package:BidNBuy/ui/screens/location/areas_screen.dart';
-import 'package:BidNBuy/ui/screens/location/nearby_location.dart';
-import 'package:BidNBuy/ui/screens/onboarding/onboarding_screen.dart';
+import 'package:Ebozor/ui/screens/location/areas_screen.dart';
+import 'package:Ebozor/ui/screens/location/nearby_location.dart';
+import 'package:Ebozor/ui/screens/onboarding/onboarding_screen.dart';
 
-import 'package:BidNBuy/ui/screens/seller/seller_intro_verification.dart';
-import 'package:BidNBuy/ui/screens/seller/seller_profile.dart';
-import 'package:BidNBuy/ui/screens/seller/seller_verification.dart';
-import 'package:BidNBuy/ui/screens/settings/contact_us.dart';
-import 'package:BidNBuy/ui/screens/settings/notification_detail.dart';
-import 'package:BidNBuy/ui/screens/settings/notifications.dart';
-import 'package:BidNBuy/ui/screens/settings/profile_setting.dart';
-import 'package:BidNBuy/ui/screens/subscription/packages_list.dart';
+import 'package:Ebozor/ui/screens/seller/seller_intro_verification.dart';
+import 'package:Ebozor/ui/screens/seller/seller_profile.dart';
+import 'package:Ebozor/ui/screens/seller/seller_verification.dart';
+import 'package:Ebozor/ui/screens/settings/contact_us.dart';
+import 'package:Ebozor/ui/screens/settings/notification_detail.dart';
+import 'package:Ebozor/ui/screens/settings/notifications.dart';
+import 'package:Ebozor/ui/screens/settings/profile_setting.dart';
+import 'package:Ebozor/ui/screens/subscription/packages_list.dart';
 
-import 'package:BidNBuy/ui/screens/subscription/transaction_history_screen.dart';
+import 'package:Ebozor/ui/screens/subscription/transaction_history_screen.dart';
 
-import 'package:BidNBuy/ui/screens/filter_screen.dart';
-import 'package:BidNBuy/ui/screens/main_activity.dart';
-import 'package:BidNBuy/ui/screens/splash_screen.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/maintenance_mode.dart';
-import 'package:BidNBuy/data/repositories/item/item_repository.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/ui/screens/filter_screen.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
+import 'package:Ebozor/ui/screens/splash_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/maintenance_mode.dart';
+import 'package:Ebozor/data/repositories/item/item_repository.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
 class Routes {
   //private constructor

@@ -1,27 +1,27 @@
 import 'dart:io';
 
-import 'package:BidNBuy/data/cubits/subscription/fetch_ads_listing_subscription_packages_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/get_api_keys_cubit.dart';
-import 'package:BidNBuy/settings.dart';
-import 'package:BidNBuy/ui/screens/subscription/widget/featured_ads_subscription_plan_item.dart';
-import 'package:BidNBuy/ui/screens/subscription/widget/item_listing_subscription_plans_item.dart';
-import 'package:BidNBuy/ui/screens/widgets/intertitial_ads_screen.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/payment/gatways/inAppPurchaseManager.dart';
-import 'package:BidNBuy/data/cubits/subscription/assign_free_package_cubit.dart';
-import 'package:BidNBuy/data/cubits/subscription/fetch_featured_subscription_packages_cubit.dart';
-import 'package:BidNBuy/data/model/subscription_pacakage_model.dart';
+import 'package:Ebozor/data/cubits/subscription/fetch_ads_listing_subscription_packages_cubit.dart';
+import 'package:Ebozor/data/cubits/system/get_api_keys_cubit.dart';
+import 'package:Ebozor/settings.dart';
+import 'package:Ebozor/ui/screens/subscription/widget/featured_ads_subscription_plan_item.dart';
+import 'package:Ebozor/ui/screens/subscription/widget/item_listing_subscription_plans_item.dart';
+import 'package:Ebozor/ui/screens/widgets/intertitial_ads_screen.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/payment/gatways/inAppPurchaseManager.dart';
+import 'package:Ebozor/data/cubits/subscription/assign_free_package_cubit.dart';
+import 'package:Ebozor/data/cubits/subscription/fetch_featured_subscription_packages_cubit.dart';
+import 'package:Ebozor/data/model/subscription_pacakage_model.dart';
 import 'package:flutter/material.dart';
 
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_internet.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_internet.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubscriptionPackageListScreen extends StatefulWidget {

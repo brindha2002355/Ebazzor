@@ -1,6 +1,6 @@
 
-import 'package:BidNBuy/data/model/home/home_screen_section.dart';
-import 'package:BidNBuy/data/repositories/home/home_repository.dart';
+import 'package:Ebozor/data/model/home/home_screen_section.dart';
+import 'package:Ebozor/data/repositories/home/home_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

@@ -1,7 +1,7 @@
 /*
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/hive_keys.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/hive_keys.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -126,18 +126,18 @@ class LocationWidget extends StatelessWidget {
 }
 */
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_keys.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
+import 'package:Ebozor/utils/app_icon.dart';
 
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 class LocationWidget extends StatelessWidget {
   const LocationWidget({super.key});

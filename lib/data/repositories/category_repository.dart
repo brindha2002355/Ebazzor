@@ -1,8 +1,8 @@
 
 
-import 'package:BidNBuy/data/model/category_model.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/category_model.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
 class CategoryRepository {
   Future<DataOutput<CategoryModel>> fetchCategories({

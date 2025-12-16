@@ -1,31 +1,31 @@
 import 'dart:async';
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/location/fetch_areas_cubit.dart';
-import 'package:BidNBuy/data/cubits/location/fetch_cities_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/data/model/location/cityModel.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/location/fetch_areas_cubit.dart';
+import 'package:Ebozor/data/cubits/location/fetch_cities_cubit.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/data/model/location/cityModel.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/utils/cloudState/cloud_state.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/data/cubits/home/fetch_home_all_items_cubit.dart';
-import 'package:BidNBuy/data/cubits/home/fetch_home_screen_cubit.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/cloudState/cloud_state.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/data/cubits/home/fetch_home_all_items_cubit.dart';
+import 'package:Ebozor/data/cubits/home/fetch_home_screen_cubit.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_internet.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_internet.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 class CitiesScreen extends StatefulWidget {
   final int stateId;
@@ -103,10 +103,12 @@ class CitiesScreenState extends CloudState<CitiesScreen> {
 
 //this will listen and manage search
   void searchItemListener() {
+    if (!mounted) return; // ✅ important
     _searchDelay?.cancel();
     searchCallAfterDelay();
     setState(() {});
   }
+
 
 //This will create delay so we don't face rapid api call
   void searchCallAfterDelay() {
@@ -115,18 +117,18 @@ class CitiesScreenState extends CloudState<CitiesScreen> {
 
   ///This will call api after some delay
   void itemSearch() {
-    // if (searchController.text.isNotEmpty) {
+    if (!mounted) return; // ✅ VERY IMPORTANT
+
     if (previousSearchQuery != searchController.text) {
       context
           .read<FetchCitiesCubit>()
           .fetchCities(search: searchController.text, stateId: widget.stateId);
+
       previousSearchQuery = searchController.text;
       setState(() {});
     }
-    // } else {
-    // context.read<SearchItemCubit>().clearSearch();
-    // }
   }
+
 
   PreferredSizeWidget appBarWidget() {
     return AppBar(
@@ -593,9 +595,16 @@ class CitiesScreenState extends CloudState<CitiesScreen> {
   }
 
   @override
+  @override
   void dispose() {
+    _searchDelay?.cancel();          // timer cancel (good practice)
+    searchController.removeListener(searchItemListener);
+    controller.removeListener(pageScrollListen);
+
     searchController.dispose();
-    searchController.clear();
+    controller.dispose();
+
     super.dispose();
   }
+
 }

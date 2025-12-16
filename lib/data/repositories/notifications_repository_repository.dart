@@ -1,8 +1,8 @@
 
 
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/notification_data.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/notification_data.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
 class NotificationsRepository {
   Future<DataOutput<NotificationData>> fetchNotifications(

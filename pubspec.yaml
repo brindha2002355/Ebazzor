@@ -1,5 +1,5 @@
-name: BidNBuy
-description: BidnBuy is your go-to classified app for buying and selling new and used items in your local community. Whether you're looking to declutter your home, score great deals, or find unique items, BidnBuy makes it easy to connect with buyers and sellers in your area.
+name: Ebozor
+description: Ebozor is your go-to classified app for buying and selling new and used items in your local community. Whether you're looking to declutter your home, score great deals, or find unique items, Ebozor makes it easy to connect with buyers and sellers in your area.
 
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev [Be careful]
@@ -78,6 +78,9 @@ dependencies:
   flutter_widget_from_html: ^0.15.2
   intl: ^0.20.0
   record_linux: ^1.2.1
+  animated_text_kit: ^4.3.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
   #flutter_keyboard_visibility: ^6.0.0
   #pay_with_paystack:
 
@@ -129,3 +132,13 @@ flutter:
           weight: 500
         - asset: assets/fonts/Manrope-ExtraBold.ttf
           weight: 800
+
+
+
+
+
+
+
+
+
+

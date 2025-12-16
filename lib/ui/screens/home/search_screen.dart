@@ -1,40 +1,40 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/item/search_item_cubit.dart';
-import 'package:BidNBuy/data/cubits/system/app_theme_cubit.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_keys.dart';
-import 'package:BidNBuy/data/cubits/item/fetch_popular_items_cubit.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/item/search_item_cubit.dart';
+import 'package:Ebozor/data/cubits/system/app_theme_cubit.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/data/cubits/item/fetch_popular_items_cubit.dart';
 
-import 'package:BidNBuy/data/model/category_model.dart';
-import 'package:BidNBuy/data/model/item_filter_model.dart';
+import 'package:Ebozor/data/model/category_model.dart';
+import 'package:Ebozor/data/model/item_filter_model.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
-import 'package:BidNBuy/data/helper/designs.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/data/helper/designs.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_internet.dart';
-import 'package:BidNBuy/ui/screens/widgets/shimmerLoadingContainer.dart';
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
-import 'package:BidNBuy/ui/screens/home/widgets/item_horizontal_card.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_internet.dart';
+import 'package:Ebozor/ui/screens/widgets/shimmerLoadingContainer.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/ui/screens/home/widgets/item_horizontal_card.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
 
 class SearchScreen extends StatefulWidget {
   final bool autoFocus;

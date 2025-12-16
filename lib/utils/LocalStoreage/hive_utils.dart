@@ -1,13 +1,13 @@
-import 'package:BidNBuy/app/app_theme.dart';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/utils/constant.dart';
+import 'package:Ebozor/app/app_theme.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/utils/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
-import 'package:BidNBuy/data/model/user_model.dart';
+import 'package:Ebozor/data/model/user_model.dart';
 
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
 
 class HiveUtils {
   ///private constructor

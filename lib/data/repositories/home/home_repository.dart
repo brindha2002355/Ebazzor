@@ -1,7 +1,7 @@
-import 'package:BidNBuy/data/model/home/home_screen_section.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/home/home_screen_section.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
 class HomeRepository {
   Future<List<HomeScreenSection>> fetchHome(
@@ -26,6 +26,7 @@ class HomeRepository {
       rethrow;
     }
   }
+
 
   Future<DataOutput<ItemModel>> fetchHomeAllItems(
       {required int page,

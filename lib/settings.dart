@@ -1,4 +1,4 @@
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 ///eClassify configuration file
@@ -30,7 +30,7 @@ class AppSettings {
   static const String andoidPackageName = 'com.app.ebozor';
   static const String shareAppText = "Share this App";
 
-  ///static const String hostUrl = "https://admin.bidnbuy.co"; //don't add / at end but https:// is required
+  ///static const String hostUrl = "https://admin.Ebozor.co"; //don't add / at end but https:// is required
   static const String hostUrl ="http://143.110.251.34";
   ///API Setting
 
@@ -55,14 +55,14 @@ it will call API in background without showing the process and when data availab
   //static const String shareNavigationWebUrl = "eclassify.thewrteam.in";
 
   //static const String shareNavigationWebUrl = "eclassify.wrteam.me";
-  static const String shareNavigationWebUrl = "api.bidnbuy.co";
+  static const String shareNavigationWebUrl = "api.Ebozor.co";
 
   /// You will find this prefix from firebase console in dynamic link section
   static const String deepLinkPrefix =
       "https://eclassify.page.link"; //demo.page.link
 
   //set anything you want
-  static const String deepLinkName = "bidnbuy.co"; //deeplink demo.com
+  static const String deepLinkName = "Ebozor.co"; //deeplink demo.com
 
   static const MapType googleMapType =
       MapType.normal; //none , normal , satellite , terrain , hybrid

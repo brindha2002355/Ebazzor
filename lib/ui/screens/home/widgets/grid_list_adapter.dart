@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:BidNBuy/ui/screens/home/home_screen.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
+import 'package:Ebozor/ui/screens/home/home_screen.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:BidNBuy/ui/screens/native_ads_screen.dart';
+import 'package:Ebozor/ui/screens/native_ads_screen.dart';
 
 enum ListUiType { Grid, List, Mixed }
 

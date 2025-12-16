@@ -1,9 +1,9 @@
 
-import 'package:BidNBuy/data/model/personalized/personalized_settings.dart';
-import 'package:BidNBuy/firebase_options.dart';
-import 'package:BidNBuy/main.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/something_went_wrong.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/data/model/personalized/personalized_settings.dart';
+import 'package:Ebozor/firebase_options.dart';
+import 'package:Ebozor/main.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

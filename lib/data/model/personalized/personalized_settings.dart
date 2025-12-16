@@ -1,4 +1,4 @@
-import 'package:BidNBuy/utils/extensions/lib/list.dart';
+import 'package:Ebozor/utils/extensions/lib/list.dart';
 
 class PersonalizedInterestSettings {
   final int userId;

@@ -1,6 +1,6 @@
-﻿import 'package:BidNBuy/utils/ApiService/api.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
+﻿import 'package:Ebozor/utils/ApiService/api.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
 
 class SellerItemsRepository {
   Future<DataOutput<ItemModel>> fetchSellerItemsAllItems(

@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/foundation.dart' as f;
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/settings.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/settings.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   const GoogleMapScreen({

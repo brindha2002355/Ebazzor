@@ -2,10 +2,10 @@
 
 import 'dart:convert';
 
-import 'package:BidNBuy/data/model/category_model.dart';
-import 'package:BidNBuy/data/model/data_output.dart';
-import 'package:BidNBuy/data/repositories/category_repository.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
+import 'package:Ebozor/data/model/category_model.dart';
+import 'package:Ebozor/data/model/data_output.dart';
+import 'package:Ebozor/data/repositories/category_repository.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 

@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/cloudState/cloud_state.dart';
-import 'package:BidNBuy/utils/helper_utils.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/data/cubits/item/manage_item_cubit.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/cloudState/cloud_state.dart';
+import 'package:Ebozor/utils/helper_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/data/cubits/item/manage_item_cubit.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -25,16 +25,16 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:shimmer/shimmer.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/utils/validator.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/utils/validator.dart';
 
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
-import 'package:BidNBuy/ui/screens/widgets/blurred_dialoge_box.dart';
-import 'package:BidNBuy/ui/screens/item/my_item_tab_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/blurred_dialoge_box.dart';
+import 'package:Ebozor/ui/screens/item/my_item_tab_screen.dart';
 
 class ConfirmLocationScreen extends StatefulWidget {
   final bool? isEdit;

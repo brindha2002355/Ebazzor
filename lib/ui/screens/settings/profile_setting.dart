@@ -1,15 +1,15 @@
-import 'package:BidNBuy/ui/theme/theme.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:BidNBuy/data/cubits/profile_setting_cubit.dart';
-import 'package:BidNBuy/data/helper/widgets.dart';
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/data/cubits/profile_setting_cubit.dart';
+import 'package:Ebozor/data/helper/widgets.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
 class ProfileSettings extends StatefulWidget {
   final String? title;

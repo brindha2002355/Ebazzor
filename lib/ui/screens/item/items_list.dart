@@ -1,32 +1,32 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:BidNBuy/app/routes.dart';
-import 'package:BidNBuy/data/cubits/item/fetch_item_from_category_cubit.dart';
-import 'package:BidNBuy/ui/theme/theme.dart';
-import 'package:BidNBuy/utils/constant.dart';
-import 'package:BidNBuy/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/app/routes.dart';
+import 'package:Ebozor/data/cubits/item/fetch_item_from_category_cubit.dart';
+import 'package:Ebozor/ui/theme/theme.dart';
+import 'package:Ebozor/utils/constant.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:BidNBuy/utils/app_icon.dart';
-import 'package:BidNBuy/utils/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
-import 'package:BidNBuy/data/model/item/item_model.dart';
-import 'package:BidNBuy/data/model/item_filter_model.dart';
+import 'package:Ebozor/utils/app_icon.dart';
+import 'package:Ebozor/utils/sliver_grid_delegate_with_fixed_cross_axis_count_and_fixed_height.dart';
+import 'package:Ebozor/data/model/item/item_model.dart';
+import 'package:Ebozor/data/model/item_filter_model.dart';
 
-import 'package:BidNBuy/utils/extensions/extensions.dart';
-import 'package:BidNBuy/utils/ApiService/api.dart';
+import 'package:Ebozor/utils/extensions/extensions.dart';
+import 'package:Ebozor/utils/ApiService/api.dart';
 
-import 'package:BidNBuy/utils/responsiveSize.dart';
-import 'package:BidNBuy/utils/ui_utils.dart';
-import 'package:BidNBuy/ui/screens/home/widgets/home_sections_adapter.dart';
-import 'package:BidNBuy/ui/screens/widgets/errors/no_data_found.dart';
-import 'package:BidNBuy/ui/screens/home/widgets/item_horizontal_card.dart';
-import 'package:BidNBuy/ui/screens/main_activity.dart';
-import 'package:BidNBuy/ui/screens/native_ads_screen.dart';
-import 'package:BidNBuy/ui/screens/widgets/animated_routes/blur_page_route.dart';
-import 'package:BidNBuy/ui/screens/widgets/shimmerLoadingContainer.dart';
+import 'package:Ebozor/utils/responsiveSize.dart';
+import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/home/widgets/home_sections_adapter.dart';
+import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
+import 'package:Ebozor/ui/screens/home/widgets/item_horizontal_card.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
+import 'package:Ebozor/ui/screens/native_ads_screen.dart';
+import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
+import 'package:Ebozor/ui/screens/widgets/shimmerLoadingContainer.dart';
 
 class ItemsList extends StatefulWidget {
   final String categoryId, categoryName;
@@ -301,6 +301,9 @@ class ItemsListState extends State<ItemsList> {
     return bodyWidget();
   }
 
+/////////////////////////////
+  //////////////////////////////
+  //// ethu tha all categries short agi show agura screen
   Widget bodyWidget() {
     return AnnotatedRegion(
       value: UiUtils.getSystemUiOverlayStyle(
