@@ -14,13 +14,13 @@ import 'package:Ebozor/ui/screens/widgets/errors/no_internet.dart';
 import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
 import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
-class SubCategoryScreen extends StatefulWidget {
+class SubCategoryScreenOne extends StatefulWidget {
   final List<CategoryModel> categoryList;
   final String catName;
   final int catId;
   final List<String> categoryIds;
 
-  const SubCategoryScreen(
+  const SubCategoryScreenOne(
       {super.key,
       required this.categoryList,
       required this.catName,
@@ -28,12 +28,12 @@ class SubCategoryScreen extends StatefulWidget {
       required this.categoryIds});
 
   @override
-  State<SubCategoryScreen> createState() => _CategoryListState();
+  State<SubCategoryScreenOne> createState() => _CategoryListState();
 
   static Route route(RouteSettings routeSettings) {
     Map? args = routeSettings.arguments as Map?;
     return BlurredRouter(
-      builder: (_) => SubCategoryScreen(
+      builder: (_) => SubCategoryScreenOne(
         categoryList: args?['categoryList'],
         catName: args?['catName'],
         catId: args?['catId'],
@@ -43,7 +43,7 @@ class SubCategoryScreen extends StatefulWidget {
   }
 }
 
-class _CategoryListState extends State<SubCategoryScreen>
+class _CategoryListState extends State<SubCategoryScreenOne>
     with TickerProviderStateMixin {
   late final ScrollController controller = ScrollController();
 
@@ -99,6 +99,8 @@ class _CategoryListState extends State<SubCategoryScreen>
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 18, vertical: 18),
+
+                        ///all categores text here
                         child: Text(
                           "${"lblall".translate(context)}\t${widget.catName}",
                           textAlign: TextAlign.center,

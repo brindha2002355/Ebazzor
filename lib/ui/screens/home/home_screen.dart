@@ -173,7 +173,7 @@ class HomeScreenState extends State<HomeScreen>
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
+     /*   appBar: AppBar(
           elevation: 0,
           leadingWidth: double.maxFinite,
           leading: Padding(
@@ -184,7 +184,7 @@ class HomeScreenState extends State<HomeScreen>
                     ? const LocationWidget()
                     : const SizedBox.shrink()),*/
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-        ),
+        ),*/
         backgroundColor: context.color.backgroundColor,
         body: RefreshIndicator(
           key: _refreshIndicatorKey,

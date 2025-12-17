@@ -109,15 +109,15 @@ class ChatMessageState extends State<ChatMessage>
     if (widget.senderId.toString() == HiveUtils.getUserId() &&
         (widget.isSentNow == true) &&
         isChatSent == false) {
-      if (!sentMessages.contains(widget.key)) {
+     /* if (!sentMessages.contains(widget.key)) {
         context.read<SendMessageCubit>().send(
               attachment: widget.file,
               message: widget.message!,
               itemOfferId: widget.itemOfferId,
               audio: widget.audio,
             );
-      }
-      sentMessages.add(widget.key);
+      }*/
+     // sentMessages.add(widget.key);
 
       isMounted = true;
     }

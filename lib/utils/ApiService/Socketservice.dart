@@ -15,19 +15,50 @@ class ChatSocketService {
   Timer? _presenceTimer;
 
   bool get isConnected => _socket?.connected ?? false;
+  final ValueNotifier<bool> isOtherUserTyping = ValueNotifier(false);
 
-  // Connect socket safely
+  /// Connect socket safely
   void connect() {
-    if (isConnected) return; // Prevent duplicate connections
+    // If socket is alive and connected, do nothing
+    if (_socket != null && _socket!.connected) return;
+
+    // If socket exists but might be stale, clean it
+    if (_socket != null) {
+      _socket!.off("message");
+      _socket!.disconnect();
+      _socket = null;
+    }
 
     _socket = IO.io(
       "http://143.110.251.34:6002",
       IO.OptionBuilder()
           .setTransports(['websocket'])
-          .enableAutoConnect()
+          .disableAutoConnect() // manual connect
           .setAuth({"token": "Bearer ${HiveUtils.getJWT()}"})
           .build(),
     );
+
+
+    _socket!.on("typing", (data) {
+      final myId = HiveUtils.getUserId();
+
+      // ignore own typing
+      if (data["userId"].toString() == myId) return;
+
+      if (data["status"] == "start") {
+        print("✍️ Other user typing");
+        isOtherUserTyping.value = true;
+      } else {
+        print("🛑 Other user stopped typing");
+        isOtherUserTyping.value = false;
+      }
+    });
+
+
+
+    // Add listeners once
+    _socket!.off("message");
+    _socket!.on("message", _onMessageReceived);
 
     _socket!.onConnect((_) {
       print("🔥 Socket Connected");
@@ -39,13 +70,13 @@ class ChatSocketService {
       _stopPresencePing();
     });
 
-    // Listen to messages once
-    _socket!.on("message", _onMessageReceived);
-
     _socket!.connect();
   }
 
-  // Handle incoming messages
+
+
+
+  /// Handle incoming messages
   void _onMessageReceived(dynamic data) {
     final senderId = data['sender_id'].toString();
     final myId = HiveUtils.getUserId();
@@ -70,13 +101,16 @@ class ChatSocketService {
     ChatMessageHandler.add(chat);
   }
 
+  /// Join a specific offer room
   void joinOffer(int offerId) {
-    if (!isConnected) connect();
+    if (_socket == null || !_socket!.connected) connect();
     print("🔥 Emitting join: {offerId: $offerId}");
     _socket?.emit("join", {"offerId": offerId});
   }
 
+  /// Send a chat message
   void sendMessage(int offerId, String message) {
+    if (_socket == null || !_socket!.connected) connect();
     print("🔥 Emitting message: {offerId: $offerId, message: $message}");
     _socket?.emit("message", {
       "offerId": offerId,
@@ -84,14 +118,23 @@ class ChatSocketService {
     });
   }
 
+  /// Typing indicators
   void typingStart(int offerId) {
-    _socket?.emit("typing:start", {"offerId": offerId});
+    _socket?.emit("typing", {
+      "offerId": offerId,
+      "status": "start",
+    });
   }
 
   void typingStop(int offerId) {
-    _socket?.emit("typing:stop", {"offerId": offerId});
+    _socket?.emit("typing", {
+      "offerId": offerId,
+      "status": "stop",
+    });
   }
 
+
+  /// Presence ping
   void _startPresencePing() {
     _presenceTimer?.cancel();
     _presenceTimer = Timer.periodic(const Duration(seconds: 60), (_) {
@@ -104,9 +147,19 @@ class ChatSocketService {
     _presenceTimer?.cancel();
   }
 
+  /// Disconnect socket safely
   void disconnect() {
     _stopPresencePing();
+    _socket?.off("message");
     _socket?.disconnect();
     _socket = null;
+  }
+
+  /// Hot reload safety
+  @mustCallSuper
+  void reassemble() {
+    // This runs on hot reload
+    print("🔥 Hot reload detected, disconnecting old socket");
+    disconnect();
   }
 }

@@ -476,72 +476,110 @@ class MainActivityState extends State<MainActivity>
     }
   }*/
 
+
+  /////// here your bottom navigation handled
   BottomAppBar bottomBar() {
     return BottomAppBar(
       color: context.color.secondaryColor,
       shape: const CircularNotchedRectangle(),
       child: Container(
+        height: 64, // 🔥 proper height
         color: context.color.secondaryColor,
         child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              buildBottomNavigationbarItem(0, AppIcons.homeNav,
-                  AppIcons.homeNavActive, "homeTab".translate(context)),
-              buildBottomNavigationbarItem(1, AppIcons.chatNav,
-                  AppIcons.chatNavActive, "chat".translate(context)),
-              BlocListener<FetchUserPackageLimitCubit,
-                  FetchUserPackageLimitState>(listener: (context, state) {
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            buildBottomNavigationbarItem(
+              0,
+              AppIcons.homeNav,
+              AppIcons.homeNavActive,
+        //      "homeTab".translate(context),
+            ),
+
+            buildBottomNavigationbarItem(
+              1,
+              AppIcons.chatNav,
+              AppIcons.chatNavActive,
+         //     "chat".translate(context),
+            ),
+
+            /// CENTER BUTTON
+            BlocListener<FetchUserPackageLimitCubit,
+                FetchUserPackageLimitState>(
+              listener: (context, state) {
                 if (state is FetchUserPackageLimitFailure) {
                   UiUtils.noPackageAvailableDialog(context);
                 }
                 if (state is FetchUserPackageLimitInSuccess) {
-                  Navigator.pushNamed(context, Routes.selectCategoryScreen,
-                      arguments: <String, dynamic>{});
+                  Navigator.pushNamed(
+                    context,
+                    Routes.selectCategoryScreen,
+                    arguments: <String, dynamic>{},
+                  );
                 }
-              }, child: BlocBuilder<FetchUserPackageLimitCubit,
-                  FetchUserPackageLimitState>(builder: (context, state) {
-                return Transform(
-                  transform: Matrix4.identity()..translate(0.toDouble(), -20),
-                  child: InkWell(
-                    onTap: () async {
+              },
+              child: BlocBuilder<FetchUserPackageLimitCubit,
+                  FetchUserPackageLimitState>(
+                builder: (context, state) {
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(30),
+                    onTap: () {
                       UiUtils.checkUser(
-                          onNotGuest: () {
-                            context
-                                .read<FetchUserPackageLimitCubit>()
-                                .fetchUserPackageLimit(
-                                    packageType: "item_listing");
-                          },
-                          context: context);
+                        context: context,
+                        onNotGuest: () {
+                          context
+                              .read<FetchUserPackageLimitCubit>()
+                              .fetchUserPackageLimit(
+                            packageType: "item_listing",
+                          );
+                        },
+                      );
                     },
-                    child: SizedBox(
-                      width: 53.rw(context),
-                      height: 58,
-                      child: state is FetchUserPackageLimitInProgress
-                          ? CircularProgressIndicator()
-                          : svgLoaded == false
-                              ? Container()
-                              : SvgPicture.string(
-                                  svgEdit.toSVGString() ?? "",
-                                ),
+                    child:SizedBox(
+                      width: 72.rw(context),   // ⬅️ WIDTH INCREASED
+                      height: 72,              // ⬅️ HEIGHT INCREASED
+                      child: Center(
+                        child: state is FetchUserPackageLimitInProgress
+                            ? const CircularProgressIndicator(strokeWidth: 2)
+                            : !svgLoaded
+                            ? const SizedBox.shrink()
+                            : SizedBox(               // ⬅️ ICON SIZE CONTROL
+                          width: 60,
+                          height: 60,
+                          child:Image.asset("assets/plusimage.png")
+                        ),
+                      ),
                     ),
-                  ),
-                );
-              })),
-              buildBottomNavigationbarItem(2, AppIcons.myAdsNav,
-                  AppIcons.myAdsNavActive, "myAdsTab".translate(context)),
-              buildBottomNavigationbarItem(3, AppIcons.profileNav,
-                  AppIcons.profileNavActive, "profileTab".translate(context))
-            ]),
+
+                  );
+                },
+              ),
+            ),
+
+            buildBottomNavigationbarItem(
+              2,
+              AppIcons.myAdsNav,
+              AppIcons.myAdsNavActive,
+          //    "myAdsTab".translate(context),
+            ),
+
+            buildBottomNavigationbarItem(
+              3,
+              AppIcons.profileNav,
+              AppIcons.profileNavActive,
+           //   "profileTab".translate(context),
+            ),
+          ],
+        ),
       ),
     );
   }
+
 
   Widget buildBottomNavigationbarItem(
     int index,
     String svgImage,
     String activeSvg,
-    String title,
+  //  String title,
   ) {
     return Expanded(
       child: Material(
@@ -555,17 +593,18 @@ class MainActivityState extends State<MainActivity>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               if (currtab == index) ...{
-                UiUtils.getSvg(activeSvg),
+                UiUtils.getSvg(activeSvg,color: context.color.territoryColor),
               } else ...{
                 UiUtils.getSvg(svgImage,
                     color: context.color.textLightColor.darken(30)),
               },
+              /*
               Text(
                 title,
                 textAlign: TextAlign.center,
               ).color(currtab == index
                   ? context.color.textDefaultColor
-                  : context.color.textLightColor.darken(30)),
+                  : context.color.textLightColor.darken(30)),*/
             ],
           ),
         ),

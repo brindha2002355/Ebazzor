@@ -32,13 +32,13 @@ class CategoryHomeCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
+         // borderRadius: BorderRadius.circular(),
           child: Container(
             child: Column(
               children: [
                 if (isFullImage) ...[
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(10),
                     child: Container(
                       height: 70,
                       width: double.infinity,
@@ -53,17 +53,26 @@ class CategoryHomeCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
-                          color: context.color.borderColor.darken(60), width: 1),
+                        color: context.color.borderColor.darken(60),
+                        width: 1,
+                      ),
                       color: context.color.secondaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: SizedBox(
-                          // color: Colors.blue,
                           width: 48,
                           height: 48,
-                          child: UiUtils.imageType(url, fit: BoxFit.cover),
+                          child: UiUtils.imageType(url, fit: BoxFit.cover,),
                         ),
                       ),
                     ),

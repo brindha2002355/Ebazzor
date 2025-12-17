@@ -5,11 +5,11 @@ import 'package:Ebozor/utils/ui_utils.dart';
 
 ///Light Theme Colors
 ///This color format is different, isn't it? .You can use hex colors here also but you have to remove '#' symbol and add 0xff instead.
-const Color primaryColor_ = Color(0xFFeeeefb);
+const Color primaryColor_ = const Color(0xFFF8FAFE);
 const Color secondaryColor_ = Color(0xFFFFFFFF);
-const Color territoryColor_ = Color(0xFF32A16B);
+const Color territoryColor_ = Color(0xFFDE2D33);
 const Color forthColor_ = Color(0xffFA6E53);
-const Color _backgroundColor = Color(0xffeeeefb);
+const Color _backgroundColor = const Color(0xFFF8FAFE);
 const Color textDarkColor = Color(0xFF121230);
 Color lightTextColor = const Color(0xFF000000).withOpacity(0.5);
 Color widgetsBorderColorLight = const Color(0xffEEEEEE).withOpacity(0.6);

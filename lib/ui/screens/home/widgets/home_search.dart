@@ -21,7 +21,7 @@ class HomeSearchField extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: sidePadding, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: sidePadding, vertical: 10),
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -30,36 +30,52 @@ class HomeSearchField extends StatelessWidget {
         },
         child: AbsorbPointer(
           absorbing: true,
-          child: Container(
-              width: context.screenWidth,
-              height: 56.rh(
-                context,
+          child: Row(
+            children: [
+              Flexible(
+                child: Container(
+                    width: context.screenWidth,
+                    height: 56.rh(
+                      context,
+                    ),
+                    alignment: AlignmentDirectional.center,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 1, color: context.color.borderColor.darken(30)),
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        color: context.color.secondaryColor),
+                    child: TextFormField(
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none, //OutlineInputBorder()
+                          fillColor: Theme.of(context).colorScheme.secondaryColor,
+                          hintText:
+                             "searchHintLbl".translate(context),
+                          hintStyle: TextStyle(color: context.color.textDefaultColor.withOpacity(0.5)),
+                          prefixIcon: buildSearchIcon(),
+                          prefixIconConstraints:
+                              const BoxConstraints(minHeight: 5, minWidth: 5),
+                        ),
+                        enableSuggestions: true,
+                        onEditingComplete: () {
+                          FocusScope.of(context).unfocus();
+                        },
+                        onTap: () {
+                          //change prefix icon color to primary
+                        })),
               ),
-              alignment: AlignmentDirectional.center,
-              decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 1, color: context.color.borderColor.darken(30)),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: context.color.secondaryColor),
-              child: TextFormField(
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none, //OutlineInputBorder()
-                    fillColor: Theme.of(context).colorScheme.secondaryColor,
-                    hintText:
-                       "searchHintLbl".translate(context),
-                    hintStyle: TextStyle(color: context.color.textDefaultColor.withOpacity(0.5)),
-                    prefixIcon: buildSearchIcon(),
-                    prefixIconConstraints:
-                        const BoxConstraints(minHeight: 5, minWidth: 5),
-                  ),
-                  enableSuggestions: true,
-                  onEditingComplete: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  onTap: () {
-                    //change prefix icon color to primary
-                  })),
+              
+
+           Padding(
+             padding: const EdgeInsets.symmetric(horizontal: 8),
+             child: UiUtils.getSvg(AppIcons.notification,color: Colors.grey),
+           ),
+            // IconButton(onPressed: (){}, icon: Icon(Icons.notifications))
+            ],
+
+
+            
+          ),
         ),
       ),
     );

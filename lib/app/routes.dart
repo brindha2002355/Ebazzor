@@ -214,7 +214,7 @@ class Routes {
       case categories:
         return CategoryList.route(routeSettings);
       case subCategoryScreen:
-        return SubCategoryScreen.route(routeSettings);
+        return SubCategoryScreenOne.route(routeSettings);
       case categoryFilterScreen:
         return CategoryFilterScreen.route(routeSettings);
       case subCategoryFilterScreen:

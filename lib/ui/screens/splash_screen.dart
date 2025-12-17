@@ -214,10 +214,10 @@ class SplashScreenState extends State<SplashScreen>
               },
               child: AnnotatedRegion(
                 value: SystemUiOverlayStyle(
-                  statusBarColor: context.color.territoryColor,
+                  statusBarColor: Colors.white,
                 ),
                 child: Scaffold(
-                  backgroundColor: context.color.territoryColor,
+                  backgroundColor: Colors.white,
                   // bottomNavigationBar: Padding(
                   //   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   //   child: UiUtils.getSvg(AppIcons.companyLogo),

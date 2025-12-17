@@ -122,20 +122,19 @@ class _ChatScreenState extends State<ChatScreen>
     );
   final ChatSocketService _socketService = ChatSocketService();
 
-  @override
+
   @override
   void initState() {
     super.initState();
 
-    // Load existing chat messages for this offer
-    context.read<LoadChatMessagesCubit>().load(
-      itemOfferId: widget.itemOfferId,
-    );
+    ChatMessageHandler.flushMessages();
+
+    // Load messages from API
+    context.read<LoadChatMessagesCubit>().load(itemOfferId: widget.itemOfferId);
 
 
     final socketService = ChatSocketService();
 
-    // Connect once
     if (!socketService.isConnected) socketService.connect();
     socketService.joinOffer(widget.itemOfferId);
 
@@ -163,7 +162,6 @@ class _ChatScreenState extends State<ChatScreen>
       setState(() {});
     });
 
-    // Show ratings dialog if the item is sold and purchased but not reviewed
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.status == "sold out" &&
           widget.isPurchased == 1 &&
@@ -186,7 +184,6 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   void dispose() {
-    _socketService.disconnect();
     notificationStreamSubsctription.cancel();
     super.dispose();
   }
@@ -348,6 +345,10 @@ class _ChatScreenState extends State<ChatScreen>
       },
     );
   }
+
+
+  Timer? _typingTimer;
+
 
   @override
   Widget build(BuildContext context) {
@@ -554,6 +555,28 @@ class _ChatScreenState extends State<ChatScreen>
                                       : SizedBox();
                                 });
                               })),
+
+
+                          //// typing status showing
+                          ValueListenableBuilder<bool>(
+                            valueListenable: _socketService.isOtherUserTyping,
+                            builder: (context, isTyping, _) {
+                              if (!isTyping) return const SizedBox();
+
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 12, bottom: 4),
+                                child: Text(
+                                  "${widget.userName} is typing...",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.italic,
+                                    color: context.color.textLightColor,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+
                           SizedBox(
                             height: 8,
                           ),
@@ -564,6 +587,15 @@ class _ChatScreenState extends State<ChatScreen>
                                 Expanded(
                                   child: TextField(
                                     controller: controller,
+                                    onChanged: (value){
+                                      _socketService.typingStart(widget.itemOfferId);
+
+                                      _typingTimer?.cancel();
+                                      _typingTimer = Timer(const Duration(seconds: 1), () {
+                                        _socketService.typingStop(widget.itemOfferId);
+                                      });
+
+                                  },
                                     cursorColor:
                                     context.color.territoryColor,
                                     onTap: () {
@@ -670,12 +702,9 @@ class _ChatScreenState extends State<ChatScreen>
 
 
                                       final text = controller.text.trim();
-
-
-// 1️⃣ SOCKET SEND (instant)
+                                      _socketService.typingStop(widget.itemOfferId);
                                       _socketService.sendMessage(widget.itemOfferId, text);
 
-// Optimistic UI
                                       ChatMessageHandler.add(ChatMessage(
                                         key: ValueKey(DateTime.now().millisecondsSinceEpoch),
                                         message: text,
@@ -687,12 +716,6 @@ class _ChatScreenState extends State<ChatScreen>
                                         file: messageAttachment?.path ?? "",
                                         itemOfferId: widget.itemOfferId,
                                       ));
-
-
-
-// 3️⃣ API handled inside ChatMessage initState
-
-
                                       controller.clear();
                                       messageAttachment = null;
                                       FocusScope.of(context).unfocus();
