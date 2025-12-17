@@ -1,4 +1,5 @@
 import 'package:Ebozor/data/cubits/category/fetch_sub_categories_cubit.dart';
+import 'package:Ebozor/ui/screens/propertyscreen.dart';
 import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,7 @@ import 'package:Ebozor/ui/screens/widgets/errors/no_internet.dart';
 import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
 import 'package:Ebozor/ui/screens/widgets/animated_routes/blur_page_route.dart';
 
+
 class SubCategoryScreenOne extends StatefulWidget {
   final List<CategoryModel> categoryList;
   final String catName;
@@ -22,10 +24,10 @@ class SubCategoryScreenOne extends StatefulWidget {
 
   const SubCategoryScreenOne(
       {super.key,
-      required this.categoryList,
-      required this.catName,
-      required this.catId,
-      required this.categoryIds});
+        required this.categoryList,
+        required this.catName,
+        required this.catId,
+        required this.categoryIds});
 
   @override
   State<SubCategoryScreenOne> createState() => _CategoryListState();
@@ -76,6 +78,56 @@ class _CategoryListState extends State<SubCategoryScreenOne>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.catId == 1 || widget.catName == "Property") {
+      if (widget.categoryList.isNotEmpty) {
+        return PropertyFilterScreen(
+          categoryList: widget.categoryList,
+          catName: widget.catName,
+          catId: widget.catId,
+          categoryIds: widget.categoryIds,
+        );
+      }
+
+      return BlocBuilder<FetchSubCategoriesCubit, FetchSubCategoriesState>(
+        builder: (context, state) {
+          if (state is FetchSubCategoriesSuccess) {
+            return PropertyFilterScreen(
+              categoryList: state.categories,
+              catName: widget.catName,
+              catId: widget.catId,
+              categoryIds: widget.categoryIds,
+            );
+          }
+          if (state is FetchSubCategoriesFailure) {
+            if (state.errorMessage is ApiException) {
+              if (state.errorMessage == "no-internet") {
+                return Scaffold(
+                  body: NoInternet(
+                    onRetry: () {
+                      context
+                          .read<FetchSubCategoriesCubit>()
+                          .fetchSubCategories(categoryId: widget.catId);
+                    },
+                  ),
+                );
+              }
+            }
+            return Scaffold(body: const SomethingWentWrong());
+          }
+
+          return Scaffold(
+              appBar: UiUtils.buildAppBar(
+                context,
+                showBackButton: true,
+                title: widget.catName,
+              ),
+              body: Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: shimmerEffect()));
+        },
+      );
+    }
+
     return AnnotatedRegion(
       value: UiUtils.getSystemUiOverlayStyle(
           context: context, statusBarColor: context.color.secondaryColor),
@@ -126,100 +178,100 @@ class _CategoryListState extends State<SubCategoryScreenOne>
                     ),
                     widget.categoryList.isNotEmpty
                         ? ListView.separated(
-                            itemCount: widget.categoryList.length,
-                            padding: EdgeInsets.zero,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            separatorBuilder: (context, index) {
-                              return const Divider(
-                                thickness: 1.2,
-                                height: 10,
-                              );
-                            },
-                            itemBuilder: (context, index) {
-                              CategoryModel category =
-                                  widget.categoryList[index];
+                      itemCount: widget.categoryList.length,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) {
+                        return const Divider(
+                          thickness: 1.2,
+                          height: 10,
+                        );
+                      },
+                      itemBuilder: (context, index) {
+                        CategoryModel category =
+                        widget.categoryList[index];
 
-                              return ListTile(
-                                onTap: () {
-                                  if (widget.categoryList[index].children!
-                                          .isEmpty &&
-                                      widget.categoryList[index]
-                                              .subcategoriesCount ==
-                                          0) {
-                                    Navigator.pushNamed(
-                                        context, Routes.itemsList,
-                                        arguments: {
-                                          'catID': widget.categoryList[index].id
-                                              .toString(),
-                                          'catName':
-                                              widget.categoryList[index].name,
-                                          "categoryIds": [
-                                            ...widget.categoryIds,
-                                            widget.categoryList[index].id
-                                                .toString()
-                                          ]
-                                        });
-                                  } else {
-                                    Navigator.pushNamed(
-                                        context, Routes.subCategoryScreen,
-                                        arguments: {
-                                          "categoryList": widget
-                                              .categoryList[index].children,
-                                          "catName":
-                                              widget.categoryList[index].name,
-                                          "catId":
-                                              widget.categoryList[index].id,
-                                          "categoryIds": [
-                                            ...widget.categoryIds,
-                                            widget.categoryList[index].id
-                                                .toString()
-                                          ]
-                                        });
-                                  }
-                                },
-                                leading: FittedBox(
-                                  child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      clipBehavior: Clip.antiAlias,
-                                      padding: const EdgeInsets.all(0),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: context.color.territoryColor
-                                              .withOpacity(0.1)),
-                                      child: ClipRRect(
-                                        child: UiUtils.imageType(
-                                          category.url!,
-                                          color: context.color.territoryColor,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )),
-                                ),
-                                title: Text(
-                                  category.name!,
-                                  textAlign: TextAlign.start,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .color(context.color.textDefaultColor)
-                                    .size(context.font.normal),
-                                trailing: Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: context.color.borderColor
-                                            .darken(10)),
-                                    child: Icon(
-                                      Icons.chevron_right_outlined,
-                                      color: context.color.textDefaultColor,
-                                    )),
-                              );
-                            },
+                        return ListTile(
+                          onTap: () {
+                            if (widget.categoryList[index].children!
+                                .isEmpty &&
+                                widget.categoryList[index]
+                                    .subcategoriesCount ==
+                                    0) {
+                              Navigator.pushNamed(
+                                  context, Routes.itemsList,
+                                  arguments: {
+                                    'catID': widget.categoryList[index].id
+                                        .toString(),
+                                    'catName':
+                                    widget.categoryList[index].name,
+                                    "categoryIds": [
+                                      ...widget.categoryIds,
+                                      widget.categoryList[index].id
+                                          .toString()
+                                    ]
+                                  });
+                            } else {
+                              Navigator.pushNamed(
+                                  context, Routes.subCategoryScreen,
+                                  arguments: {
+                                    "categoryList": widget
+                                        .categoryList[index].children,
+                                    "catName":
+                                    widget.categoryList[index].name,
+                                    "catId":
+                                    widget.categoryList[index].id,
+                                    "categoryIds": [
+                                      ...widget.categoryIds,
+                                      widget.categoryList[index].id
+                                          .toString()
+                                    ]
+                                  });
+                            }
+                          },
+                          leading: FittedBox(
+                            child: Container(
+                                width: 40,
+                                height: 40,
+                                clipBehavior: Clip.antiAlias,
+                                padding: const EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: context.color.territoryColor
+                                        .withOpacity(0.1)),
+                                child: ClipRRect(
+                                  child: UiUtils.imageType(
+                                    category.url!,
+                                    color: context.color.territoryColor,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
+                          ),
+                          title: Text(
+                            category.name!,
+                            textAlign: TextAlign.start,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           )
+                              .color(context.color.textDefaultColor)
+                              .size(context.font.normal),
+                          trailing: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: context.color.borderColor
+                                      .darken(10)),
+                              child: Icon(
+                                Icons.chevron_right_outlined,
+                                color: context.color.textDefaultColor,
+                              )),
+                        );
+                      },
+                    )
                         : fetchSubCategoriesData()
                   ],
                 ),

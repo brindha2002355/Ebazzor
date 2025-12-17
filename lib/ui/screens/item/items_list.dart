@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:Ebozor/app/routes.dart';
 import 'package:Ebozor/data/cubits/item/fetch_item_from_category_cubit.dart';
+import 'package:Ebozor/data/cubits/category/fetch_sub_categories_cubit.dart';
+import 'package:Ebozor/data/model/category_model.dart';
 import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:Ebozor/utils/constant.dart';
 import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
@@ -31,12 +33,14 @@ import 'package:Ebozor/ui/screens/widgets/shimmerLoadingContainer.dart';
 class ItemsList extends StatefulWidget {
   final String categoryId, categoryName;
   final List<String> categoryIds;
+  final List<CategoryModel>? selectedCategoryChain;
 
   const ItemsList(
       {super.key,
-      required this.categoryId,
-      required this.categoryName,
-      required this.categoryIds});
+        required this.categoryId,
+        required this.categoryName,
+        required this.categoryIds,
+        this.selectedCategoryChain});
 
   @override
   ItemsListState createState() => ItemsListState();
@@ -48,6 +52,7 @@ class ItemsList extends StatefulWidget {
         categoryId: arguments?['catID'] as String,
         categoryName: arguments?['catName'],
         categoryIds: arguments?['categoryIds'],
+        selectedCategoryChain: arguments?['selectedCategoryChain'],
       ),
     );
   }
@@ -63,9 +68,33 @@ class ItemsListState extends State<ItemsList> {
   String? sortBy;
   ItemFilterModel? filter;
 
+  // For dynamic filtering
+  late List<CategoryModel> _currentChain;
+  late final FetchSubCategoriesCubit _chipFilterCubit;
+  List<String> _currentCategoryIds = [];
+
+  bool _showVerifiedOnly = false;
+
   @override
   void initState() {
     super.initState();
+    _chipFilterCubit = FetchSubCategoriesCubit();
+    // Initialize chain from arguments or empty
+    _currentChain = widget.selectedCategoryChain ?? [];
+    // Fallback: If chain is empty but we have a main category and it's not "Property" (which is root), add it.
+    // Actually, simply relying on arguments is safer.
+    // If empty & we have categoryName, maybe add it?
+    if (_currentChain.isEmpty && widget.categoryId.isNotEmpty) {
+      // Basic fallback
+      _currentChain.add(CategoryModel(
+          id: int.tryParse(widget.categoryId) ?? 0,
+          name: widget.categoryName,
+          children: [],
+          subcategoriesCount: 0
+      ));
+    }
+
+    _currentCategoryIds = List.from(widget.categoryIds);
     searchbody = {};
     Constant.itemFilter = null;
     searchController = TextEditingController();
@@ -102,6 +131,7 @@ class ItemsListState extends State<ItemsList> {
     controller.removeListener(_loadMore);
     controller.dispose();
     searchController.dispose();
+    _chipFilterCubit.close();
     super.dispose();
   }
 
@@ -155,121 +185,347 @@ class ItemsListState extends State<ItemsList> {
 
   Widget searchBarWidget() {
     return Container(
-      height: 56.rh(context),
       color: context.color.secondaryColor,
-      child: LayoutBuilder(builder: (context, c) {
-        return SizedBox(
-            width: c.maxWidth,
-            child: FittedBox(
-              fit: BoxFit.none,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 14, horizontal: 18.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        width: 243.rw(context),
-                        height: 40.rh(context),
-                        alignment: AlignmentDirectional.center,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+                height: 45,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 1, color: context.color.borderColor.darken(30)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    color: context.color.primaryColor),
+                child: TextFormField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      fillColor: Theme.of(context).colorScheme.primaryColor,
+                      hintText: "Search any items ..", // Updated hint
+                      prefixIcon: setSearchIcon(),
+                      prefixIconConstraints:
+                      const BoxConstraints(minHeight: 5, minWidth: 5),
+                    ),
+                    enableSuggestions: true,
+                    onEditingComplete: () {
+                      setState(() {
+                        isFocused = false;
+                        FocusScope.of(context).unfocus();
+                      });
+                    },
+                    onTap: () {
+                      setState(() {
+                        isFocused = true;
+                      });
+                    })),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isList = !isList;
+              });
+            },
+            child: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                border: Border.all(
+                    width: 1, color: context.color.borderColor.darken(30)),
+                color: context.color.secondaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: UiUtils.getSvg(
+                    isList ? AppIcons.gridViewIcon : AppIcons.listViewIcon,
+                    color: context.color.textDefaultColor),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () {
+              // Open Sort/Filter menu
+              showSortByBottomSheet();
+            },
+            child: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                border: Border.all(
+                    width: 1, color: context.color.borderColor.darken(30)),
+                color: context.color.secondaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Icon(Icons.menu, color: context.color.textDefaultColor),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChips() {
+    return Container(
+      color: context.color.secondaryColor,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            // Filters Badge Button
+            GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    Routes.filterScreen,
+                    arguments: {
+                      "update": getFilterValue,
+                      "from": "itemsList",
+                      "categoryIds": _currentCategoryIds.isNotEmpty ? _currentCategoryIds : widget.categoryIds
+                    },
+                  ).then((value) {
+                    if (value == true && filter != null) {
+                      ItemFilterModel updatedFilter =
+                      filter!.copyWith(categoryId: widget.categoryId);
+
+                      context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
+                        categoryId: int.parse(widget.categoryId),
+                        search: searchController.text,
+                        filter: updatedFilter,
+                      );
+                      setState(() {});
+                    }
+                  });
+                },
+                child: Container(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: context.color.primaryColor,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: context.color.borderColor),
+                  ),
+                  child: Row(
+                    children: [
+                      UiUtils.getSvg(AppIcons.filterByIcon,
+                          color: context.color.textDefaultColor,
+                          height: 16,
+                          width: 16),
+                      const SizedBox(width: 6),
+                      Text("Filters",
+                          style: TextStyle(
+                              color: context.color.textDefaultColor,
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Container(
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1,
-                                color: context.color.borderColor.darken(30)),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            color: context.color.primaryColor),
-                        child: TextFormField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 8),
-                              //OutlineInputBorder()
-                              fillColor:
-                                  Theme.of(context).colorScheme.primaryColor,
-                              hintText: "searchHintLbl".translate(context),
-                              prefixIcon: setSearchIcon(),
-                              prefixIconConstraints: const BoxConstraints(
-                                  minHeight: 5, minWidth: 5),
-                            ),
-                            enableSuggestions: true,
-                            onEditingComplete: () {
-                              setState(
-                                () {
-                                  isFocused = false;
-                                  FocusScope.of(context).unfocus();
-                                },
-                              );
-                              print("onediting");
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: Text("2",
+                            style: TextStyle(color: Colors.white, fontSize: 10)),
+                      )
+                    ],
+                  ),
+                )),
+            const SizedBox(width: 8),
+
+            // Dynamic Chips
+            ...List.generate(_currentChain.length, (index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: _buildDynamicChip(index),
+              );
+            }),
+
+            // All Fields Chip
+            _buildChip(
+                label: "All Fields",
+                isActive: false,
+                onTap: _onAllFieldsTap
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDynamicChip(int chainIndex) {
+    CategoryModel currentModel = _currentChain[chainIndex];
+    return _buildChip(
+      label: currentModel.name ?? "",
+      isActive: true, // Or based on selection logic
+      onTap: () => _showDynamicFilterBottomSheet(chainIndex),
+    );
+  }
+
+  void _onAllFieldsTap() {
+    setState(() {
+      _currentChain.clear();
+      _currentCategoryIds = [widget.categoryId];
+
+      context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
+          categoryId: int.tryParse(widget.categoryId) ?? 0,
+          search: searchController.text
+      );
+    });
+  }
+
+  void _showDynamicFilterBottomSheet(int chainIndex) {
+    // Determine the Parent ID to fetch siblings from.
+    // Index 0 in chain corresponds to Level 1 (Rent). Its parent is Level 0 (Property).
+    // _currentCategoryIds: [PropertyID, RentID, ResID, AptID]
+
+    // Check bounds
+    if (_currentCategoryIds.length <= chainIndex) return;
+
+    var parentId = _currentCategoryIds[chainIndex];
+
+    _chipFilterCubit.fetchSubCategories(categoryId: int.tryParse(parentId) ?? 0);
+
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+              color: context.color.secondaryColor,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Select Category", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: context.color.textDefaultColor)),
+              const SizedBox(height: 16),
+              BlocProvider.value(
+                value: _chipFilterCubit,
+                child: BlocBuilder<FetchSubCategoriesCubit, FetchSubCategoriesState>(
+                  builder: (context, state) {
+                    if (state is FetchSubCategoriesInProgress) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (state is FetchSubCategoriesSuccess) {
+                      return Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: state.categories.map((cat) {
+                          bool isSelected = _currentChain.length > chainIndex && cat.id == _currentChain[chainIndex].id;
+                          return ActionChip(
+                            label: Text(cat.name ?? ""),
+                            backgroundColor: isSelected ? context.color.territoryColor.withOpacity(0.1) : context.color.primaryColor,
+                            side: BorderSide(color: isSelected ? context.color.territoryColor : context.color.borderColor),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _updateSelection(chainIndex, cat);
                             },
-                            onTap: () {
-                              //change prefix icon color to primary
-                              setState(() {
-                                isFocused = true;
-                              });
-                            })),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isList = false;
-                        });
-                      },
-                      child: Container(
-                        width: 40.rw(context),
-                        height: 40.rh(context),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 1,
-                              color: context.color.borderColor.darken(30)),
-                          color: context.color.secondaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: UiUtils.getSvg(AppIcons.gridViewIcon,
-                              color: !isList
-                                  ? context.color.textDefaultColor
-                                  : context.color.textDefaultColor
-                                      .withOpacity(0.2)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isList = true;
-                        });
-                      },
-                      child: Container(
-                        width: 40.rw(context),
-                        height: 40.rh(context),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 1,
-                              color: context.color.borderColor.darken(30)),
-                          color: context.color.secondaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: UiUtils.getSvg(AppIcons.listViewIcon,
-                              color: isList
-                                  ? context.color.textDefaultColor
-                                  : context.color.textDefaultColor
-                                      .withOpacity(0.2)),
-                        ),
-                      ),
-                    ),
-                  ],
+                          );
+                        }).toList(),
+                      );
+                    }
+                    return Text("No options available");
+                  },
                 ),
               ),
-            ));
-      }),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _updateSelection(int chainIndex, CategoryModel newSelection) {
+    final oldId = _currentChain.length > chainIndex ? _currentChain[chainIndex].id : -1;
+    if (oldId == newSelection.id) return; // No change
+
+    setState(() {
+      // Update the chain at this index
+      if (_currentChain.length > chainIndex) {
+        _currentChain[chainIndex] = newSelection;
+      } else {
+        _currentChain.add(newSelection);
+      }
+
+      // Truncate logic: If I changed Level 1 (Rent -> Sale), Level 2 (Res) might be invalid or need reset.
+      if (_currentChain.length > chainIndex + 1) {
+        _currentChain.removeRange(chainIndex + 1, _currentChain.length);
+      }
+
+      // Re-calculate categoryIds chain
+      List<String> newIds = [_currentCategoryIds[0]];
+      for (var cat in _currentChain) {
+        newIds.add(cat.id.toString());
+      }
+
+      _currentCategoryIds = newIds;
+
+      // Trigger API refresh
+      context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
+          categoryId: newSelection.id!,
+          search: searchController.text
+      );
+    });
+  }
+
+  Widget _buildChip({required String label, required bool isActive, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: context.color.primaryColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+              color: isActive
+                  ? context.color.borderColor
+                  : context.color.borderColor), // Same border for now or customize
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(label,
+                style: TextStyle(
+                    color: context.color.textDefaultColor,
+                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal)),
+            const SizedBox(width: 4),
+            Icon(Icons.keyboard_arrow_down,
+                size: 16, color: context.color.textDefaultColor)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVerifiedToggle() {
+    return Container(
+      color: context.color.primaryColor,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Show verified properties first",
+              style: TextStyle(
+                  color: context.color.textDefaultColor, fontSize: 14)),
+          Switch(
+            value: _showVerifiedOnly,
+            onChanged: (val) {
+              setState(() {
+                _showVerifiedOnly = val;
+              });
+              // Optionally trigger reload or sort
+            },
+            activeColor: context.color.territoryColor,
+          )
+        ],
+      ),
     );
   }
 
@@ -318,11 +574,11 @@ class ItemsListState extends State<ItemsList> {
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.primaryColor,
           appBar: UiUtils.buildAppBar(
-            context,
-            showBackButton: true,
-            title: selectedcategoryName == ""
-                ? widget.categoryName
-                : selectedcategoryName
+              context,
+              showBackButton: true,
+              title: selectedcategoryName == ""
+                  ? widget.categoryName
+                  : selectedcategoryName
           ),
           bottomNavigationBar: bottomWidget(),
           body: RefreshIndicator(
@@ -333,14 +589,16 @@ class ItemsListState extends State<ItemsList> {
               Constant.itemFilter = null;
 
               context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
-                    categoryId: int.parse(widget.categoryId),
-                    search: "",
-                  );
+                categoryId: int.parse(widget.categoryId),
+                search: "",
+              );
             },
             color: context.color.territoryColor,
             child: Column(
               children: [
                 searchBarWidget(),
+                _buildFilterChips(),
+                _buildVerifiedToggle(),
                 Expanded(child: fetchItems()),
               ],
             ),
@@ -509,11 +767,11 @@ class ItemsListState extends State<ItemsList> {
                   context
                       .read<FetchItemFromCategoryCubit>()
                       .fetchItemFromCategory(
-                          categoryId: int.parse(
-                            widget.categoryId,
-                          ),
-                          search: searchController.text.toString(),
-                          sortBy: null);
+                      categoryId: int.parse(
+                        widget.categoryId,
+                      ),
+                      search: searchController.text.toString(),
+                      sortBy: null);
 
                   setState(() {
                     sortBy = null;
@@ -535,11 +793,11 @@ class ItemsListState extends State<ItemsList> {
                   context
                       .read<FetchItemFromCategoryCubit>()
                       .fetchItemFromCategory(
-                          categoryId: int.parse(
-                            widget.categoryId,
-                          ),
-                          search: searchController.text.toString(),
-                          sortBy: "new-to-old");
+                      categoryId: int.parse(
+                        widget.categoryId,
+                      ),
+                      search: searchController.text.toString(),
+                      sortBy: "new-to-old");
                   setState(() {
                     sortBy = "new-to-old";
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -555,11 +813,11 @@ class ItemsListState extends State<ItemsList> {
                   context
                       .read<FetchItemFromCategoryCubit>()
                       .fetchItemFromCategory(
-                          categoryId: int.parse(
-                            widget.categoryId,
-                          ),
-                          search: searchController.text.toString(),
-                          sortBy: "old-to-new");
+                      categoryId: int.parse(
+                        widget.categoryId,
+                      ),
+                      search: searchController.text.toString(),
+                      sortBy: "old-to-new");
                   setState(() {
                     sortBy = "old-to-new";
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -575,11 +833,11 @@ class ItemsListState extends State<ItemsList> {
                   context
                       .read<FetchItemFromCategoryCubit>()
                       .fetchItemFromCategory(
-                          categoryId: int.parse(
-                            widget.categoryId,
-                          ),
-                          search: searchController.text.toString(),
-                          sortBy: "price-high-to-low");
+                      categoryId: int.parse(
+                        widget.categoryId,
+                      ),
+                      search: searchController.text.toString(),
+                      sortBy: "price-high-to-low");
                   setState(() {
                     sortBy = "price-high-to-low";
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -595,11 +853,11 @@ class ItemsListState extends State<ItemsList> {
                   context
                       .read<FetchItemFromCategoryCubit>()
                       .fetchItemFromCategory(
-                          categoryId: int.parse(
-                            widget.categoryId,
-                          ),
-                          search: searchController.text.toString(),
-                          sortBy: "price-low-to-high");
+                      categoryId: int.parse(
+                        widget.categoryId,
+                      ),
+                      search: searchController.text.toString(),
+                      sortBy: "price-low-to-high");
                   setState(() {
                     sortBy = "price-low-to-high";
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -616,41 +874,41 @@ class ItemsListState extends State<ItemsList> {
   Widget fetchItems() {
     return BlocBuilder<FetchItemFromCategoryCubit, FetchItemFromCategoryState>(
         builder: (context, state) {
-      if (state is FetchItemFromCategoryInProgress) {
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return buildItemsShimmer(context);
-          },
-        );
-      }
+          if (state is FetchItemFromCategoryInProgress) {
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return buildItemsShimmer(context);
+              },
+            );
+          }
 
-      if (state is FetchItemFromCategoryFailure) {
-        return Center(
-          child: Text(state.errorMessage),
-        );
-      }
-      if (state is FetchItemFromCategorySuccess) {
-        if (state.itemModel.isEmpty) {
-          return Center(
-            child: NoDataFound(
-              onTap: () {
-                context
-                    .read<FetchItemFromCategoryCubit>()
-                    .fetchItemFromCategory(
+          if (state is FetchItemFromCategoryFailure) {
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          }
+          if (state is FetchItemFromCategorySuccess) {
+            if (state.itemModel.isEmpty) {
+              return Center(
+                child: NoDataFound(
+                  onTap: () {
+                    context
+                        .read<FetchItemFromCategoryCubit>()
+                        .fetchItemFromCategory(
                         categoryId: int.parse(
                           widget.categoryId,
                         ),
                         search: searchController.text.toString());
-              },
-            ),
-          );
-        }
-        return Column(
-          children: [
-            Expanded(child: mainChildren(state.itemModel)
-                /* isList
+                  },
+                ),
+              );
+            }
+            return Column(
+              children: [
+                Expanded(child: mainChildren(state.itemModel)
+                  /* isList
                   ? ListView.builder(
                       shrinkWrap: true,
                       controller: controller,
@@ -718,12 +976,12 @@ class ItemsListState extends State<ItemsList> {
                       },
                     ),*/
                 ),
-            if (state.isLoadingMore) UiUtils.progress()
-          ],
-        );
-      }
-      return Container();
-    });
+                if (state.isLoadingMore) UiUtils.progress()
+              ],
+            );
+          }
+          return Container();
+        });
   }
 
   void _navigateToDetails(BuildContext context, ItemModel item) {
