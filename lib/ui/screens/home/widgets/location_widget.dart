@@ -158,13 +158,10 @@ class LocationWidget extends StatelessWidget {
             child: Container(
               width: 40.rw(context),
               height: 40.rh(context),
-              decoration: BoxDecoration(
-                  color: context.color.secondaryColor,
-                  borderRadius: BorderRadius.circular(10)),
               child: UiUtils.getSvg(
                 AppIcons.location,
                 fit: BoxFit.none,
-                color: context.color.territoryColor,
+                color: context.color.textLightColor,
               ),
             ),
           ),

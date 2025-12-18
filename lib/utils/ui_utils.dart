@@ -368,6 +368,7 @@ class UiUtils {
                           title ?? "",
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
+                          //textAlign: TextAlign.center,
                         
                         )
                             .color(context.color.textDefaultColor)

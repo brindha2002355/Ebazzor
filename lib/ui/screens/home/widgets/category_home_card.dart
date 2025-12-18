@@ -4,11 +4,11 @@ import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Ebozor/utils/ui_utils.dart';
-
 class CategoryHomeCard extends StatelessWidget {
   final String title;
   final String url;
   final VoidCallback onTap;
+
   const CategoryHomeCard({
     super.key,
     required this.title,
@@ -18,82 +18,77 @@ class CategoryHomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String extension = url.split(".").last.toLowerCase();
-    bool isFullImage = false;
+    final extension = url.split(".").last.toLowerCase();
+    final bool isFullImage = !(extension == "png" || extension == "svg");
 
-
-    if (extension == "png" || extension == "svg") {
-      isFullImage = false;
-    } else {
-      isFullImage = true;
-    }
     return SizedBox(
-      width: 70,
+      width: 85,
+      height: 120, // 🔥 FIX: explicit height
       child: GestureDetector(
         onTap: onTap,
-        child: ClipRRect(
-         // borderRadius: BorderRadius.circular(),
-          child: Container(
-            child: Column(
-              children: [
-                if (isFullImage) ...[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      height: 70,
-                      width: double.infinity,
-                      color: context.color.secondaryColor,
-                      child: UiUtils.imageType(url, fit: BoxFit.contain),
-                    ),
-                  ),
-                ] else ...[
-                  Container(
-                    clipBehavior: Clip.antiAlias,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: context.color.borderColor.darken(60),
-                        width: 1,
-                      ),
-                      color: context.color.secondaryColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 10,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: UiUtils.imageType(url, fit: BoxFit.cover,),
-                        ),
-                      ),
-                    ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFFFFF),
+              borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+          mainAxisSize: MainAxisSize.max, // 🔥 important
+          children: [
+            Container(
+              height: 46,
+              width: 46,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
                   ),
                 ],
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Text(title)
-                      .centerAlign()
-                      .setMaxLines(lines: 2)
-                      .size(context.font.smaller)
-                      .color(
-                        context.color.textDefaultColor,
-                      ),
-                ))
-              ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: UiUtils.imageType(
+                  url,
+                  fit: isFullImage ? BoxFit.contain : BoxFit.cover,
+                ),
+              ),
             ),
-          ),
+
+            const SizedBox(height: 6),
+
+            Expanded(
+              child: Center( // 🔥 text center panna
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: context.font.small,
+                    color: context.color.textDefaultColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
+
+
+      ),
       ),
     );
   }
 }
+
+

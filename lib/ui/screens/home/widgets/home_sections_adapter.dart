@@ -54,13 +54,12 @@ class HomeSectionsAdapter extends StatelessWidget {
         GridListAdapter(
           type: ListUiType.List,
           listAxis: Axis.horizontal,
-          height: 260, // 🔥 SAME AS CARD HEIGHT
+          height: 220,
           listSaperator: (_, __) => const SizedBox(width: 14),
           builder: (context, index, _) {
             final item = section.sectionData![index];
             return ItemCard(
               item: item,
-              width: 160, // 🔥 SAME WIDTH FOR ALL
             );
           },
           total: section.sectionData!.length,
@@ -83,10 +82,9 @@ class ItemCard extends StatefulWidget {
   @override
   State<ItemCard> createState() => _ItemCardState();
 }
-
 class _ItemCardState extends State<ItemCard> {
-  final double likeButtonSize = 32;
-  final double imageHeight = 140;
+  final double likeButtonSize = 24;
+  final double imageHeight = 130;
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +97,7 @@ class _ItemCardState extends State<ItemCard> {
         );
       },
       child: Container(
-        width: widget.width ?? 160,
-        height: 260, // 🔥 FIXED HEIGHT
+        width: widget.width ?? 170,
         decoration: BoxDecoration(
           color: context.color.secondaryColor,
           borderRadius: BorderRadius.circular(18),
@@ -114,24 +111,27 @@ class _ItemCardState extends State<ItemCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// IMAGE
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(18),
-                  ),
-                  child: UiUtils.getImage(
-                    widget.item?.image ?? "",
-                    height: imageHeight,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                Flexible(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(18),
+                    ),
+                    child: UiUtils.getImage(
+                      widget.item?.image ?? "",
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
 
                 /// CONTENT
                 Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
+                      /// PRICE
                       Text(
                         "${Constant.currencySymbol} ${widget.item?.price ?? ""}",
                       )
@@ -139,31 +139,38 @@ class _ItemCardState extends State<ItemCard> {
                           .size(context.font.large)
                           .color(context.color.territoryColor),
 
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 1),
 
+                      /// ITEM NAME
                       Text(widget.item?.name ?? "")
                           .firstUpperCaseWidget()
                           .setMaxLines(lines: 1)
                           .size(context.font.large),
 
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 1),
 
+                      /// LOCATION (compact)
                       if ((widget.item?.address ?? "").isNotEmpty)
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             UiUtils.getSvg(
+                              height: 20,
+                              width: 20,
                               AppIcons.location,
-                              width: 10,
-                              height: 12,
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 1),
                             Expanded(
-                              child: Text(widget.item?.address ?? "")
-                                  .size(context.font.smaller)
-                                  .setMaxLines(lines: 1)
-                                  .color(
-                                context.color.textDefaultColor
-                                    .withOpacity(0.5),
+                              child: Text(
+                                widget.item?.address ?? "",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: context.font.small,
+                                  height: 1,
+                                  color: context.color.textDefaultColor
+                                      .withOpacity(0.5),
+                                ),
                               ),
                             ),
                           ],
@@ -228,36 +235,42 @@ class _ItemCardState extends State<ItemCard> {
                       },
                     );
                   },
-                  child: Container(
-                    width: likeButtonSize,
-                    height: likeButtonSize,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: context.color.secondaryColor,
-                      boxShadow:
-                      context.watch<AppThemeCubit>().state.appTheme ==
-                          AppTheme.dark
-                          ? null
-                          : [
-                        BoxShadow(
-                          color: Colors.grey.shade300,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        )
-                      ],
+                   child: Container(
+                  width: likeButtonSize,
+                  height: likeButtonSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.color.secondaryColor,
+                    boxShadow:
+                    context.watch<AppThemeCubit>().state.appTheme == AppTheme.dark
+                        ? null
+                        : [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        blurRadius: 3,
+                        offset: const Offset(0, 2),
+                      )
+                    ],
+                  ),
+                  child: state is UpdateFavoriteInProgress
+                      ? Center(
+                    child: SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: UiUtils.progress(),
                     ),
-                    child: state is UpdateFavoriteInProgress
-                        ? Center(child: UiUtils.progress())
-                        : UiUtils.getSvg(
-                      isLike
-                          ? AppIcons.like_fill
-                          : AppIcons.like,
-                      width: 22,
-                      height: 22,
-                      color: context.color.territoryColor,
+                  )
+                      : Center(
+                    child: UiUtils.getSvg(
+                      isLike ? AppIcons.like_fill : AppIcons.like,
+                      width: 14,
+                      height: 14,
+                      color: context.color.territoryColor
                     ),
                   ),
                 ),
+
+              ),
               );
             },
           );
@@ -266,6 +279,7 @@ class _ItemCardState extends State<ItemCard> {
     );
   }
 }
+
 
 class TitleHeader extends StatelessWidget {
   final String title;
@@ -294,7 +308,7 @@ class TitleHeader extends StatelessWidget {
           Expanded(
             child: Text(title)
                 .size(context.font.large)
-                .bold(weight: FontWeight.w600)
+                .bold(weight: FontWeight.bold)
                 .setMaxLines(lines: 1),
           ),
 

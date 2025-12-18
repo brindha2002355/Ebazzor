@@ -1,6 +1,7 @@
 import 'package:Ebozor/data/cubits/category/fetch_sub_categories_cubit.dart';
 import 'package:Ebozor/ui/screens/home/widgets/location_widget.dart';
 import 'package:Ebozor/data/model/category_model.dart';
+import 'package:Ebozor/ui/screens/main_activity.dart';
 import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:Ebozor/utils/ui_utils.dart';
@@ -101,7 +102,7 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion(
       value: UiUtils.getSystemUiOverlayStyle(
-          context: context, statusBarColor: context.color.secondaryColor),
+          context: context, statusBarColor: context.color.backgroundColor),
       child: Scaffold(
         backgroundColor: context.color.backgroundColor,
         appBar: UiUtils.buildAppBar(
@@ -225,10 +226,9 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
           width: double.infinity,
           decoration: BoxDecoration(
             color: context.color.backgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: context.color.borderColor),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: const LocationWidget(),
         ),
         const SizedBox(height: 8),
@@ -296,13 +296,14 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
                   },
                   child: Container(
                     width: 100,
+                    height: 100, // 🔥 FIXED HEIGHT (important)
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: context.color.backgroundColor,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: isSelected
-                            ? context.color.territoryColor
+                            ? context.color.blackColor
                             : context.color.borderColor,
                         width: isSelected ? 2 : 1,
                       ),
@@ -310,32 +311,44 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        /// ICON
                         SizedBox(
                           height: 30,
                           width: 30,
                           child: UiUtils.imageType(
                             subCat.url ?? "",
                             color: isSelected
-                                ? context.color.territoryColor
+                                ? context.color.blackColor
                                 : context.color.textDefaultColor,
                             fit: BoxFit.contain,
                           ),
                         ),
+
                         const SizedBox(height: 8),
-                        Text(
-                          subCat.name ?? "",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
+
+                        /// TEXT (height controlled)
+                        SizedBox(
+                          height: 32, // 🔥 text area fixed
+                          child: Text(
+                            subCat.name ?? "",
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
                               fontSize: 12,
                               color: isSelected
-                                  ? context.color.territoryColor
+                                  ? context.color.blackColor
                                   : context.color.textDefaultColor,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal
+                              fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.normal,
+                              height: 1.2, // 🔥 line height control
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
+
                 ),
               );
             }).toList(),
@@ -382,48 +395,59 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
         Text(
           "${_selectedPropertyType?.name} Categories",
           style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: context.color.textDefaultColor),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: context.color.textDefaultColor,
+          ),
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: subCats.map((child) {
-            bool isSelected = _selectedSubCategory?.id == child.id;
-            return ActionChip(
-              label: Text(child.name ?? ""),
-              backgroundColor: isSelected ? context.color.territoryColor.withOpacity(0.1) : context.color.backgroundColor,
-              side: BorderSide(color: isSelected ? context.color.territoryColor : context.color.borderColor),
-              labelStyle: TextStyle(
-                color: isSelected ? context.color.territoryColor : context.color.textDefaultColor,
-              ),
-              onPressed: () {
-                setState(() {
-                  _selectedSubCategory = child;
-                });
-              },
-            );
-          }).toList(),
-        )
+
+        /// 🔥 Horizontal scroll – single row
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: subCats.map((child) {
+              bool isSelected = _selectedSubCategory?.id == child.id;
+
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ActionChip(
+                  label: Text(child.name ?? ""),
+                  backgroundColor: isSelected
+                      ? context.color.backgroundColor
+                      : context.color.backgroundColor,
+                  side: BorderSide(
+                    color: isSelected
+                        ? context.color.blackColor
+                        : context.color.borderColor,
+                  ),
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5), // 👈 change value
+                  ),
+                  labelStyle: TextStyle(
+                    color: isSelected
+                        ? context.color.blackColor
+                        : context.color.textDefaultColor,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _selectedSubCategory = child;
+                    });
+                  },
+                ),
+              );
+            }).toList(),
+          ),
+        ),
       ],
     );
   }
 
+
   Widget _buildBottomButton() {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: context.color.secondaryColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          )
-        ],
-      ),
       child: MaterialButton(
         onPressed: () {
           _onShowResults();

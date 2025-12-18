@@ -545,36 +545,7 @@ class AllItemsWidget extends StatelessWidget {
   }
 }
 
-Widget _builderWrapper(FetchHomeAllItemsSuccess state, BuildContext context,
-    int index, bool isGrid) {
-  ItemModel? item = state.items[index];
 
-  if (isGrid) {
-    // Show ItemCard for grid items
-    return ItemCard(
-      item: item,
-      width: 192,
-    );
-  } else {
-    // Show ItemHorizontalCard for list items
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.adDetailsScreen,
-          arguments: {
-            'model': item,
-          },
-        );
-      },
-      child: ItemHorizontalCard(
-        item: item,
-        showLikeButton: true,
-        additionalImageWidth: 8,
-      ),
-    );
-  }
-}
 
 Future<void> notificationPermissionChecker() async {
   if (!(await Permission.notification.isGranted)) {

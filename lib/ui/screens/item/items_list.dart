@@ -8,6 +8,7 @@ import 'package:Ebozor/data/model/category_model.dart';
 import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:Ebozor/utils/constant.dart';
 import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -189,44 +190,52 @@ class ItemsListState extends State<ItemsList> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
+          /// 🔍 SEARCH FIELD
           Expanded(
             child: Container(
-                height: 45,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 1, color: context.color.borderColor.darken(30)),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: context.color.primaryColor),
-                child: TextFormField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      fillColor: Theme.of(context).colorScheme.primaryColor,
-                      hintText: "Search any items ..", // Updated hint
-                      prefixIcon: setSearchIcon(),
-                      prefixIconConstraints:
-                      const BoxConstraints(minHeight: 5, minWidth: 5),
-                    ),
-                    enableSuggestions: true,
-                    onEditingComplete: () {
-                      setState(() {
-                        isFocused = false;
-                        FocusScope.of(context).unfocus();
-                      });
-                    },
-                    onTap: () {
-                      setState(() {
-                        isFocused = true;
-                      });
-                    })),
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 0.1,
+                  color: context.color.borderColor.darken(30),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                color: context.color.backgroundColor,
+              ),
+              child: TextFormField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  hintText: "Search any items ..",
+                  prefixIcon: setSearchIcon(),
+                  prefixIconConstraints:
+                  const BoxConstraints(minHeight: 5, minWidth: 5),
+                ),
+                enableSuggestions: true,
+                onEditingComplete: () {
+                  setState(() {
+                    isFocused = false;
+                    FocusScope.of(context).unfocus();
+                  });
+                },
+                onTap: () {
+                  setState(() {
+                    isFocused = true;
+                  });
+                },
+              ),
+            ),
           ),
+
           const SizedBox(width: 12),
+
+          /// 🔲 GRID VIEW ONLY
           GestureDetector(
             onTap: () {
               setState(() {
-                isList = !isList;
+                isList = false; // 🔥 always GRID
               });
             },
             child: Container(
@@ -234,34 +243,54 @@ class ItemsListState extends State<ItemsList> {
               height: 45,
               decoration: BoxDecoration(
                 border: Border.all(
-                    width: 1, color: context.color.borderColor.darken(30)),
-                color: context.color.secondaryColor,
+                  width: 1,
+                  color: context.color.borderColor.darken(30),
+                ),
+                color: !isList
+                    ? context.color.backgroundColor
+                    : context.color.secondaryColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
                 child: UiUtils.getSvg(
-                    isList ? AppIcons.gridViewIcon : AppIcons.listViewIcon,
-                    color: context.color.textDefaultColor),
+                  AppIcons.gridViewIcon,
+                  color: !isList
+                      ? context.color.blackColor
+                      : context.color.textDefaultColor.withOpacity(0.2),
+                ),
               ),
             ),
           ),
+
           const SizedBox(width: 12),
+
+          /// ☰ MENU → LIST VIEW ONLY
           GestureDetector(
             onTap: () {
-              // Open Sort/Filter menu
-              showSortByBottomSheet();
+              setState(() {
+                isList = true; // 🔥 always LIST
+              });
             },
             child: Container(
               width: 45,
               height: 45,
               decoration: BoxDecoration(
                 border: Border.all(
-                    width: 1, color: context.color.borderColor.darken(30)),
-                color: context.color.secondaryColor,
+                  width: 1,
+                  color: context.color.borderColor.darken(30),
+                ),
+                color: isList
+                    ? context.color.backgroundColor
+                    : context.color.secondaryColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
-                child: Icon(Icons.menu, color: context.color.textDefaultColor),
+                child: Icon(
+                  Icons.menu,
+                  color: isList
+                      ? context.color.blackColor
+                      : context.color.textDefaultColor.withOpacity(0.2),
+                ),
               ),
             ),
           ),
@@ -269,6 +298,8 @@ class ItemsListState extends State<ItemsList> {
       ),
     );
   }
+
+
 
   Widget _buildFilterChips() {
     return Container(
@@ -288,8 +319,9 @@ class ItemsListState extends State<ItemsList> {
                     arguments: {
                       "update": getFilterValue,
                       "from": "itemsList",
-                      "categoryIds": _currentCategoryIds.isNotEmpty ? _currentCategoryIds : widget.categoryIds
+                      "categoryIds": _currentCategoryIds
                     },
+
                   ).then((value) {
                     if (value == true && filter != null) {
                       ItemFilterModel updatedFilter =
@@ -319,18 +351,6 @@ class ItemsListState extends State<ItemsList> {
                           height: 16,
                           width: 16),
                       const SizedBox(width: 6),
-                      Text("Filters",
-                          style: TextStyle(
-                              color: context.color.textDefaultColor,
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 4),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.red, shape: BoxShape.circle),
-                        child: Text("2",
-                            style: TextStyle(color: Colors.white, fontSize: 10)),
-                      )
                     ],
                   ),
                 )),
@@ -506,24 +526,36 @@ class ItemsListState extends State<ItemsList> {
 
   Widget _buildVerifiedToggle() {
     return Container(
-      color: context.color.primaryColor,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: context.color.secondaryColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: context.color.borderColor,
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Show verified properties first",
-              style: TextStyle(
-                  color: context.color.textDefaultColor, fontSize: 14)),
-          Switch(
+          Text(
+            "Show verified properties first",
+            style: TextStyle(
+              color: context.color.textDefaultColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          /// 🍎 iOS style toggle
+          CupertinoSwitch(
             value: _showVerifiedOnly,
+            activeColor: context.color.territoryColor, // green when ON
             onChanged: (val) {
               setState(() {
                 _showVerifiedOnly = val;
               });
-              // Optionally trigger reload or sort
             },
-            activeColor: context.color.territoryColor,
-          )
+          ),
         ],
       ),
     );
@@ -533,7 +565,7 @@ class ItemsListState extends State<ItemsList> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: UiUtils.getSvg(AppIcons.search,
-            color: context.color.textDefaultColor));
+            color: context.color.territoryColor));
   }
 
   Widget setSuffixIcon() {
@@ -564,7 +596,7 @@ class ItemsListState extends State<ItemsList> {
     return AnnotatedRegion(
       value: UiUtils.getSystemUiOverlayStyle(
         context: context,
-        statusBarColor: context.color.secondaryColor,
+        statusBarColor: context.color.backgroundColor,
       ),
       child: PopScope(
         canPop: true,
@@ -572,8 +604,9 @@ class ItemsListState extends State<ItemsList> {
           Constant.itemFilter = null;
         },
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.primaryColor,
+          backgroundColor: Colors.white,
           appBar: UiUtils.buildAppBar(
+
               context,
               showBackButton: true,
               title: selectedcategoryName == ""
@@ -582,6 +615,7 @@ class ItemsListState extends State<ItemsList> {
           ),
           bottomNavigationBar: bottomWidget(),
           body: RefreshIndicator(
+            backgroundColor: context.color.backgroundColor,
             onRefresh: () async {
               // Debug log to check if onRefresh is triggered
 
@@ -596,9 +630,12 @@ class ItemsListState extends State<ItemsList> {
             color: context.color.territoryColor,
             child: Column(
               children: [
+                SizedBox(height: 8,),
                 searchBarWidget(),
-                _buildFilterChips(),
+                SizedBox(height: 8,),
+               // _buildFilterChips(),
                 _buildVerifiedToggle(),
+                SizedBox(height: 8,),
                 Expanded(child: fetchItems()),
               ],
             ),

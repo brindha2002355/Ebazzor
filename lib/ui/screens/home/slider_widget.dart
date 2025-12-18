@@ -237,10 +237,10 @@ class _SliderWidgetState extends State<SliderWidget>
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                width: isActive ? 8 : 6,
-                height: 8,
+                width: isActive ? 12 : 8,
+                height: isActive ?12:8,
                 decoration: BoxDecoration(
-                  color: isActive ? context.color.territoryColor: Colors.grey.shade400,
+                  color: isActive ? context.color.territoryColor:context.color.territoryColor.withOpacity(0.5) ,
                   borderRadius: BorderRadius.circular(10),
                 ),
               );

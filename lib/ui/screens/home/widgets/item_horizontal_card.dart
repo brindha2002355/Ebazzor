@@ -121,143 +121,128 @@ class ItemHorizontalCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.5),
       child: Container(
-        height: addBottom == null ? 124 : (124 + (additionalHeight ?? 0)),
         decoration: BoxDecoration(
-            border: Border.all(color: context.color.borderColor.darken(50)),
-            color: context.color.secondaryColor,
-            borderRadius: BorderRadius.circular(15)),
-        child: Stack(
-          fit: StackFit.expand,
+          border: Border.all(color: context.color.borderColor.darken(50)),
+          color: context.color.secondaryColor,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
+            // IMAGE SECTION
+            Stack(
               children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: UiUtils.getImage(
-                                  item.image ?? "",
-                                  height: addBottom == null
-                                      ? 122
-                                      : (122 +
-                                          (additionalHeight ??
-                                              0)) /*statusButton != null ? 90 : 120*/,
-                                  width: 100 + (additionalImageWidth ?? 0),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              // Text(item.promoted.toString()),
-                              if (item.isFeature ?? false)
-                                const PositionedDirectional(
-                                    start: 5,
-                                    top: 5,
-                                    child: PromotedCard(
-                                        type: PromoteCardType.icon)),
-                            ],
-                          ),
-                          if (statusButton != null)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 3.0, horizontal: 3.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: statusButton!.color,
-                                    borderRadius: BorderRadius.circular(4)),
-                                width: 80,
-                                height: 120 - 90 - 8,
-                                child: Center(
-                                    child: Text(statusButton!.lable)
-                                        .size(context.font.small)
-                                        .bold()
-                                        .color(statusButton?.textColor ??
-                                            Colors.black)),
-                              ),
-                            )
-                        ],
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(
-                            top: 0,
-                            start: 12,
-                            bottom: 5,
-                            end: 12,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      Constant.currencySymbol +
-                                          item.price!
-                                              .toString()
-                                              .priceFormate(
-                                                  disabled: Constant
-                                                          .isNumberWithSuffix ==
-                                                      false)
-                                              .toString()
-                                    )
-                                        .size(context.font.large)
-                                        .color(context.color.territoryColor)
-                                        .bold(weight: FontWeight.w700),
-                                  ),
-                                  if (showLikeButton ?? true) favButton(context)
-                                ],
-                              ),
-                              Text(
-                                item.name!.firstUpperCase(),
-                              )
-                                  .setMaxLines(lines: 2)
-                                  .size(context.font.normal)
-                                  .color(context.color.textDefaultColor),
-                              //SizedBox(height: 5),
-                              if (item.address != "")
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on_outlined,
-                                      size: 15,
-                                      color: context.color.textDefaultColor
-                                          .withOpacity(0.5),
-                                    ),
-                                    Expanded(
-                                      child: Text(item.address?.trim() ?? "")
-                                          .setMaxLines(lines: 1)
-                                          .color(context.color.textDefaultColor
-                                              .withOpacity(0.5))
-                                          .size(context.font.smaller),
-                                    )
-                                  ],
-                                )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(15),
+                  ),
+                  child: UiUtils.getImage(
+                    item.image ?? "",
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
 
-                if (useRow == false || useRow == null) ...addBottom ?? [],
+                if (item.isFeature ?? false)
+                  const Positioned(
+                    top: 8,
+                    left: 8,
+                    child: PromotedCard(type: PromoteCardType.icon),
+                  ),
 
-                if (useRow == true) ...{Row(children: addBottom ?? [])}
+                if (showLikeButton ?? true)
+                  Positioned(
+                    top: 8,
+                    right: 8,
 
-                // ...addBottom ?? []
+                    child: favButton(context,),
+                  ),
               ],
             ),
+
+            // CONTENT
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // PRICE
+                  SizedBox(height: 10,),
+                  Text(
+                    Constant.currencySymbol +
+                        item.price!
+                            .toString()
+                            .priceFormate(
+                            disabled:
+                            Constant.isNumberWithSuffix == false),
+                  )
+                      .size(context.font.large)
+                      .color(context.color.territoryColor)
+                      .bold(weight: FontWeight.w700),
+
+                  const SizedBox(height: 10),
+
+                  // NAME
+                  Text(item.name!.firstUpperCase())
+                      .setMaxLines(lines: 2)
+                      .size(context.font.normal)
+                      .color(context.color.textDefaultColor),
+
+                  const SizedBox(height: 10),
+
+                  // LOCATION
+                  if (item.address != "")
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 14,
+                          color: context.color.textDefaultColor.withOpacity(0.5),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(item.address?.trim() ?? "")
+                              .setMaxLines(lines: 1)
+                              .size(context.font.smaller)
+                              .color(context.color.textDefaultColor
+                              .withOpacity(0.5)),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+
+            // STATUS BUTTON
+            if (statusButton != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 12, bottom: 8),
+                child: Container(
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusButton!.color,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(statusButton!.lable)
+                      .size(context.font.small)
+                      .bold()
+                      .color(
+                      statusButton?.textColor ?? Colors.black),
+                ),
+              ),
+
+            // ADD BOTTOM WIDGETS
+            if (useRow == false || useRow == null) ...addBottom ?? [],
+            if (useRow == true)
+              Row(children: addBottom ?? []),
           ],
         ),
       ),
     );
   }
+
 }
 
 class StatusButton {
