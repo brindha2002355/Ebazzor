@@ -2405,25 +2405,40 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
           borderRadius: BorderRadius.circular(18),
           child: SizedBox(
             height: 200.rh(context),
-            child: GoogleMap(
-              zoomControlsEnabled: false,
-              zoomGesturesEnabled: false,
-              onTap: (latLng) {
-                _navigateToGoogleMapScreen(context);
-              },
-              initialCameraPosition:
-                  CameraPosition(target: currentPosition, zoom: 13),
-              mapType: MapType.normal,
-              markers: {
-                Marker(
-                  markerId: MarkerId('currentPosition'),
-                  position: currentPosition,
-                  onTap: () {
-                    // Navigate on marker tap
-                    _navigateToGoogleMapScreen(context);
+            child: Stack(
+              children: [
+                GoogleMap(
+                  zoomControlsEnabled: false,
+                  myLocationButtonEnabled: false,
+                  compassEnabled: false,
+                  mapToolbarEnabled: false,
+                  liteModeEnabled: true,
+                  zoomGesturesEnabled: false, // Changed to false to prevent map from consuming event
+                  scrollGesturesEnabled: false,
+                  rotateGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                  initialCameraPosition:
+                      CameraPosition(target: currentPosition, zoom: 14),
+                  mapType: MapType.normal,
+                  markers: {
+                    Marker(
+                      markerId: MarkerId('currentPosition'),
+                      position: currentPosition,
+                    )
                   },
-                )
-              },
+                ),
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _navigateToGoogleMapScreen(context);
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
