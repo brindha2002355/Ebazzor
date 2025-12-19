@@ -291,26 +291,8 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
             backgroundColor: context.color.secondaryDetailsColor,
             showBackButton: true,
             actions: [
-              Padding(
-                padding: EdgeInsetsDirectional.only(
-                    end: isAddedByMe &&
-                            (model.status != "sold out" &&
-                                model.status != "review" &&
-                                model.status != "inactive" &&
-                                model.status != "rejected")
-                        ? 30.0
-                        : 15),
-                child: IconButton(
-                  onPressed: () {
-                    HelperUtils.share(context, model.slug!);
-                  },
-                  icon: Icon(
-                    Icons.share,
-                    size: 24,
-                    color: context.color.textDefaultColor,
-                  ),
-                ),
-              ),
+
+
               if (isAddedByMe &&
                   (model.status != "sold out" &&
                       model.status != "review" &&
@@ -448,8 +430,11 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  // this is image widget
                   setImageViewer(),
                   if (isAddedByMe) setLikesAndViewsCount(),
+                  // this is price and status widget
+                  setPriceAndStatus(),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(model.name!)
@@ -457,9 +442,10 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                         .setMaxLines(lines: 2)
                         .color(context.color.textDefaultColor),
                   ),
-                  setPriceAndStatus(),
+
+
                   if (isAddedByMe) setRejectedReason(),
-                  if (model.address != null) setAddress(isDate: true),
+                  if (model.address != null) setAddress(isDate: false),
 
                   if (Constant.isGoogleBannerAdsEnabled == "1") ...[
                     Divider(
@@ -479,13 +465,24 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                   Divider(
                       thickness: 1,
                       color: context.color.textDefaultColor.withOpacity(0.1)),
+                  // this is description widget
                   setDescription(),
+                  
+                  // this is make an offer widget
+                  makeOfferButtonWidget(),
+                  
                   Divider(
                       thickness: 1,
                       color: context.color.textDefaultColor.withOpacity(0.1)),
-                  if (!isAddedByMe && model.user != null) setSellerDetails(),
+                      
+                  
                   //Dynamic Ads here
+                  // this is location widget
                   setLocation(),
+                  
+                   // this is seller details widget
+                   if (!isAddedByMe && model.user != null) setSellerDetails(),
+
                   if (Constant.isGoogleBannerAdsEnabled == "1") ...[
                     Divider(
                         thickness: 1,
@@ -496,10 +493,13 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                     ),
                   ],
 
+                  // this is report ad widget
                   if (!isAddedByMe) reportedAdsWidget(),
                   /*if (model.isAlreadyReported != null &&
                         model.isAlreadyReported!)
                       setReportAd(),*/
+                  
+                  // this is similar ads widget
                   relatedAds(),
                   // const SizedBox(height: 15),
                 ],
@@ -571,12 +571,32 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("relatedAds".translate(context))
+          Text("Similar Ads")
               .size(context.font.large)
               .bold(weight: FontWeight.w600)
               .setMaxLines(lines: 1),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  AppIcons.location,
+                  colorFilter: ColorFilter.mode(
+                      context.color.textLightColor, BlendMode.srcIn),
+                  width: 12,
+                  height: 12,
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(model.address ?? "")
+                      .size(context.font.small)
+                      .color(context.color.textDefaultColor.withOpacity(0.5)),
+                ),
+              ],
+            ),
+          ),
           SizedBox(
-            height: 15,
+            height: 10,
           ),
           GridListAdapter(
             type: ListUiType.List,
@@ -1568,25 +1588,6 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //if(!model.isAlreadyOffered!)
-                if (chatedUser == null /*!model.isAlreadyOffered!*/)
-                  Expanded(
-                    child: _buildButton("makeAnOffer".translate(context), () {
-                      /* if (Constant.isDemoModeOn) {
-                        HelperUtils.showSnackBarMessage(context,
-                            "thisActionNotValidDemo".translate(context));
-                        return;
-                      }*/
-                      UiUtils.checkUser(
-                          onNotGuest: () {
-                            safetyTipsBottomSheet();
-                            //makeOfferBottomSheet(model);
-                          },
-                          context: context);
-                    }, null, null),
-                  ),
-                if (chatedUser == null) SizedBox(width: 10.rw(context)),
-
                 Expanded(
                   child: _buildButton("chat".translate(context), () {
                     UiUtils.checkUser(
@@ -1800,11 +1801,12 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
   Widget setImageViewer() {
     return Container(
       height: 250.rh(context),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(18)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
       padding: const EdgeInsets.symmetric(vertical: 10),
       // decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
         child: Stack(children: [
           PageView.builder(
             itemCount: images.length,
@@ -1832,7 +1834,8 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                         );
                       },
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(10)),
                         child: UiUtils.getImage(
                           youtubeVideoThumbnail,
                           fit: BoxFit.cover,
@@ -1941,7 +1944,7 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                   childWidget: Text("featured".translate(context))
                       .size(context.font.small)
                       .color(context.color.backgroundColor)),
-          favouriteButton()
+          imageActionButtons()
         ]),
       ),
     );
@@ -1964,60 +1967,93 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
     );
   }*/
 
-  Widget favouriteButton() {
-    if (!isAddedByMe) {
-      return BlocBuilder<FavoriteCubit, FavoriteState>(
-        bloc: context.read<FavoriteCubit>(),
-        builder: (context, favState) {
-          bool isLike = context
-              .select((FavoriteCubit cubit) => cubit.isItemFavorite(model.id!));
+  Widget imageActionButtons() {
+    return Align(
+      alignment: AlignmentDirectional.bottomEnd,
+      child: Container(
+        margin: const EdgeInsetsDirectional.only(bottom: 10, end: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!isAddedByMe)
+              BlocBuilder<FavoriteCubit, FavoriteState>(
+                bloc: context.read<FavoriteCubit>(),
+                builder: (context, favState) {
+                  bool isLike = context.select((FavoriteCubit cubit) =>
+                      cubit.isItemFavorite(model.id!));
 
-          return BlocConsumer<UpdateFavoriteCubit, UpdateFavoriteState>(
-            bloc: context.read<UpdateFavoriteCubit>(),
-            listener: (context, state) {
-              if (state is UpdateFavoriteSuccess) {
-                if (state.wasProcess) {
-                  context.read<FavoriteCubit>().addFavoriteitem(state.item);
-                } else {
-                  context.read<FavoriteCubit>().removeFavoriteItem(state.item);
-                }
-              }
-            },
-            builder: (context, state) {
-              return setTopRowItem(
-                  alignment: AlignmentDirectional.topEnd,
-                  marginVal: 10,
-                  backgroundColor: context.color.backgroundColor,
-                  cornerRadius: 30,
-                  childWidget: InkWell(
-                    onTap: () {
-                      UiUtils.checkUser(
-                          onNotGuest: () {
-                            context.read<UpdateFavoriteCubit>().setFavoriteItem(
-                                  item: model,
-                                  type: isLike ? 0 : 1,
-                                );
-                          },
-                          context: context);
+                  return BlocConsumer<UpdateFavoriteCubit, UpdateFavoriteState>(
+                    bloc: context.read<UpdateFavoriteCubit>(),
+                    listener: (context, state) {
+                      if (state is UpdateFavoriteSuccess) {
+                        if (state.wasProcess) {
+                          context
+                              .read<FavoriteCubit>()
+                              .addFavoriteitem(state.item);
+                        } else {
+                          context
+                              .read<FavoriteCubit>()
+                              .removeFavoriteItem(state.item);
+                        }
+                      }
                     },
-                    child: state is UpdateFavoriteInProgress
-                        ? UiUtils.progress(
-                            height: 22,
-                            width: 22,
-                          )
-                        : UiUtils.getSvg(
-                            isLike ? AppIcons.like_fill : AppIcons.like,
-                            color: context.color.territoryColor,
-                            width: 22,
-                            height: 22),
-                  ));
-            },
-          );
-        },
-      );
-    } else {
-      return SizedBox.shrink();
-    }
+                    builder: (context, state) {
+                      return Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: context.color.backgroundColor),
+                          child: InkWell(
+                            onTap: () {
+                              UiUtils.checkUser(
+                                  onNotGuest: () {
+                                    context
+                                        .read<UpdateFavoriteCubit>()
+                                        .setFavoriteItem(
+                                          item: model,
+                                          type: isLike ? 0 : 1,
+                                        );
+                                  },
+                                  context: context);
+                            },
+                            child: state is UpdateFavoriteInProgress
+                                ? UiUtils.progress(
+                                    height: 22,
+                                    width: 22,
+                                  )
+                                : UiUtils.getSvg(
+                                    isLike ? AppIcons.like_fill : AppIcons.like,
+                                    color: isLike ? context.color.territoryColor : context.color.textLightColor.withOpacity(0.5),
+                                    //color: context.color.textLightColor,
+                                    width: 22,
+                                    height: 22),
+                          ));
+                    },
+                  );
+                },
+              )
+            else
+              SizedBox.shrink(),
+            SizedBox(width: 10),
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: context.color.backgroundColor),
+              child: InkWell(
+                  onTap: () {
+                    HelperUtils.share(context, model.slug!);
+                  },
+                  child: Icon(
+                    Icons.share,
+                    size: 22,
+                    color: context.color.textLightColor.withOpacity(0.5),
+                  )),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget setTopRowItem(
@@ -2254,14 +2290,14 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
           SvgPicture.asset(
             AppIcons.location,
             colorFilter:
-                ColorFilter.mode(context.color.territoryColor, BlendMode.srcIn),
+                ColorFilter.mode(context.color.textLightColor, BlendMode.srcIn),
           ),
           Expanded(
             flex: 3,
             child: Padding(
               padding: EdgeInsetsDirectional.only(start: 5.0),
               child: Text(model.address!)
-                  .color(context.color.textDefaultColor.withOpacity(0.5)),
+                  .color(context.color.textDefaultColor),
             ),
           ),
           (isDate)
@@ -2287,6 +2323,54 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
               .color(context.color.textDefaultColor.withOpacity(0.5)),
         ),
       ],
+    );
+  }
+
+  Widget makeOfferButtonWidget() {
+    if (isAddedByMe) return SizedBox.shrink();
+
+    return BlocBuilder<GetBuyerChatListCubit, GetBuyerChatListState>(
+      builder: (context, state) {
+        ChatedUser? chatedUser =
+            context.read<GetBuyerChatListCubit>().getOfferForItem(model.id!);
+        if (chatedUser != null) {
+          return SizedBox.shrink();
+        }
+
+        return BlocListener<MakeAnOfferItemCubit, MakeAnOfferItemState>(
+          listener: (context, state) {
+            // We can rely on the bottom navigation listener for state changes
+            // or we could handle them here too if they are independent.
+            // Since they use the same Cubit, let's just use the widget for UI triggers.
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: InkWell(
+              onTap: () {
+                UiUtils.checkUser(
+                    onNotGuest: () {
+                      makeOfferBottomSheet(model);
+                    },
+                    context: context);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: context.color.secondaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: context.color.territoryColor),
+                ),
+                alignment: Alignment.center,
+                child: Text("makeAnOffer".translate(context))
+                    .color(context.color.territoryColor)
+                    .bold(weight: FontWeight.w600)
+                    .size(context.font.large),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -2348,90 +2432,63 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
   }
 
   Widget setReportAd() {
-    return AnimatedCrossFade(
-      duration: Duration(milliseconds: 500),
-      crossFadeState: isShowReportAds
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
-      firstChild: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-              color: context.color.textDefaultColor.withOpacity(0.1)),
+    if (!isShowReportAds) return SizedBox.shrink();
 
-          // Background color
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+    return BlocListener<ItemReportCubit, ItemReportState>(
+      listener: (context, state) {
+        if (state is ItemReportFailure) {
+          HelperUtils.showSnackBarMessage(context, state.error.toString());
+        }
+        if (state is ItemReportInSuccess) {
+          HelperUtils.showSnackBarMessage(
+              context, state.responseMessage.toString());
+          context.read<UpdatedReportItemCubit>().addItem(model);
+        }
+
+        if (!Constant.isDemoModeOn && state is ItemReportInSuccess)
+          setState(() {
+            isShowReportAds = false;
+          });
+      },
+      child: Column(
+        children: [
+          Divider(
+            thickness: 1,
+            color: context.color.textDefaultColor.withOpacity(0.1),
+          ),
+          InkWell(
+            onTap: () {
+              UiUtils.checkUser(
+                  onNotGuest: () {
+                    _bottomSheet(model.id!);
+                  },
+                  context: context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.report,
+                    Icons.flag_outlined,
+                    color: context.color.textDefaultColor,
                     size: 20,
-                    color: Colors.red, // Icon color can be adjusted
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Expanded(
-                    child: Text(
-                      "didYouFindAnyProblemWithThisItem".translate(context),
-                      maxLines: 2,
-                    )
-                        .color(context.color.textDefaultColor)
-                        .size(context.font.large),
-                  ),
-                ]),
-            SizedBox(height: 15),
-            BlocListener<ItemReportCubit, ItemReportState>(
-              listener: (context, state) {
-                if (state is ItemReportFailure) {
-                  HelperUtils.showSnackBarMessage(
-                      context, state.error.toString());
-                }
-                if (state is ItemReportInSuccess) {
-                  HelperUtils.showSnackBarMessage(
-                      context, state.responseMessage.toString());
-                  context.read<UpdatedReportItemCubit>().addItem(model);
-                }
-
-                if (!Constant.isDemoModeOn)
-                  setState(() {
-                    isShowReportAds = false;
-                  });
-              },
-              child: GestureDetector(
-                onTap: () {
-                  UiUtils.checkUser(
-                      onNotGuest: () {
-                        _bottomSheet(model.id!);
-                      },
-                      context: context);
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: context.color.territoryColor
-                        .withOpacity(0.1), // Button color can be adjusted
-                  ),
-                  child: Text(
-                    "reportThisAd".translate(context),
-                  )
-                      .color(context.color.territoryColor)
-                      .size(context.font.normal),
-                ),
+                  SizedBox(width: 8),
+                  Text("reportThisAd".translate(context))
+                      .color(context.color.textDefaultColor)
+                      .size(context.font.large)
+                      .bold(weight: FontWeight.w500),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+          Divider(
+            thickness: 1,
+            color: context.color.textDefaultColor.withOpacity(0.1),
+          ),
+        ],
       ),
-      secondChild: SizedBox.shrink(),
     );
   }
 
@@ -2629,142 +2686,6 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
 
   Widget setSellerDetails() {
     return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(children: [
-          SizedBox(
-              height: 60.rh(context),
-              width: 60.rw(context),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: model.user!.profile != null &&
-                          model.user!.profile != ""
-                      ? UiUtils.getImage(model.user!.profile!, fit: BoxFit.fill)
-                      : UiUtils.getSvg(
-                          AppIcons.defaultPersonLogo,
-                          color: context.color.territoryColor,
-                          fit: BoxFit.none,
-                        ))),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (model.user!.isVerified == 1)
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: context.color.forthColor),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            UiUtils.getSvg(AppIcons.verifiedIcon,
-                                width: 14, height: 14),
-                            /*Icon(
-                              Icons.verified_user_rounded,
-                              color: context.color.secondaryColor,
-                              size: 14,
-                            ),*/
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Text("verifiedLbl".translate(context))
-                                .color(context.color.secondaryColor)
-                                .bold(weight: FontWeight.w500)
-                          ],
-                        ),
-                      ),
-                    Text(model.user!.name!).bold().size(context.font.large),
-                    if (context.watch<FetchSellerRatingsCubit>().sellerData() !=
-                        null)
-                      if (context
-                              .watch<FetchSellerRatingsCubit>()
-                              .sellerData()!
-                              .averageRating !=
-                          null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  child: Icon(Icons.star_rounded,
-                                      size: 17,
-                                      color: context
-                                          .color.textDefaultColor), // Star icon
-                                ),
-                                TextSpan(
-                                  text:
-                                      '\t${context.watch<FetchSellerRatingsCubit>().sellerData()!.averageRating!.toStringAsFixed(2).toString()}',
-                                  // Rating value
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: context.color.textDefaultColor,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '  |  ',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: context.color.textDefaultColor
-                                        .withOpacity(0.5),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      '${context.watch<FetchSellerRatingsCubit>().totalSellerRatings()}\t${"ratings".translate(context)}',
-                                  // Rating count text
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: context.color.textDefaultColor
-                                        .withOpacity(0.3),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                    if (widget.model.user!.showPersonalDetails == 1)
-                      if (model.user!.email != null || model.user!.email != "")
-                        Text(model.user!.email!)
-                            .color(context.color.textLightColor)
-                            .size(context.font.small)
-                  ]),
-            ),
-          ),
-          if (widget.model.user!.showPersonalDetails == 1)
-            if (model.user!.mobile != null || model.user!.mobile != "")
-              setIconButtons(
-                  assetName: AppIcons.message,
-                  onTap: () {
-                    HelperUtils.launchPathURL(
-                        isTelephone: false,
-                        isSMS: true,
-                        isMail: false,
-                        value: formatPhoneNumber(
-                            model.user!.mobile!, Constant.defaultCountryCode),
-                        context: context);
-                  }),
-          SizedBox(width: 10.rw(context)),
-          if (widget.model.user!.showPersonalDetails == 1)
-            if (model.user!.mobile != null || model.user!.mobile != "")
-              setIconButtons(
-                  assetName: AppIcons.call,
-                  onTap: () {
-                    HelperUtils.launchPathURL(
-                        isTelephone: true,
-                        isSMS: false,
-                        isMail: false,
-                        value: formatPhoneNumber(
-                            model.user!.mobile!, Constant.defaultCountryCode),
-                        context: context);
-                  })
-        ]),
-      ),
       onTap: () {
         Navigator.pushNamed(context, Routes.sellerProfileScreen, arguments: {
           "model": model.user!,
@@ -2777,6 +2698,44 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
               null
         });
       },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(children: [
+          Container(
+              height: 60.rh(context),
+              width: 60.rw(context),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: model.user!.profile != null &&
+                          model.user!.profile != ""
+                      ? UiUtils.getImage(model.user!.profile!, fit: BoxFit.fill)
+                      : UiUtils.getSvg(
+                          AppIcons.defaultPersonLogo,
+                          color: context.color.territoryColor,
+                          fit: BoxFit.none,
+                        ))),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(start: 20.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(model.user!.name!).bold().size(context.font.large),
+                    Text("Owner")
+                        .size(context.font.small)
+                        .bold(weight: FontWeight.w500)
+                        .color(context.color.textDefaultColor),
+                    Text("View Profile")
+                        .size(context.font.small)
+                        .color(Colors.blue),
+                  ]),
+            ),
+          ),
+        ]),
+      ),
     );
   }
 
