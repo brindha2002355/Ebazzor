@@ -32,6 +32,10 @@ def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    println "Loaded key.properties from: ${keystorePropertiesFile.absolutePath}"
+    println "storeFile property: ${keystoreProperties['storeFile']}"
+} else {
+    println "key.properties NOT found at: ${keystorePropertiesFile.absolutePath}"
 }
 
 android {
@@ -72,7 +76,7 @@ android {
         versionName flutterVersionName
     }
 
-    /*
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -82,11 +86,11 @@ android {
         }
     }
 
-     */
+
 
     buildTypes {
         release {
-        //    signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
         }

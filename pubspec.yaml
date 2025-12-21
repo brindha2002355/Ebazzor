@@ -100,8 +100,8 @@ dev_dependencies:
   rename: ^3.0.0
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
+ # integration_test:
+  #  sdk: flutter
   flutter_lints: ^4.0.0
 
 
@@ -134,6 +134,10 @@ flutter:
           weight: 500
         - asset: assets/fonts/Manrope-ExtraBold.ttf
           weight: 800
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/svg/Logo/splashlogo.png"
 
 
 
