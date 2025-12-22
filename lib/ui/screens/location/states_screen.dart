@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'package:Ebozor/app/app_theme.dart';
 import 'package:Ebozor/app/routes.dart';
@@ -125,7 +126,7 @@ class StatesScreenState extends State<StatesScreen> {
   PreferredSizeWidget appBarWidget() {
     return AppBar(
       systemOverlayStyle:
-          SystemUiOverlayStyle(statusBarColor: context.color.backgroundColor),
+      SystemUiOverlayStyle(statusBarColor: context.color.backgroundColor),
       bottom: PreferredSize(
           preferredSize: Size.fromHeight(58.rh(context)),
           child: Container(
@@ -136,7 +137,7 @@ class StatesScreenState extends State<StatesScreen> {
               decoration: BoxDecoration(
                   border: Border.all(
                       width: context.watch<AppThemeCubit>().state.appTheme ==
-                              AppTheme.dark
+                          AppTheme.dark
                           ? 0
                           : 1,
                       color: context.color.borderColor.darken(30)),
@@ -149,15 +150,15 @@ class StatesScreenState extends State<StatesScreen> {
                     //OutlineInputBorder()
                     fillColor: Theme.of(context).colorScheme.secondaryColor,
                     hintText:
-                        "${"search".translate(context)}\t${"state".translate(context)}",
+                    "${"search".translate(context)}\t${"state".translate(context)}",
                     prefixIcon: setSearchIcon(),
                     prefixIconConstraints:
-                        const BoxConstraints(minHeight: 5, minWidth: 5),
+                    const BoxConstraints(minHeight: 5, minWidth: 5),
                   ),
                   enableSuggestions: true,
                   onEditingComplete: () {
                     setState(
-                      () {
+                          () {
                         isFocused = false;
                       },
                     );
@@ -192,9 +193,9 @@ class StatesScreenState extends State<StatesScreen> {
                   textDirection: Directionality.of(context),
                   child: RotatedBox(
                     quarterTurns:
-                        Directionality.of(context) == TextDirection.rtl
-                            ? 2
-                            : -4,
+                    Directionality.of(context) == TextDirection.rtl
+                        ? 2
+                        : -4,
                     child: UiUtils.getSvg(AppIcons.arrowLeft,
                         fit: BoxFit.none,
                         color: context.color.textDefaultColor),
@@ -208,9 +209,9 @@ class StatesScreenState extends State<StatesScreen> {
           ? 0
           : 6,
       shadowColor:
-          context.watch<AppThemeCubit>().state.appTheme == AppTheme.dark
-              ? null
-              : context.color.textDefaultColor.withOpacity(0.2),
+      context.watch<AppThemeCubit>().state.appTheme == AppTheme.dark
+          ? null
+          : context.color.textDefaultColor.withOpacity(0.2),
       backgroundColor: context.color.backgroundColor,
     );
   }
@@ -238,18 +239,21 @@ class StatesScreenState extends State<StatesScreen> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border:
-                    Border.all(color: context.color.borderColor.darken(30))),
+                Border.all(color: context.color.borderColor.darken(30))),
           ),
         );
       },
     );
   }
 
+  StatesModel? selectedState;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWidget(),
       body: bodyData(),
+      bottomNavigationBar: getBottomButtons(),
       backgroundColor: context.color.backgroundColor,
     );
   }
@@ -272,15 +276,15 @@ class StatesScreenState extends State<StatesScreen> {
                 child: NoInternet(
                   onRetry: () {
                     context.read<FetchStatesCubit>().fetchStates(
-                        search: searchController.text,
-                        countryId: widget.countryId);
+                      search: searchController.text,
+                      countryId: widget.countryId,
+                    );
                   },
                 ),
               );
             }
           }
-
-          return Center(child: const SomethingWentWrong());
+          return const Center(child: SomethingWentWrong());
         }
 
         if (state is FetchStatesSuccess) {
@@ -289,8 +293,9 @@ class StatesScreenState extends State<StatesScreen> {
               child: NoDataFound(
                 onTap: () {
                   context.read<FetchStatesCubit>().fetchStates(
-                      search: searchController.text,
-                      countryId: widget.countryId);
+                    search: searchController.text,
+                    countryId: widget.countryId,
+                  );
                 },
               ),
             );
@@ -300,180 +305,149 @@ class StatesScreenState extends State<StatesScreen> {
             padding: const EdgeInsets.only(top: 17),
             child: Container(
               color: context.color.secondaryColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  widget.from == "addItem"
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 18),
-                          child: Text(
-                            "${"chooseLbl".translate(context)}\t${"state".translate(context)}",
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+              child: SingleChildScrollView(
+                controller: controller,
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// ---------- HEADER (UNCHANGED) ----------
+                    widget.from == "addItem"
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 18),
+                      child: Text(
+                        "${"chooseLbl".translate(context)} ${"state".translate(context)}",
+                      )
+                          .color(context.color.textDefaultColor)
+                          .size(context.font.normal)
+                          .bold(weight: FontWeight.w600),
+                    )
+                        : SizedBox.shrink(),
+
+                    /// ---------- POPULAR SEARCHES TITLE ----------
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      child: Row(
+                        children: [
+                          Icon(Icons.trending_up,
+                              size: 18,
+                              color: context.color.textDefaultColor),
+                          const SizedBox(width: 6),
+                          Text(
+                            "popularSearches".translate(context),
                           )
                               .color(context.color.textDefaultColor)
                               .size(context.font.normal)
                               .bold(weight: FontWeight.w600),
-                        )
-                      : InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 12),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "${"allIn".translate(context)}\t${widget.countryName}",
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .color(context.color.textDefaultColor)
-                                    .size(context.font.normal)
-                                    .bold(weight: FontWeight.w600),
-                                Spacer(),
-                                Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: context.color.borderColor
-                                            .darken(10)),
-                                    child: Icon(
-                                      Icons.chevron_right_outlined,
-                                      color: context.color.textDefaultColor,
-                                    )),
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            if (widget.from == "home") {
-                              HiveUtils.setLocation(
-                                  country: widget.countryName);
-
-                              Future.delayed(
-                                Duration.zero,
-                                () {
-                                  context
-                                      .read<FetchHomeScreenCubit>()
-                                      .fetch(country: widget.countryName);
-                                  context.read<FetchHomeAllItemsCubit>().fetch(
-                                      country: widget.countryName,
-                                      radius: null);
-                                },
-                              );
-
-                              Navigator.popUntil(
-                                  context, (route) => route.isFirst);
-                            } else if (widget.from == "location") {
-                              HiveUtils.setLocation(
-                                  country: widget.countryName);
-                              HelperUtils.killPreviousPages(
-                                  context, Routes.main, {"from": "login"});
-                            } else {
-                              Map<String, dynamic> result = {
-                                'area_id': null,
-                                'area': null,
-                                'state': null,
-                                'country': widget.countryName,
-                                'city': null,
-                                'latitude': null,
-                                'longitude': null
-                              };
-                              Navigator.pop(context);
-                              Navigator.pop(context, result);
-                            }
-                          },
-                        ),
-                  const Divider(
-                    thickness: 1.2,
-                    height: 10,
-                  ),
-                  // Remove Expanded here
-                  Expanded(
-                    child: ListView.separated(
-                      controller: controller,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: state.statesModel.length,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (context, index) {
-                        return const Divider(
-                          thickness: 1.2,
-                          height: 10,
-                        );
-                      },
-                      itemBuilder: (context, index) {
-                        StatesModel states = state.statesModel[index];
-
-                        return BlocProvider(
-                          create: (context) => FetchCitiesCubit(),
-                          child: Builder(builder: (context) {
-                            return BlocListener<FetchCitiesCubit,
-                                FetchCitiesState>(
-                              listener: (context, city) {
-                                if (city is FetchCitiesSuccess) {
-                                  if (city.citiesModel.isNotEmpty) {
-                                    Navigator.pushNamed(
-                                        context, Routes.citiesScreen,
-                                        arguments: {
-                                          "stateId": states.id!,
-                                          "stateName": states.name!,
-                                          "from": widget.from,
-                                          "countryName": widget.countryName
-                                        });
-                                  }
-                                }
-                              },
-                              child: ListTile(
-                                onTap: () {
-                                  context
-                                      .read<FetchCitiesCubit>()
-                                      .fetchCities(stateId: states.id!);
-                                },
-                                title: Text(
-                                  states.name!,
-                                  textAlign: TextAlign.start,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .color(context.color.textDefaultColor)
-                                    .size(context.font.normal),
-                                trailing: Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: context.color.borderColor
-                                            .darken(10)),
-                                    child: Icon(
-                                      Icons.chevron_right_outlined,
-                                      color: context.color.textDefaultColor,
-                                    )),
-                              ),
-                            );
-                          }),
-                        );
-                      },
-                    ),
-                  ),
-                  if (state.isLoadingMore)
-                    Center(
-                      child: UiUtils.progress(
-                        normalProgressColor: context.color.territoryColor,
+                        ],
                       ),
-                    )
-                ],
+                    ),
+
+                    /// ---------- STATES CHIP UI ----------
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: state.statesModel.map((states) {
+                          bool isSelected = selectedState?.id == states.id;
+                          return InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () {
+                              setState(() {
+                                selectedState = states;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isSelected ? context.color.territoryColor : context.color.borderColor,
+                                ),
+                                color: isSelected ? context.color.territoryColor.withOpacity(0.1) : context.color.secondaryColor,
+                              ),
+                              child: Text(
+                                states.name!,
+                              )
+                                  .color(isSelected ? context.color.territoryColor : context.color.textDefaultColor)
+                                  .size(context.font.small),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+
+                    if (state.isLoadingMore)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Center(
+                          child: UiUtils.progress(
+                            normalProgressColor:
+                            context.color.territoryColor,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           );
         }
-        return Container();
+
+        return const SizedBox.shrink();
       },
     );
   }
+
+  Widget getBottomButtons() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: context.color.secondaryColor,
+        boxShadow: [
+          BoxShadow(
+            color: context.color.borderColor.withOpacity(0.5),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          )
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          UiUtils.buildButton(
+            context,
+            onPressed: () {
+              if (selectedState != null) {
+                Navigator.pushNamed(
+                  context,
+                  Routes.citiesScreen,
+                  arguments: {
+                    "stateId": selectedState!.id!,
+                    "stateName": selectedState!.name!,
+                    "from": widget.from,
+                    "countryName": widget.countryName,
+                    "countryId": widget.countryId
+                  },
+                );
+              }
+            },
+            buttonTitle: "continue".translate(context),
+            textColor: Colors.white,
+            buttonColor: selectedState != null ? context.color.territoryColor : context.color.textLightColor,
+            radius: 8,
+            disabled: selectedState == null,
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Widget setSearchIcon() {
     return Padding(

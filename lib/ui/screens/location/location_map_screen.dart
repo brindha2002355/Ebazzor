@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/app/routes.dart';
 
 class LocationMapScreen extends StatefulWidget {
   const LocationMapScreen({super.key});
@@ -29,10 +31,68 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   double? latitude, longitude;
   TextEditingController searchController = TextEditingController();
 
+  bool _initialLocationSet = false;
+
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialLocationSet) {
+      Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
+      if (arguments != null &&
+          arguments.containsKey('latitude') &&
+          arguments.containsKey('longitude') &&
+          arguments['latitude'] != null &&
+          arguments['longitude'] != null) {
+        
+        latitude = arguments['latitude'];
+        longitude = arguments['longitude'];
+
+        formatedAddress = AddressComponent(
+            area: arguments['area'],
+            areaId: arguments['area_id'],
+            city: arguments['city'],
+            country: arguments['country'],
+            state: arguments['state']);
+
+         String addressString = "";
+         if (formatedAddress!.area != null && formatedAddress!.area!.isNotEmpty) {
+           addressString += "${formatedAddress!.area}, ";
+         }
+         if (formatedAddress!.city != null) {
+           addressString += "${formatedAddress!.city}, ";
+         }
+         if (formatedAddress!.state != null) {
+           addressString += "${formatedAddress!.state}, ";
+         }
+         if (formatedAddress!.country != null) {
+           addressString += "${formatedAddress!.country}";
+         }
+         searchController.text = addressString;
+
+        _cameraPosition = CameraPosition(
+          target: LatLng(latitude!, longitude!),
+          zoom: 14.4746,
+        );
+
+        _markers.clear();
+        _markers.add(Marker(
+          markerId: const MarkerId('currentLocation'),
+          position: LatLng(latitude!, longitude!),
+        ));
+
+        setState(() {
+          _isFetchingLocation = false;
+        });
+      } else {
+        _getCurrentLocation();
+      }
+      _initialLocationSet = true;
+    }
   }
 
   Future<void> _getCurrentLocation() async {
@@ -68,6 +128,12 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
         getLocationFromLatitudeLongitude(
             latLng: LatLng(latitude!, longitude!));
 
+        if (mapController != null) {
+          mapController!.animateCamera(
+            CameraUpdate.newCameraPosition(_cameraPosition!),
+          );
+        }
+
       }
     } catch (e) {
       // Handle error
@@ -92,6 +158,21 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
             city: placeMark.locality,
             country: placeMark.country,
             state: placeMark.administrativeArea);
+            
+         String addressString = "";
+         if (formatedAddress!.area != null && formatedAddress!.area!.isNotEmpty) {
+           addressString += "${formatedAddress!.area}, ";
+         }
+         if (formatedAddress!.city != null) {
+           addressString += "${formatedAddress!.city}, ";
+         }
+         if (formatedAddress!.state != null) {
+           addressString += "${formatedAddress!.state}, ";
+         }
+         if (formatedAddress!.country != null) {
+           addressString += "${formatedAddress!.country}";
+         }
+         searchController.text = addressString;
       }
       setState(() {});
     } catch (e) {
@@ -127,187 +208,166 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
+    controller.setMapStyle('''
+    [
+      {
+        "featureType": "poi",
+        "stylers": [
+          { "visibility": "off" }
+        ]
+      }
+    ]
+    ''');
     mapController = controller;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false, // Prevent map resize on keyboard
+      backgroundColor: context.color.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         leading: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-                decoration: BoxDecoration(
-                    color: context.color.secondaryColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: context.color.borderColor.darken(30))
-                ),
-                child: BackButton(
-                  color: context.color.textDefaultColor,
-                )
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              child: Icon(Icons.arrow_back_ios, color: context.color.textDefaultColor),
             )
         ),
+        title: Text("Location", style: TextStyle(color: context.color.textDefaultColor, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: InkWell(
+              onTap: () {
+                searchController.clear();
+                _getCurrentLocation();
+              },
+              child: Center(child: Text("Clear All", style: TextStyle(color: context.color.textLightColor))),
+            ),
+          )
+        ],
+        backgroundColor: context.color.backgroundColor,
+        elevation: 0,
       ),
-      body: Stack(
+      body: Column(
         children: [
-          // 4) Map as Background (Full Screen)
-          _cameraPosition == null
-              ? Center(child: UiUtils.progress())
-              : GoogleMap(
-            initialCameraPosition: _cameraPosition!,
-            onMapCreated: _onMapCreated,
-            markers: _markers,
-            myLocationButtonEnabled: false, // We use custom buttons
-            myLocationEnabled: true,
-            zoomControlsEnabled: false,
-            onTap: (latLng) {
-              setState(() {
-                _markers.clear();
-                _markers.add(Marker(
-                  markerId: const MarkerId('selectedLocation'),
-                  position: latLng,
-                ));
-                latitude = latLng.latitude;
-                longitude = latLng.longitude;
-                getLocationFromLatitudeLongitude(latLng: latLng);
-              });
-            },
-          ),
-
-          // 5) Search Bar Overlay over Map
-          Positioned(
-              top: MediaQuery.of(context).padding.top + 10,
-              left: 60, // Space for back button
-              right: 16,
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    color: context.color.secondaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                          color: context.color.borderColor.withOpacity(0.3),
-                          blurRadius: 10,
-                          offset: Offset(0, 5)
-                      )
-                    ]
+          Expanded(
+            child: Stack(
+              children: [
+                _cameraPosition == null
+                    ? Center(child: UiUtils.progress())
+                    : GoogleMap(
+                  initialCameraPosition: _cameraPosition!,
+                  onMapCreated: _onMapCreated,
+                  markers: _markers,
+                  myLocationButtonEnabled: false,
+                  myLocationEnabled: true,
+                  zoomControlsEnabled: false,
+                  onTap: (latLng) {
+                    setState(() {
+                      _markers.clear();
+                      _markers.add(Marker(
+                        markerId: const MarkerId('selectedLocation'),
+                        position: latLng,
+                      ));
+                      latitude = latLng.latitude;
+                      longitude = latLng.longitude;
+                      getLocationFromLatitudeLongitude(latLng: latLng);
+                    });
+                  },
                 ),
-                child: TextField(
-                  controller: searchController,
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: _searchLocation,
-                  decoration: InputDecoration(
-                      hintText: "Search location...",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.location_on, color: Colors.red), // Red location icon as per hypothesis/reference
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14) // Centered vert
-                  ),
-                ),
-              )
-          ),
-
-          // Bottom Buttons
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                color: context.color.secondaryColor,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end, // Align Clear All to right? Or center? Reference usually shows Clear All at right top of container or similar.
-                  // Requirement: "Above the 'Apply' button, show a text button: 'Clear all'"
-                  // Let's put it in a Row with spacer or just aligned right.
-                  children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              "Location",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: context.color.textDefaultColor
-                              )
-                          ),
-                          InkWell(
-                            onTap: () {
-                              searchController.clear();
-                              _getCurrentLocation().then((_) {
-                                if(mapController != null && _cameraPosition != null) {
-                                  mapController!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition!));
-                                }
-                              });
-                            },
-                            child: Text(
-                              "Clear All",
-                              style: TextStyle(
-                                  color: context.color.textLightColor,
-                                  fontSize: 12
-                              ),
-                            ),
-                          )
-                        ]
-                    ),
-                    SizedBox(height: 10),
-                    if (formatedAddress != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on, color: context.color.territoryColor),
-                            const SizedBox(width: 8),
-                            Expanded(
-                                child: Text(
-                                  [
-                                    formatedAddress?.area,
-                                    formatedAddress?.city,
-                                    formatedAddress?.state,
-                                    formatedAddress?.country
-                                  ].where((e) => e != null && e.isNotEmpty).join(", "),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: context.color.textDefaultColor,
-                                      fontWeight: FontWeight.w600
-                                  ),
-                                )
+                Positioned(
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: context.color.secondaryColor,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                                color: context.color.borderColor.withOpacity(0.3),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5)
                             )
-                          ],
+                          ]
+                      ),
+                      child: TextField(
+                        controller: searchController,
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: _searchLocation,
+                        decoration: InputDecoration(
+                            hintText: "Search",
+                            hintStyle: TextStyle(color: context.color.textLightColor),
+                            border: InputBorder.none,
+                            prefixIcon: Icon(Icons.location_on_outlined, color: Colors.red),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 14)
                         ),
                       ),
-                    UiUtils.buildButton(context,
-                        onPressed: () {
-                          if (formatedAddress != null) {
-                            Navigator.pop(context, {
-                              'area': formatedAddress!.area,
-                              'city': formatedAddress!.city,
-                              'state': formatedAddress!.state,
-                              'country': formatedAddress!.country,
-                              'latitude': latitude,
-                              'longitude': longitude
-                            });
-                          } else {
-                            Navigator.pop(context, {
-                              'latitude': latitude,
-                              'longitude': longitude
-                            });
-                          }
-                        },
-                        buttonTitle: "Apply",
-                        textColor: context.color.secondaryColor,
-                        buttonColor: context.color.territoryColor,
-                        radius: 8,
-                        height: 45,
-                        fontSize: context.font.normal
-                    ),
-                  ],
+                    )
                 ),
-              )
-          )
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: context.color.secondaryColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                )
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                UiUtils.buildButton(
+                  context,
+                  onPressed: () {
+                    // Reset Logic - basically current location
+                    _getCurrentLocation();
+                  },
+                  buttonTitle: "Reset",
+                  textColor: Colors.red,
+                  buttonColor: context.color.secondaryColor,
+                  border: BorderSide(color: Colors.red),
+                  radius: 8,
+                ),
+                const SizedBox(height: 12),
+                UiUtils.buildButton(
+                  context,
+                  onPressed: () {
+                    if (formatedAddress != null) {
+                      HiveUtils.setLocation(
+                          city: formatedAddress!.city,
+                          state: formatedAddress!.state,
+                          country: formatedAddress!.country,
+                          area: formatedAddress!.area,
+                          latitude: latitude,
+                          longitude: longitude);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.main, (route) => false,
+                          arguments: {"from": "login"});
+                    } else {
+                      HiveUtils.setLocation(
+                          latitude: latitude, longitude: longitude);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.main, (route) => false,
+                          arguments: {"from": "login"});
+                    }
+                  },
+                  buttonTitle: "Apply",
+                  textColor: Colors.white,
+                  buttonColor: Colors.red, // Matching image red color
+                  radius: 8,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

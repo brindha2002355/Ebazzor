@@ -81,11 +81,28 @@ class FilterScreenState extends State<FilterScreen> {
 
   //String _selectedOption = "All Time";
 
-
   String postedOn =
       Constant.itemFilter?.postedSince ?? Constant.postedSince[0].value;
 
   late List<CategoryModel> categoryList = widget.categoryList ?? [];
+
+    double _minPrice = 0;
+  double _maxPrice = 1000000; // Default max, can be adjusted
+  RangeValues _priceRangeValues = const RangeValues(0, 1000000);
+
+  bool get isProperty {
+    if (categoryList.isNotEmpty) {
+      for (var cat in categoryList) {
+        if (cat.name != null &&
+            (cat.name!.toLowerCase().contains("property") ||
+                cat.name!.toLowerCase().contains("properties") ||
+                cat.name!.toLowerCase().contains("real estate"))) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   @override
   void dispose() {
@@ -101,7 +118,14 @@ class FilterScreenState extends State<FilterScreen> {
     setDefaultVal(isRefresh: false);
     //clearFieldData();
     getCustomFieldsData();
+    
+         // Initialize slider values
+    double min = double.tryParse(minController.text.replaceAll(',', '')) ?? 0;
+    double max = double.tryParse(maxController.text.replaceAll(',', '')) ?? 1000000;
+    if (max < min) max = min + 1000;
+    _priceRangeValues = RangeValues(min, max);
   }
+
 
   setCategories() {
     if (widget.categoryIds != null && widget.categoryIds!.isNotEmpty) {
@@ -235,12 +259,8 @@ class FilterScreenState extends State<FilterScreen> {
         checkFilterValSet();
         return;
       },
-      /*  onWillPop: () async {
-        checkFilterValSet();
-        return true;
-      },*/
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primaryColor,
+        backgroundColor: isProperty ? Color(0xFFF9F9F9) : Theme.of(context).colorScheme.primaryColor,
         appBar: UiUtils.buildAppBar(
           context,
           onBackPress: () {
@@ -250,7 +270,6 @@ class FilterScreenState extends State<FilterScreen> {
           showBackButton: true,
           title: "filterTitle".translate(context),
           actions: [
-            // if ((checkFilterValSet() == true)) ...[
             FittedBox(
               fit: BoxFit.none,
               child: UiUtils.buildButton(
@@ -268,21 +287,18 @@ class FilterScreenState extends State<FilterScreen> {
                 buttonTitle: "reset".translate(context),
               ),
             )
-            // ]
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          color: context.color.secondaryColor,
-          elevation: 3,
-          //padding: EdgeInsets.all(12),
+          color: isProperty ? Color(0xFFF9F9F9) : context.color.secondaryColor,
+          elevation: isProperty ? 0 : 3,
           child: UiUtils.buildButton(context,
               outerPadding: const EdgeInsets.all(12),
               height: 50.rh(context), onPressed: () {
             Map<String, dynamic> customFields =
                 convertToCustomFields(AbstractField.fieldsData);
-//
             Constant.itemFilter = ItemFilterModel(
-              maxPrice: maxController.text,
+                maxPrice: maxController.text,
                 minPrice: minController.text,
                 categoryId: selectedCategories.isNotEmpty
                     ? selectedCategories.last
@@ -316,18 +332,14 @@ class FilterScreenState extends State<FilterScreen> {
                 customFields: customFields));
 
             Navigator.pop(context, true);
-
-            //this will set name of previous screen app bar
-
-            /*if (selectedCategory == null) {
-              selectedcategoryName = "";
-            } else {
-              selectedcategoryName =
-                  (selectedCategory as CategoryModel).name ?? "";
-            }*/
-          }, buttonTitle: "applyFilter".translate(context), radius: 8),
+          }, 
+          buttonTitle: "applyFilter".translate(context), 
+          radius: 8,
+          buttonColor: isProperty ? Color(0xFFE52D2D) : context.color.territoryColor,
+          textColor: Colors.white
+          ),
         ),
-        body: SingleChildScrollView(
+        body: isProperty ? propertyFilterBody() : SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Padding(
@@ -342,7 +354,7 @@ class FilterScreenState extends State<FilterScreen> {
                     .bold(weight: FontWeight.w600)
                     .color(context.color.textDefaultColor),
                 const SizedBox(height: 5),
-    locationWidget(context),
+                locationWidget(context),
                 if (widget.categoryIds == null ||
                     widget.categoryIds!.isEmpty) ...[
                   const SizedBox(height: 15),
@@ -350,7 +362,7 @@ class FilterScreenState extends State<FilterScreen> {
                       .bold(weight: FontWeight.w600)
                       .color(context.color.textDefaultColor),
                   const SizedBox(height: 5),
-                 categoryWidget(context),
+                  categoryWidget(context),
                   const SizedBox(height: 5),
                 ],
                 //categoryModule(),
@@ -373,6 +385,186 @@ class FilterScreenState extends State<FilterScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget propertyFilterBody() {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('locationLbl'.translate(context))
+                .bold(weight: FontWeight.w600)
+                .color(context.color.textDefaultColor),
+            const SizedBox(height: 10),
+            locationWidgetProperty(context),
+            const SizedBox(height: 20),
+            
+            Text('Price Range')
+                .bold(weight: FontWeight.w600)
+                .color(context.color.textDefaultColor),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(child: minMaxTFFProperty("minLbl".translate(context))),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text("To").color(context.color.textDefaultColor),
+                ),
+                Expanded(child: minMaxTFFProperty("maxLbl".translate(context))),
+              ],
+            ),
+             const SizedBox(height: 10),
+            RangeSlider(
+              values: _priceRangeValues,
+              min: 0,
+              max: 1000000, 
+              activeColor: Color(0xFFE52D2D),
+              inactiveColor: Color(0xFFE52D2D).withOpacity(0.2),
+              onChanged: (RangeValues values) {
+                setState(() {
+                  _priceRangeValues = values;
+                  minController.text = values.start.round().toString();
+                  maxController.text = values.end.round().toString();
+                });
+              },
+            ),
+
+            const SizedBox(height: 20),
+            
+            Text('postedSinceLbl'.translate(context))
+                .bold(weight: FontWeight.w600)
+                .color(context.color.textDefaultColor),
+            const SizedBox(height: 10),
+            postedSinceOptionProperty(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget locationWidgetProperty(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        _onTapChooseLocation();
+      },
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.location_on_outlined, color: Colors.grey),
+            const SizedBox(width: 10),
+            Expanded(
+              child: [area, city, _state, country]
+                      .where((element) => element != null && element.isNotEmpty)
+                      .join(", ")
+                      .isNotEmpty
+                  ? Text(
+                      [area, city, _state, country]
+                          .where((element) =>
+                              element != null && element.isNotEmpty)
+                          .join(", "),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.grey.shade600),
+                    )
+                  : Text("allCities".translate(context))
+                      .color(Colors.grey.shade400),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget minMaxTFFProperty(String minMax) {
+    return Container(
+      height: 45,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      alignment: Alignment.center,
+      child: TextFormField(
+        controller: (minMax == "minLbl".translate(context))
+            ? minController
+            : maxController,
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        style: TextStyle(color: Colors.black),
+        textAlign: TextAlign.center,
+        onChanged: (value) {
+            double? val = double.tryParse(value);
+            if(val != null) {
+              if (minMax == "minLbl".translate(context)) {
+                 if(val <= _priceRangeValues.end) {
+                   setState(() {
+                     _priceRangeValues = RangeValues(val, _priceRangeValues.end);
+                   });
+                 }
+              } else {
+                 if(val >= _priceRangeValues.start) {
+                   setState(() {
+                      _priceRangeValues = RangeValues(_priceRangeValues.start, val);
+                   });
+                 }
+              }
+            }
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          suffixText: "AED",
+          suffixStyle: TextStyle(color: Colors.grey, fontSize: 12),
+          hintText: "0",
+          hintStyle: TextStyle(color: Colors.grey.shade400),
+        ),
+      ),
+    );
+  }
+
+  Widget postedSinceOptionProperty(BuildContext context) {
+    int index =
+        Constant.postedSince.indexWhere((item) => item.value == postedOn);
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, Routes.postedSinceFilterScreen,
+            arguments: {
+              "list": Constant.postedSince,
+              "postedSince": postedOn,
+              "update": postedSinceUpdate
+            });
+      },
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.calendar_today_outlined, color: Colors.black54, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(Constant.postedSince[index].status)
+                  .color(Colors.grey.shade600),
+            ),
+            Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+          ],
         ),
       ),
     );

@@ -19,6 +19,7 @@ class HiveKeys {
   static const String jwtToken = "token";
   static const String svgBox = "svgBox";
   static const String historyBox = "historyBox";
+  static const String countryHistoryBoxKey = "countryHistoryBox";
 
 //Box
   static const String authBox = "authBox";

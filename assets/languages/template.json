@@ -595,5 +595,8 @@
   "within1Week": "Within 1 Week",
   "within2Week": "Within 2 Weeks",
   "within1Month": "Within 1 Month",
-  "within3Months": "Within 3 Months"
+  "within3Months": "Within 3 Months",
+  "yourLastSearches": "Your last searches",
+  "popularSearches": "Popular Searches",
+  "clearAll": "Clear All"
 }

@@ -24,6 +24,7 @@ import 'package:Ebozor/utils/extensions/extensions.dart';
 import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
 import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/location/location_map_screen.dart';
 
 class AreasScreen extends StatefulWidget {
   final int cityId;
@@ -73,6 +74,7 @@ class AreasScreenState extends State<AreasScreen> {
   TextEditingController searchController = TextEditingController(text: null);
   final ScrollController controller = ScrollController();
   Timer? _searchDelay;
+  AreaModel? selectedArea;
 
   @override
   void initState() {
@@ -202,7 +204,7 @@ class AreasScreenState extends State<AreasScreen> {
       ),
       /*BackButton(
         color: context.color.textDefaultColor,
-      ),*/
+        ),*/
       elevation: context.watch<AppThemeCubit>().state.appTheme == AppTheme.dark
           ? 0
           : 6,
@@ -249,6 +251,7 @@ class AreasScreenState extends State<AreasScreen> {
     return Scaffold(
       appBar: appBarWidget(),
       body: bodyData(),
+      bottomNavigationBar: getBottomButtons(),
       backgroundColor: context.color.backgroundColor,
     );
   }
@@ -314,85 +317,7 @@ class AreasScreenState extends State<AreasScreen> {
                               .size(context.font.normal)
                               .bold(weight: FontWeight.w600),
                         )
-                      : InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 12),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "${"allIn".translate(context)}\t${widget.cityName}",
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                                    .color(context.color.textDefaultColor)
-                                    .size(context.font.normal)
-                                    .bold(weight: FontWeight.w600),
-                                Spacer(),
-                                Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: context.color.borderColor
-                                            .darken(10)),
-                                    child: Icon(
-                                      Icons.chevron_right_outlined,
-                                      color: context.color.textDefaultColor,
-                                    )),
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            if (widget.from == "home") {
-                              HiveUtils.setLocation(
-                                  country: widget.countryName,
-                                  state: widget.stateName,
-                                  city: widget.cityName);
-
-                              Future.delayed(
-                                Duration.zero,
-                                () {
-                                  context.read<FetchHomeScreenCubit>().fetch(
-                                        country: widget.countryName,
-                                        state: widget.stateName,
-                                        city: widget.cityName,
-                                      );
-                                  context.read<FetchHomeAllItemsCubit>().fetch(
-                                      country: widget.countryName,
-                                      state: widget.stateName,
-                                      city: widget.cityName,
-                                      radius: null);
-                                },
-                              );
-
-                              Navigator.popUntil(
-                                  context, (route) => route.isFirst);
-                            } else if (widget.from == "location") {
-                              HiveUtils.setLocation(
-                                  country: widget.countryName,
-                                  state: widget.stateName,
-                                  city: widget.cityName);
-                              HelperUtils.killPreviousPages(
-                                  context, Routes.main, {"from": "login"});
-                            } else {
-                              Map<String, dynamic> result = {
-                                'area_id': null,
-                                'area': null,
-                                'state': widget.stateName,
-                                'country': widget.countryName,
-                                'city': widget.cityName,
-                                'latitude': null,
-                                'longitude': null
-                              };
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context, result);
-                            }
-                          },
-                        ),
+                      : SizedBox.shrink(),
                   const Divider(
                     thickness: 1.2,
                     height: 10,
@@ -412,77 +337,14 @@ class AreasScreenState extends State<AreasScreen> {
                       },
                       itemBuilder: (context, index) {
                         AreaModel area = state.areasModel[index];
+                        bool isSelected = selectedArea?.id == area.id;
 
                         return ListTile(
+                          tileColor: isSelected ? context.color.territoryColor.withOpacity(0.1) : null,
                           onTap: () {
-                            if (widget.from == "home") {
-                              if (Constant.isDemoModeOn) {
-                                UiUtils.setDefaultLocationValue(
-                                    isCurrent: false,
-                                    isHomeUpdate: true,
-                                    context: context);
-                                Navigator.popUntil(
-                                    context, (route) => route.isFirst);
-                              } else {
-                                HiveUtils.setLocation(
-                                    city: widget.cityName,
-                                    state: widget.stateName,
-                                    country: widget.countryName,
-                                    area: area.name,
-                                    areaId: area.id,
-                                    latitude: widget.latitude,
-                                    longitude: widget.longitude);
-                                Future.delayed(
-                                  Duration.zero,
-                                  () {
-                                    context.read<FetchHomeScreenCubit>().fetch(
-                                          areaId: area.id,
-                                        );
-                                    context
-                                        .read<FetchHomeAllItemsCubit>()
-                                        .fetch(areaId: area.id, radius: null);
-                                  },
-                                );
-                              }
-                              Navigator.popUntil(
-                                  context, (route) => route.isFirst);
-                            } else if (widget.from == "location") {
-                              if (Constant.isDemoModeOn) {
-                                UiUtils.setDefaultLocationValue(
-                                    isCurrent: false,
-                                    isHomeUpdate: false,
-                                    context: context);
-                                HelperUtils.killPreviousPages(
-                                    context, Routes.main, {"from": "login"});
-                              } else {
-                                HiveUtils.setLocation(
-                                  area: area.name,
-                                  areaId: area.id,
-                                  city: widget.cityName,
-                                  state: widget.stateName,
-                                  country: widget.countryName,
-                                  latitude: widget.latitude,
-                                  longitude: widget.longitude,
-                                );
-                                HelperUtils.killPreviousPages(
-                                    context, Routes.main, {"from": "login"});
-                              }
-                            } else {
-                              Map<String, dynamic> result = {
-                                'area_id': area.id,
-                                'area': area.name,
-                                'city': widget.cityName,
-                                'state': widget.stateName,
-                                'country': widget.countryName,
-                                'latitude': widget.latitude,
-                                'longitude': widget.longitude
-                              };
-
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context, result);
-                            }
+                            setState(() {
+                              selectedArea = area;
+                            });
                           },
                           title: Text(
                             area.name!,
@@ -490,19 +352,13 @@ class AreasScreenState extends State<AreasScreen> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           )
-                              .color(context.color.textDefaultColor)
+                              .color(isSelected ? context.color.territoryColor : context.color.textDefaultColor)
                               .size(context.font.normal),
-                          /* trailing: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: context.color.borderColor
-                                      .darken(10)),
-                              child: Icon(
-                                Icons.chevron_right_outlined,
-                                color: context.color.textDefaultColor,
-                              )),*/
+                          trailing: isSelected
+                              ? Icon(Icons.check,
+                                color: context.color.territoryColor,
+                                size: 20)
+                              : null,
                         );
                       },
                     ),
@@ -523,6 +379,56 @@ class AreasScreenState extends State<AreasScreen> {
     );
   }
 
+  Widget getBottomButtons() {
+    return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: context.color.secondaryColor,
+          boxShadow: [
+            BoxShadow(
+              color: context.color.borderColor.withOpacity(0.5),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            )
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            UiUtils.buildButton(
+              context,
+              onPressed: () {
+                if (selectedArea != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LocationMapScreen(),
+                      settings: RouteSettings(
+                        arguments: {
+                          'area_id': selectedArea!.id,
+                          'area': selectedArea!.name,
+                          'city': widget.cityName,
+                          'state': widget.stateName,
+                          'country': widget.countryName,
+                          'latitude': widget.latitude,
+                          'longitude': widget.longitude,
+                        }
+                      )
+                    ),
+                  );
+                }
+              },
+              buttonTitle: "continue".translate(context),
+              textColor: Colors.white,
+              buttonColor: selectedArea != null
+                  ? context.color.territoryColor
+                  : context.color.textLightColor,
+              radius: 8,
+              disabled: selectedArea == null,
+            ),
+          ],
+        ));
+  }
   Widget setSearchIcon() {
     return Padding(
         padding: const EdgeInsets.all(8.0),

@@ -474,9 +474,14 @@ class SearchScreenState extends State<SearchScreen>
     return ValueListenableBuilder(
       valueListenable: Hive.box(HiveKeys.historyBox).listenable(),
       builder: (context, Box box, _) {
-        List<ItemModel> items = box.values.map((jsonString) {
-          return ItemModel.fromJson(jsonDecode(jsonString));
-        }).toList();
+        List<ItemModel> items = [];
+        for (var item in box.values) {
+          if (item is String) {
+            try {
+              items.add(ItemModel.fromJson(jsonDecode(item)));
+            } catch (e) {}
+          }
+        }
 
         if (items.isNotEmpty) {
           return Padding(

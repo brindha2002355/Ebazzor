@@ -10,11 +10,13 @@ import 'package:Ebozor/ui/screens/widgets/errors/no_data_found.dart';
 import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:Ebozor/utils/constant.dart';
 import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hive/hive.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:Ebozor/utils/ApiService/api.dart';
@@ -32,6 +34,7 @@ import 'package:Ebozor/utils/responsiveSize.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Ebozor/utils/ui_utils.dart';
+import 'package:Ebozor/ui/screens/location/location_map_screen.dart';
 
 class CountriesScreen extends StatefulWidget {
   final String from;
@@ -63,9 +66,9 @@ class CountriesScreenState extends State<CountriesScreen> {
   TextEditingController searchController = TextEditingController(text: null);
   final ScrollController controller = ScrollController();
   Timer? _searchDelay;
-  String _locationStatus = 'enableLocation'; // Initial status
-  String _currentLocation = '';
-  bool _isFetchingLocation = false;
+  CountriesModel? selectedCountry;
+  List<String> recentSearches = [];
+  bool isLocationLoading = false;
 
   @override
   void initState() {
@@ -78,7 +81,37 @@ class CountriesScreenState extends State<CountriesScreen> {
 
     searchController.addListener(searchItemListener);
     controller.addListener(pageScrollListen);
-    defaultLocation();
+    getRecentSearches();
+  }
+
+  void getRecentSearches() {
+    try {
+      if (Hive.isBoxOpen(HiveKeys.historyBox)) {
+        recentSearches = List<String>.from(
+            Hive.box(HiveKeys.historyBox).get("country_history") ?? []);
+      }
+    } catch (e) {
+      print("Error fetching history: $e");
+    }
+  }
+
+  void addToRecentSearches(String name) {
+    if (!recentSearches.contains(name)) {
+      recentSearches.insert(0, name);
+      if (recentSearches.length > 5) recentSearches.removeLast();
+      if (Hive.isBoxOpen(HiveKeys.historyBox)) {
+        Hive.box(HiveKeys.historyBox).put("country_history", recentSearches);
+      }
+    }
+  }
+
+  void clearRecentSearches() {
+    setState(() {
+      recentSearches.clear();
+      if (Hive.isBoxOpen(HiveKeys.historyBox)) {
+        Hive.box(HiveKeys.historyBox).put("country_history", recentSearches);
+      }
+    });
   }
 
   void pageScrollListen() {
@@ -116,6 +149,64 @@ class CountriesScreenState extends State<CountriesScreen> {
     // }
   }
 
+  Future<void> _getCurrentLocation() async {
+    setState(() {
+      isLocationLoading = true;
+    });
+
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (mounted) {
+           HelperUtils.showSnackBarMessage(
+            context, "pleaseEnableLocationServicesManually".translate(context));
+            // You can add logic to open app settings here
+        }
+      } else if (permission == LocationPermission.whileInUse ||
+          permission == LocationPermission.always) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+            position.latitude, position.longitude);
+
+        if (placemarks.isNotEmpty) {
+          Placemark place = placemarks[0];
+          if (mounted) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const LocationMapScreen(),
+                    settings: RouteSettings(arguments: {
+                      'latitude': position.latitude,
+                      'longitude': position.longitude,
+                      'city': place.locality,
+                      'state': place.administrativeArea,
+                      'country': place.country,
+                      'area': place.subLocality,
+                      'area_id': null,
+                      'from': widget.from // Passing 'from' parameter
+                    })));
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        HelperUtils.showSnackBarMessage(context, e.toString());
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLocationLoading = false;
+        });
+      }
+    }
+  }
+
   PreferredSizeWidget appBarWidget(List<CountriesModel> countriesModel) {
     return AppBar(
       systemOverlayStyle:
@@ -150,7 +241,7 @@ class CountriesScreenState extends State<CountriesScreen> {
                           fillColor:
                               Theme.of(context).colorScheme.secondaryColor,
                           hintText:
-                              "${"search".translate(context)}\t${"country".translate(context)}",
+                              "${"search".translate(context)}\t${"country".translate(context)}..",
                           prefixIcon: setSearchIcon(),
                           prefixIconConstraints:
                               const BoxConstraints(minHeight: 5, minWidth: 5),
@@ -171,32 +262,26 @@ class CountriesScreenState extends State<CountriesScreen> {
                           });
                         })),
               ),
-              if (widget.from != "addItem")
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.nearbyLocationScreen,
-                        arguments: {"from": widget.from});
-                  },
-                  child: Container(
-                    width: 50.rw(context),
-                    height: 50.rh(context),
-                    margin: EdgeInsetsDirectional.only(end: sidePadding),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 1,
-                          color: context.color.borderColor.darken(30)),
-                      color: context.color.secondaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.share_location,
-                        color: context.color.territoryColor,
-                        size: 27,
-                      ),
-                    ),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.nearbyLocationScreen,
+                      arguments: {"from": widget.from});
+                },
+                child: Container(
+                  width: 50.rw(context),
+                  height: 50.rh(context),
+                  margin: EdgeInsetsDirectional.only(end: sidePadding),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 1, color: context.color.borderColor.darken(30)),
+                    color: context.color.secondaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Image.asset("assets/seachfiltericon.png")
                   ),
                 ),
+              ),
             ],
           )),
       automaticallyImplyLeading: false,
@@ -231,9 +316,19 @@ class CountriesScreenState extends State<CountriesScreen> {
                   ),
                 ))),
       ),
-      /*BackButton(
-        color: context.color.textDefaultColor,
-      ),*/
+      actions: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(end: 18.0),
+            child: InkWell(
+              onTap: clearRecentSearches,
+              child: Text("clearAll".translate(context))
+                  .color(context.color.textLightColor)
+                  .size(context.font.large),
+            ),
+          ),
+        )
+      ],
       elevation: context.watch<AppThemeCubit>().state.appTheme == AppTheme.dark
           ? 0
           : 6,
@@ -249,10 +344,6 @@ class CountriesScreenState extends State<CountriesScreen> {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      /*   padding: const EdgeInsets.symmetric(
-        vertical: 10 + defaultPadding,
-        //horizontal: defaultPadding,
-      ),*/
       itemCount: 15,
       separatorBuilder: (context, index) {
         return Container();
@@ -286,6 +377,7 @@ class CountriesScreenState extends State<CountriesScreen> {
       return Scaffold(
         appBar: appBarWidget(countriesModel),
         body: bodyData(),
+        bottomNavigationBar: bottomBar(),
         backgroundColor: context.color.backgroundColor,
       );
     });
@@ -295,225 +387,55 @@ class CountriesScreenState extends State<CountriesScreen> {
     return searchItemsWidget();
   }
 
-  defaultLocation() {
-    _currentLocation = [
-      HiveUtils.getCurrentAreaName(),
-      HiveUtils.getCurrentCityName(),
-      HiveUtils.getCurrentStateName(),
-      HiveUtils.getCurrentCountryName()
-    ].where((part) => part != null && part.isNotEmpty).join(', ');
-    _locationStatus =
-        _currentLocation.isNotEmpty ? 'locationFetched' : 'enableLocation';
-    setState(() {});
-  }
-
-  Future<void> _getCurrentLocation() async {
-    if (_isFetchingLocation) return;
-
-    setState(() {
-      _isFetchingLocation = true;
-      _locationStatus = 'fetchingLocation';
-    });
-
-    try {
-      // Check if location services are enabled
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        setState(() {
-          _locationStatus = 'locationServicesDisabled';
-          _isFetchingLocation = false;
-        });
-        return;
-      }
-
-      // Check location permissions
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          setState(() {
-            _locationStatus = 'locationPermissionsDenied';
-            _isFetchingLocation = false;
-          });
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        setState(() {
-          _locationStatus = 'locationPermissionsPermanentlyDenied';
-          _isFetchingLocation = false;
-        });
-        return;
-      }
-
-      // Get the current position
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      // Get placemarks from coordinates
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
-
-      if (placemarks.isNotEmpty) {
-        Placemark placemark = placemarks[0];
-        if (mounted) {
-          setState(() {
-            _currentLocation = [
-              placemark.subLocality,
-              placemark.locality,
-              placemark.administrativeArea,
-              placemark.country,
-            ].where((part) => part != null && part.isNotEmpty).join(', ');
-            _locationStatus = _currentLocation.isNotEmpty
-                ? 'locationFetched'
-                : 'enableLocation';
-          });
-
-          // Store current location in Hive
-          HiveUtils.setCurrentLocation(
-            area: placemark.subLocality,
-            city: placemark.locality!,
-            state: placemark.administrativeArea!,
-            country: placemark.country!,
-            latitude: position.latitude,
-            longitude: position.longitude,
-          );
-
-          // Additional handling based on widget.from
-          if (widget.from == "home") {
-            if (Constant.isDemoModeOn) {
-              UiUtils.setDefaultLocationValue(
-                  isCurrent: false, isHomeUpdate: true, context: context);
-              Navigator.pop(context);
-            } else {
-              HiveUtils.setLocation(
-                area: placemark.subLocality,
-                city: placemark.locality!,
-                state: placemark.administrativeArea!,
-                country: placemark.country!,
-                latitude: position.latitude,
-                longitude: position.longitude,
-              );
-
-              Future.delayed(Duration.zero, () {
-                context.read<FetchHomeScreenCubit>().fetch(
-                      city: placemark.locality!,
-                    );
-                context
-                    .read<FetchHomeAllItemsCubit>()
-                    .fetch(city: placemark.locality!, radius: null);
-              });
-              Navigator.pop(context);
-            }
-          } else if (widget.from == "location") {
-            if (Constant.isDemoModeOn) {
-              UiUtils.setDefaultLocationValue(
-                  isCurrent: false, isHomeUpdate: false, context: context);
-              HelperUtils.killPreviousPages(
-                  context, Routes.main, {"from": "login"});
-              /*Navigator.of(context).pushReplacementNamed(Routes.main,
-                  arguments: {'from': "main"});*/
-            } else {
-              HiveUtils.setLocation(
-                area: placemark.subLocality,
-                city: placemark.locality!,
-                state: placemark.administrativeArea!,
-                country: placemark.country!,
-                latitude: position.latitude,
-                longitude: position.longitude,
-              );
-              HelperUtils.killPreviousPages(
-                  context, Routes.main, {"from": "login"});
-              /*Navigator.of(context).pushReplacementNamed(Routes.main,
-                  arguments: {'from': "main"});*/
-            }
-          } else {
-            Map<String, dynamic> result = {
-              'area_id': null,
-              'area': placemark.subLocality,
-              'city': placemark.locality!,
-              'state': placemark.administrativeArea!,
-              'country': placemark.country!,
-              'latitude': position.latitude,
-              'longitude': position.longitude,
-            };
-
-            Navigator.pop(context, result);
-          }
-        }
-      } else {
-        setState(() {
-          _locationStatus = 'noPlacemarksFound';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _locationStatus = 'locationFetchError';
-      });
-    } finally {
-      setState(() {
-        _isFetchingLocation = false;
-      });
-    }
-  }
-
-  Widget currentLocation() {
-    return Padding(
-      padding: EdgeInsets.only(top: 20),
-      child: Container(
-        padding: EdgeInsets.only(top: 5),
-        color: context.color.secondaryColor,
+  Widget bottomBar() {
+    return Container(
+      color: context.color.backgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: InkWell(
-                onTap: _isFetchingLocation ? null : _getCurrentLocation,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.my_location,
-                      color: context.color.territoryColor,
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 13),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("useCurrentLocation".translate(context))
-                                .color(context.color.territoryColor)
-                                .bold(weight: FontWeight.bold),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 3.0),
-                              child: Text(
-                                _locationStatus == 'locationFetched'
-                                    ? _currentLocation
-                                    : _isFetchingLocation
-                                        ? "fetchingLocation".translate(context)
-                                        : "enableLocation".translate(context),
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Divider(
-              thickness: 1.2,
-              height: 10,
+            isLocationLoading
+                ? Center(
+                    child: UiUtils.progress(
+                        normalProgressColor: context.color.territoryColor))
+                : UiUtils.buildButton(
+                    context,
+                    onPressed: () {
+                      _getCurrentLocation();
+                    },
+                    buttonTitle: "useCurrentLocation".translate(context),
+                    buttonColor: context.color.backgroundColor,
+                    textColor: context.color.territoryColor,
+                    border: BorderSide(color: context.color.territoryColor),
+                    showElevation: false,
+                    radius: 8,
+                    height: 48,
+                  ),
+            const SizedBox(height: 12),
+            UiUtils.buildButton(
+              context,
+              onPressed: () {
+                if (selectedCountry != null) {
+                  addToRecentSearches(selectedCountry!.name!);
+                  Navigator.pushNamed(
+                    context,
+                    Routes.statesScreen,
+                    arguments: {
+                      "countryId": selectedCountry!.id!,
+                      "countryName": selectedCountry!.name!,
+                      "from": widget.from
+                    },
+                  );
+                }
+              },
+              buttonTitle: "continue".translate(context),
+              radius: 8,
+              height: 48,
+              disabled: selectedCountry == null,
+              disabledColor:
+                  context.color.territoryColor.withOpacity(0.5), // Lighter red
+              buttonColor: context.color.territoryColor, // Red background
             ),
           ],
         ),
@@ -524,7 +446,6 @@ class CountriesScreenState extends State<CountriesScreen> {
   Widget searchItemsWidget() {
     return Column(
       children: [
-        currentLocation(),
         Expanded(
           child: BlocBuilder<FetchCountriesCubit, FetchCountriesState>(
             builder: (context, state) {
@@ -546,168 +467,161 @@ class CountriesScreenState extends State<CountriesScreen> {
                     );
                   }
                 }
-
-                return Center(child: const SomethingWentWrong());
+                return const Center(child: SomethingWentWrong());
               }
 
               if (state is FetchCountriesSuccess) {
                 if (state.countriesModel.isEmpty) {
-                  return Center(child: SingleChildScrollView(child: NoDataFound()));
+                  return Center(
+                      child: SingleChildScrollView(child: NoDataFound()));
                 }
 
                 return Container(
                   width: double.infinity,
                   color: context.color.secondaryColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      widget.from == "addItem"
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 18),
-                              child: Text(
-                                "${"chooseLbl".translate(context)}\t${"country".translate(context)}",
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                  child: SingleChildScrollView(
+                    controller: controller,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// -------- RECENT SEARCHES ----------
+                        if (recentSearches.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            child: Row(
+                              children: [
+                                Icon(Icons.history,
+                                    size: 18,
+                                    color: context.color.textDefaultColor),
+                                const SizedBox(width: 6),
+                                Text(
+                                  "yourLastSearches".translate(context),
+                                )
+                                    .color(context.color.textDefaultColor)
+                                    .size(context.font.normal)
+                                    .bold(weight: FontWeight.bold),
+                                const Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    // See All Logic
+                                  },
+                                  child: Text("seeAll".translate(context))
+                                      .size(context.font.small)
+                                      .color(context.color.textLightColor),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: recentSearches.map((search) {
+                                  return Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        end: 10),
+                                    child: Chip(
+                                      label: Text(search),
+                                      backgroundColor:
+                                          context.color.secondaryColor,
+                                      side: BorderSide(
+                                          color: context.color.borderColor),
+                                      labelStyle: TextStyle(
+                                          color: context.color.textDefaultColor,
+                                          fontSize: 12),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+
+                        /// -------- POPULAR SEARCHES ----------
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          child: Row(
+                            children: [
+                              Icon(Icons.trending_up,
+                                  size: 18,
+                                  color: context.color.textDefaultColor),
+                              const SizedBox(width: 6),
+                              Text(
+                                "popularSearches".translate(context),
                               )
                                   .color(context.color.textDefaultColor)
                                   .size(context.font.normal)
-                                  .bold(weight: FontWeight.w600),
-                            )
-                          : InkWell(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 12),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "${"lblall".translate(context)}\t${"countriesLbl".translate(context)}",
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                        .color(context.color.textDefaultColor)
-                                        .size(context.font.normal)
-                                        .bold(weight: FontWeight.w600),
-                                    Spacer(),
-                                    Container(
-                                        width: 32,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color: context.color.borderColor
-                                                .darken(10)),
-                                        child: Icon(
-                                          Icons.chevron_right_outlined,
-                                          color: context.color.textDefaultColor,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              onTap: () {
-                                if (widget.from == "home") {
-                                  HiveUtils.setLocation();
-
-                                  Future.delayed(
-                                    Duration.zero,
-                                    () {
-                                      context
-                                          .read<FetchHomeScreenCubit>()
-                                          .fetch();
-                                      context
-                                          .read<FetchHomeAllItemsCubit>()
-                                          .fetch(radius: null);
-                                    },
-                                  );
-
-                                  Navigator.popUntil(
-                                      context, (route) => route.isFirst);
-                                } else if (widget.from == "location") {
-                                  HiveUtils.setLocation();
-                                  HelperUtils.killPreviousPages(
-                                      context, Routes.main, {"from": "login"});
-                                } else {
-                                  Map<String, dynamic> result = {
-                                    'area_id': null,
-                                    'area': null,
-                                    'state': null,
-                                    'city': null,
-                                    'country': null,
-                                    'latitude': null,
-                                    'longitude': null
-                                  };
-
-                                  Navigator.pop(context, result);
-                                }
-                              },
-                            ),
-                      const Divider(
-                        thickness: 1.2,
-                        height: 10,
-                      ),
-                      // Using Flexible instead of Expanded here
-                      Flexible(
-                        child: ListView.separated(
-                          controller: controller,
-                          itemCount: state.countriesModel.length,
-                          padding: EdgeInsets.zero,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          separatorBuilder: (context, index) {
-                            return const Divider(
-                              thickness: 1.2,
-                              height: 10,
-                            );
-                          },
-                          itemBuilder: (context, index) {
-                            CountriesModel country =
-                                state.countriesModel[index];
-
-                            return ListTile(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, Routes.statesScreen, arguments: {
-                                  "countryId": country.id!,
-                                  "countryName": country.name!,
-                                  "from": widget.from
-                                });
-                              },
-                              title: Text(
-                                country.name!,
-                                textAlign: TextAlign.start,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                                  .color(context.color.textDefaultColor)
-                                  .size(context.font.normal),
-                              trailing: Container(
-                                  width: 32,
-                                  height: 32,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color:
-                                          context.color.borderColor.darken(10)),
-                                  child: Icon(
-                                    Icons.chevron_right_outlined,
-                                    color: context.color.textDefaultColor,
-                                  )),
-                            );
-                          },
-                        ),
-                      ),
-                      if (state.isLoadingMore)
-                        Center(
-                          child: UiUtils.progress(
-                            normalProgressColor: context.color.territoryColor,
+                                  .bold(weight: FontWeight.bold),
+                            ],
                           ),
-                        )
-                    ],
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: state.countriesModel.map((country) {
+                              bool isSelected =
+                                  selectedCountry?.id == country.id;
+                              return InkWell(
+                                borderRadius: BorderRadius.circular(20),
+                                onTap: () {
+                                  setState(() {
+                                    selectedCountry = country;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? context.color.territoryColor
+                                          : context.color.borderColor,
+                                    ),
+                                    color: isSelected
+                                        ? context.color.territoryColor
+                                            .withOpacity(0.1)
+                                        : context.color.secondaryColor,
+                                  ),
+                                  child: Text(
+                                    country.name!,
+                                  )
+                                      .color(isSelected
+                                          ? context.color.territoryColor
+                                          : context.color.textDefaultColor)
+                                      .size(context.font.small),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+
+                        if (state.isLoadingMore)
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Center(
+                              child: UiUtils.progress(
+                                normalProgressColor:
+                                    context.color.territoryColor,
+                              ),
+                            ),
+                          ),
+
+                        SizedBox(height: 20), // Bottom padding
+                      ],
+                    ),
                   ),
                 );
               }
-              return Container();
+
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -741,7 +655,7 @@ class CountriesScreenState extends State<CountriesScreen> {
   @override
   @override
   void dispose() {
-    _searchDelay?.cancel();                       // cancel timer
+    _searchDelay?.cancel(); // cancel timer
     searchController.removeListener(searchItemListener);
     controller.removeListener(pageScrollListen);
 
@@ -750,5 +664,4 @@ class CountriesScreenState extends State<CountriesScreen> {
 
     super.dispose();
   }
-
 }
