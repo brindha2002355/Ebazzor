@@ -14,19 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "655632443224-bfci01i5lr1kds9cfkp0m9f2l0gka91r.apps.googleusercontent.com",
+          "client_id": "655632443224-s6qvem8s9p5ah2t2f4q8ge4ivfk4u0ko.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.app.ebozor",
-            "certificate_hash": "fc58a72ab04ceb238b9307f87a7a1a7313cdbda8"
-          }
-        },
-        {
-          "client_id": "655632443224-u0up6gvqm1cv7s2555dqkktttlnr7crh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.app.ebozor",
-            "certificate_hash": "3f4e1793ec1b60aa42ff0a98f0f46341259c252e"
+            "certificate_hash": "571443c66a33881d95e565d72cfcaf6649cd2aa6"
           }
         },
         {
