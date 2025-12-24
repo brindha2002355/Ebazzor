@@ -58,6 +58,8 @@ class _AddMoreDetailsScreenState extends CloudState<AddMoreDetailsScreen> {
     Future.delayed(
       Duration.zero,
           () {
+        AbstractField.fieldsData.clear();
+        AbstractField.files.clear();
         moreDetailDynamicFields =
             context.read<FetchCustomFieldsCubit>().getFields().map((field) {
               Map<String, dynamic> fieldData = field.toMap();

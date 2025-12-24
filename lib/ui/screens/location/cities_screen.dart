@@ -278,7 +278,11 @@ class CitiesScreenState extends CloudState<CitiesScreen> {
                 "latitude": double.parse(selectedCity!.latitude!),
                 "longitude": double.parse(selectedCity!.longitude!),
               },
-            );
+            ).then((value) {
+              if (value != null && widget.from == "addItem") {
+                Navigator.pop(context, value);
+              }
+            });
           } else {
             // Navigate to LocationMapScreen directly with City arguments
             Navigator.push(
@@ -294,10 +298,15 @@ class CitiesScreenState extends CloudState<CitiesScreen> {
                     'country': widget.countryName,
                     'latitude': double.parse(selectedCity!.latitude!),
                     'longitude': double.parse(selectedCity!.longitude!),
+                    'from': widget.from,
                   }
                 )
               ),
-            );
+            ).then((value) {
+              if (value != null && widget.from == "addItem") {
+                Navigator.pop(context, value);
+              }
+            });
           }
         }
       },
@@ -386,7 +395,7 @@ class CitiesScreenState extends CloudState<CitiesScreen> {
                               size: 18,
                               color: context.color.textDefaultColor),
                           const SizedBox(width: 6),
-                          Text("popularSearches".translate(context))
+                          Text(" All Cities".translate(context))
                               .color(context.color.textDefaultColor)
                               .size(context.font.normal)
                               .bold(weight: FontWeight.w600),

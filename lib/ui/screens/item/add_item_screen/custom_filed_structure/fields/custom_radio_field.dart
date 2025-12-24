@@ -24,6 +24,9 @@ class CustomRadioField extends CustomField {
       if (parameters['value'] != null) {
         if ((parameters['value'] as List).isNotEmpty) {
           selectedRadioValue = parameters['value'][0];
+          AbstractField.fieldsData.addAll({
+            parameters['id'].toString(): [selectedRadioValue]
+          });
         } /*else {
           selectedRadioValue = (selectedCustomFieldValue[0]);
         }*/

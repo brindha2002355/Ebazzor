@@ -412,10 +412,15 @@ class AreasScreenState extends State<AreasScreen> {
                           'country': widget.countryName,
                           'latitude': widget.latitude,
                           'longitude': widget.longitude,
+                          'from': widget.from,
                         }
                       )
                     ),
-                  );
+                  ).then((value) {
+                    if (value != null && widget.from == "addItem") {
+                      Navigator.pop(context, value);
+                    }
+                  });
                 }
               },
               buttonTitle: "continue".translate(context),

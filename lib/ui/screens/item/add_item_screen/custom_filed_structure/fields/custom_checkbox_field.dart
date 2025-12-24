@@ -21,6 +21,9 @@ class CustomCheckboxField extends CustomField {
       if (parameters['value'] != null) {
         if ((parameters['value'] as List).isNotEmpty) {
           checked = parameters['value'];
+          AbstractField.fieldsData.addAll({
+            parameters['id'].toString(): checked,
+          });
           update(() {});
         }
       }

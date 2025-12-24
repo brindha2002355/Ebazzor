@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
+//import 'package:integration_test/integration_test.dart';
 import 'package:Ebozor/main.dart' as app;
 
 ///Testing eclassify application for version v1.0.3
 void main() {
   group("Login test", () {
-    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+   // IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
     testWidgets("Login test", (widgetTester) async {
       app.main();

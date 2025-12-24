@@ -1734,17 +1734,14 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: _buildButton(
-                  "continueToOffer".translate(context),
-                      () {
-                    Navigator.pop(context);
-                    makeOfferBottomSheet(model);
-                  },
-                  context.color.territoryColor,
-                  context.color.secondaryColor,
-                ),
+              _buildButton(
+                "continueToOffer".translate(context),
+                    () {
+                  Navigator.pop(context);
+                  makeOfferBottomSheet(model);
+                },
+                context.color.territoryColor,
+                context.color.secondaryColor,
               ),
             ],
           ),
@@ -2338,30 +2335,28 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
             // or we could handle them here too if they are independent.
             // Since they use the same Cubit, let's just use the widget for UI triggers.
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: InkWell(
-              onTap: () {
-                UiUtils.checkUser(
-                    onNotGuest: () {
-                      makeOfferBottomSheet(model);
-                    },
-                    context: context);
-              },
-              child: Container(
-                width: double.infinity,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: context.color.secondaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: context.color.territoryColor),
-                ),
-                alignment: Alignment.center,
-                child: Text("makeAnOffer".translate(context))
-                    .color(context.color.territoryColor)
-                    .bold(weight: FontWeight.w600)
-                    .size(context.font.large),
+          child: InkWell(
+            onTap: () {
+              UiUtils.checkUser(
+                  onNotGuest: () {
+                    ////////////////////
+                    makeOfferBottomSheet(model);
+                  },
+                  context: context);
+            },
+            child: Container(
+              width: double.infinity,
+              height: 48,
+              decoration: BoxDecoration(
+                color: context.color.secondaryColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: context.color.territoryColor),
               ),
+              alignment: Alignment.center,
+              child: Text("makeAnOffer".translate(context))
+                  .color(context.color.territoryColor)
+                  .bold(weight: FontWeight.w600)
+                  .size(context.font.large),
             ),
           ),
         );
@@ -2501,52 +2496,84 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
       ),
     );
   }
-
   void makeOfferBottomSheet(ItemModel model) async {
-    await UiUtils.showBlurredDialoge(
-      context,
-      dialoge: BlurredDialogBox(
-        content: makeAnOffer(),
-        onCancel: () {
-          _makeAnOffermessageController.clear();
-        },
-        acceptButtonName: "send".translate(context),
-        isAcceptContainesPush: true,
-        onAccept: () => Future.value().then((_) {
-          if (_offerFormKey.currentState!.validate()) {
-            context.read<MakeAnOfferItemCubit>().makeAnOfferItem(
-                id: widget.model.id!,
-                from: "offer",
-                amount:
-                double.parse(_makeAnOffermessageController.text.trim()));
-            Navigator.pop(context);
-            return;
-          }
-        }),
-      ),
-    );
-    /* if (offer == true) {
-      if (_offerFormKey.currentState!.validate()) {
-        context.read<MakeAnOfferItemCubit>().makeAnOfferItem(widget.model.id!,
-            int.parse(_makeAnOffermessageController.text.trim()));
-      }
-    }*/
-    /*UiUtils.showBlurredDialoge(context,
-        dialoge: EmptyDialogBox(
-            child: AlertDialog(
-          backgroundColor: context.color.secondaryColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          content: MakeAnOfferItemScreen(
-            model: model,
+    await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-        )));*/
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /// CONTENT
+                makeAnOffer(),
+
+                const SizedBox(height: 12),
+
+                Row(
+                  children: [
+                    /// Cancel
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          _makeAnOffermessageController.clear();
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel".translate(context)
+                        ,style:TextStyle(color: context.color.territoryColor,),
+                        )
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    /// Confirm
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_offerFormKey.currentState!.validate()) {
+                            context.read<MakeAnOfferItemCubit>().makeAnOfferItem(
+                              id: widget.model.id!,
+                              from: "offer",
+                              amount: double.parse(
+                                _makeAnOffermessageController.text.trim(),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: context.color.territoryColor, // 👈 button color
+                          foregroundColor: Colors.white, // 👈 text color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        child: Text("Confirm".translate(context)),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
+
 
   Widget makeAnOffer() {
     double bottomPadding = (MediaQuery.of(context).viewInsets.bottom - 50);
     bool isBottomPaddingNagative = bottomPadding.isNegative;
+
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
         child: Form(
           key: _offerFormKey,
@@ -2557,51 +2584,56 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                   .size(context.font.larger)
                   .centerAlign()
                   .bold(),
+
               Divider(
                 thickness: 1,
                 color: context.color.borderColor.darken(30),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+
               RichText(
                 text: TextSpan(
-                  text: "sellerPrice".translate(context),
+                  text: "Seller asking price:".translate(context),
                   style: TextStyle(
-                      color: context.color.textDefaultColor.withOpacity(0.5),
-                      fontSize: 16),
+                    color: context.color.textDefaultColor.withOpacity(0.5),
+                    fontSize: 16,
+                  ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: "\t${Constant.currencySymbol}${widget.model.price}",
+                      text:
+                      "\t${Constant.currencySymbol}${widget.model.price}",
                       style: TextStyle(
-                          color: context.color.textDefaultColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                        color: context.color.textDefaultColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.only(
-                    bottom: isBottomPaddingNagative ? 0 : bottomPadding,
-                    start: 20,
-                    end: 20,
-                    top: 18),
+
+              SizedBox(height: 6,),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: TextFormField(
                   maxLines: null,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                      color: context.color.textDefaultColor),
                   controller: _makeAnOffermessageController,
                   cursorColor: context.color.territoryColor,
-                  //autovalidateMode: AutovalidateMode.always,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    color: context.color.textDefaultColor,
+                  ),
                   validator: (val) {
                     if (val == null || val.isEmpty) {
-                      return Validator.nullCheckValidator(val,
-                          context: context);
+                      return Validator.nullCheckValidator(
+                        val,
+                        context: context,
+                      );
                     } else {
                       double parsedVal = double.parse(val);
                       if (parsedVal <= 0.0) {
@@ -2614,28 +2646,14 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
                     }
                   },
                   decoration: InputDecoration(
-                      fillColor: context.color.borderColor.darken(20),
-                      filled: true,
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                      hintText: "yourOffer".translate(context),
-                      hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          color:
-                          context.color.textDefaultColor.withOpacity(0.3)),
-                      focusColor: context.color.territoryColor,
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(
-                              color: context.color.borderColor.darken(60))),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(
-                              color: context.color.borderColor.darken(60))),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: context.color.territoryColor))),
+                    border: InputBorder.none, // 🔥 rectangle removed
+                    hintText: "Type here".translate(context),
+                    hintStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: context.color.textDefaultColor.withOpacity(0.3),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -2644,6 +2662,7 @@ class AdDetailsScreenState extends CloudState<AdDetailsScreen> {
       ),
     );
   }
+
 
   Future<void> _bottomSheet(int itemId) async {
     await UiUtils.showBlurredDialoge(

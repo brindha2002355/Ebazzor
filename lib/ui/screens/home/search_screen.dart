@@ -88,15 +88,15 @@ class SearchScreenState extends State<SearchScreen>
     context.read<FetchPopularItemsCubit>().fetchPopularItems();
     //context.read<ItemCubit>().fetchItem(context, {});
     //context.read<SearchItemCubit>().searchItem(searchController.text, page: 1);
-    context.read<SearchItemCubit>().searchItem(searchController.text,
-        page: 1, filter: _getLocationFilter());
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SearchItemCubit>().searchItem(
-        searchController.text, // empty text or default query
-        page: 1,
-        filter: filter ?? _getLocationFilter(),
-      );
-    });
+    // context.read<SearchItemCubit>().searchItem(searchController.text,
+    //     page: 1, filter: _getLocationFilter());
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<SearchItemCubit>().searchItem(
+    //     searchController.text, // empty text or default query
+    //     page: 1,
+    //     filter: filter ?? _getLocationFilter(),
+    //   );
+    // });
 
     searchController = TextEditingController();
 
@@ -145,6 +145,7 @@ class SearchScreenState extends State<SearchScreen>
         filter: filter ?? _getLocationFilter(),
       );
       previousSearchQuery = searchController.text;
+      insertSearchQuery(searchController.text);
       setState(() {});
     } else {
       context.read<SearchItemCubit>().clearSearch();
@@ -445,9 +446,7 @@ class SearchScreenState extends State<SearchScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               buildHistoryItemList(),
-              if (searchController.text.isNotEmpty ||
-                  hasSearchResults ||
-                  filter != null)
+              if (searchController.text.isNotEmpty)
                 searchItemsWidget()
               //else
               //  popularItemsWidget(),
@@ -478,22 +477,36 @@ class SearchScreenState extends State<SearchScreen>
         for (var item in box.values) {
           if (item is String) {
             try {
-              items.add(ItemModel.fromJson(jsonDecode(item)));
+              var json = jsonDecode(item);
+              if (json['is_query'] == true) {
+                 // Reconstruct a dummy item for display
+                 items.add(ItemModel(
+                   id: -1, 
+                   name: json['name'], 
+                   category: CategoryModel(name: ""),
+                 ));
+              } else {
+                 items.add(ItemModel.fromJson(json));
+              }
             } catch (e) {}
           }
         }
+        // Show most recent first
+        items = items.reversed.toList();
 
         if (items.isNotEmpty) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("recentSearches".translate(context))
-                        .color(context.color.textDefaultColor.withOpacity(0.5)),
+                        .color(context.color.textDefaultColor.withOpacity(0.5))
+                        .bold(weight: FontWeight.w600),
                     InkWell(
                       child: Text("clear".translate(context))
                           .color(context.color.territoryColor),
@@ -503,52 +516,51 @@ class SearchScreenState extends State<SearchScreen>
                     ),
                   ],
                 ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(
-                      color: context.color.borderColor.darken(30),
-                      thickness: 1.2,
-                    );
-                  },
-                  padding: EdgeInsets.only(top: 10),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Icon(
-                          Icons.refresh,
-                          size: 22,
-                          color: context.color.textDefaultColor,
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: items.map((item) {
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () {
+                        searchController.text = item.name!;
+                        searchController.selection = TextSelection.fromPosition(
+                            TextPosition(offset: searchController.text.length));
+                        setState(() {
+                             isFocused = true; // Focus state to show search results if needed
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: context.color.secondaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: context.color.borderColor.darken(30)),
                         ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              text: "${items[index].name!}\tin\t",
-                              style: TextStyle(
-                                  color: context.color.textDefaultColor
-                                      .withOpacity(0.5),
-                                  overflow: TextOverflow.ellipsis),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: items[index].category!.name,
-                                  style: TextStyle(
-                                    color: context.color.textDefaultColor,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.history,
+                                size: 16,
+                                color: context.color.textDefaultColor
+                                    .withOpacity(0.6)),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(item.name!)
+                                  .color(context.color.textDefaultColor)
+                                  .size(context.font.normal)
+                                  .setMaxLines(lines: 1),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     );
-                  },
+                  }).toList(),
                 ),
+                const SizedBox(height: 10),
                 Divider(
                   color: context.color.borderColor.darken(30),
                   thickness: 1.2,
@@ -577,28 +589,68 @@ class SearchScreenState extends State<SearchScreen>
 
   void insertNewItem(ItemModel model) {
     var box = Hive.box(HiveKeys.historyBox);
-
-    // Check if the model.id is already present in the box
+    
+    // Create a simplified item or query wrapper if needed, but here we save the item
+    // For search queries, we use a different method.
+    // If we want to prevent dups:
     bool exists = false;
     for (int i = 0; i < box.length; i++) {
-      var item = jsonDecode(box.getAt(i));
-      if (item['id'] == model.id) {
-        exists = true;
-        break;
+      var itemString = box.getAt(i);
+      if (itemString is String) {
+        try {
+           var item = jsonDecode(itemString);
+           if (item['id'] == model.id) {
+             exists = true;
+             break;
+           }
+        } catch(e) {}
       }
     }
 
-    // If the id does not exist, add the new item
     if (!exists) {
-      // Ensure the box length does not exceed 5
-      if (box.length >= 5) {
+      if (box.length >= 10) { // Increase limit
         box.deleteAt(0);
       }
-
       box.add(jsonEncode(model.toJson()));
     }
-
     setState(() {});
+  }
+
+  void insertSearchQuery(String query) {
+    if (query.trim().isEmpty) return;
+    var box = Hive.box(HiveKeys.historyBox);
+    
+    // Check if query exists (using a custom format)
+    bool exists = false;
+    for (int i = 0; i < box.length; i++) {
+        var itemString = box.getAt(i);
+        if (itemString is String) {
+             try {
+                var json = jsonDecode(itemString);
+                if (json['is_query'] == true && json['name'] == query) {
+                  exists = true;
+                  break;
+                }
+             } catch(e) {}
+        }
+    }
+
+    if (!exists) {
+       if (box.length >= 10) box.deleteAt(0);
+       
+       // Create a dummy ItemModel-like JSON for query
+       Map<String, dynamic> queryJson = {
+         'id': -1, // -1 for query
+         'name': query,
+         'is_query': true,
+         'category': {'name': ''}, // dummy category
+         'image': '',
+         'price': 0,
+         'total_likes': 0,
+         'clicks': 0
+       };
+       box.add(jsonEncode(queryJson));
+    }
   }
 
   Widget searchItemsWidget() {
@@ -671,7 +723,9 @@ class SearchScreenState extends State<SearchScreen>
 
                     return InkWell(
                       onTap: () {
-                        insertNewItem(item);
+                        try {
+                          insertNewItem(item);
+                        } catch (e) {}
                         Navigator.pushNamed(
                           context,
                           Routes.adDetailsScreen,

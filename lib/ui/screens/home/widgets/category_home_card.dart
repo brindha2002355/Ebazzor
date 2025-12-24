@@ -23,7 +23,7 @@ class CategoryHomeCard extends StatelessWidget {
 
     return SizedBox(
       width: 85,
-      height: 120, // 🔥 FIX: explicit height
+      height: 120,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -31,30 +31,11 @@ class CategoryHomeCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
           child: Column(
-          mainAxisSize: MainAxisSize.max, // 🔥 important
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              height: 46,
-              width: 46,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
+            Flexible(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: UiUtils.imageType(
@@ -64,10 +45,10 @@ class CategoryHomeCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 6),
+           // const SizedBox(height: ),
 
             Expanded(
-              child: Center( // 🔥 text center panna
+              child: Center(
                 child: Text(
                   title,
                   textAlign: TextAlign.center,

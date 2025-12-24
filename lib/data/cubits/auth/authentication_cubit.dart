@@ -102,7 +102,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
 
       print(" ///////////////////////////");
-      print("🔥 Authentication Failed: $e");
+      print("1Authentication Failed: $e");
       print(" ///////////////////////////");
 
       emit(AuthenticationFail(e));

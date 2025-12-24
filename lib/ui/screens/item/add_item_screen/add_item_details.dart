@@ -141,6 +141,9 @@ class _AddItemDetailsState extends CloudState<AddItemDetails> {
 
     _pickTitleImage.listener((p0) {
       titleImageURL = "";
+      if (p0 is List && p0.length > 1) {
+        mixedItemImageList.addAll(List<dynamic>.from(p0.sublist(1)));
+      }
       WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
         if (mounted) setState(() {});
       });
@@ -650,7 +653,7 @@ class _AddItemDetailsState extends CloudState<AddItemDetails> {
                   showImageSourceDialog(context, (source) {
                     _pickTitleImage.resumeSubscription();
                     _pickTitleImage.pick(
-                      pickMultiple: false,
+                      pickMultiple: source == ImageSource.gallery,
                       context: context,
                       source: source,
                     );
@@ -690,7 +693,7 @@ class _AddItemDetailsState extends CloudState<AddItemDetails> {
               showImageSourceDialog(context, (source) {
                 _pickTitleImage.resumeSubscription();
                 _pickTitleImage.pick(
-                  pickMultiple: false,
+                  pickMultiple: source == ImageSource.gallery,
                   context: context,
                   source: source,
                 );

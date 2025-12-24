@@ -367,7 +367,7 @@ class ItemsListState extends State<ItemsList> {
             // All Fields Chip
             _buildChip(
                 label: "All Fields",
-                isActive: false,
+                isActive: _isAllFieldsSelected,
                 onTap: _onAllFieldsTap
             ),
           ],
@@ -380,14 +380,24 @@ class ItemsListState extends State<ItemsList> {
     CategoryModel currentModel = _currentChain[chainIndex];
     return _buildChip(
       label: currentModel.name ?? "",
-      isActive: true, // Or based on selection logic
-      onTap: () => _showDynamicFilterBottomSheet(chainIndex),
+      isActive: !_isAllFieldsSelected, // Inactive if All Fields is selected
+      onTap: () {
+        if (_isAllFieldsSelected) {
+          _restoreSelection(chainIndex);
+        } else {
+          _showDynamicFilterBottomSheet(chainIndex);
+        }
+      },
     );
   }
 
+  bool _isAllFieldsSelected = false;
+  final Map<int, List<CategoryModel>> _selectionHistory = {};
+
   void _onAllFieldsTap() {
     setState(() {
-      _currentChain.clear();
+      // Do not clear the chain, just reset the search to root
+       _isAllFieldsSelected = true;
       _currentCategoryIds = [widget.categoryId];
 
       context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
@@ -397,15 +407,50 @@ class ItemsListState extends State<ItemsList> {
     });
   }
 
+  void _restoreSelection(int chainIndex) {
+    setState(() {
+      _isAllFieldsSelected = false;
+
+      // Truncate chain after chainIndex
+      if (_currentChain.length > chainIndex + 1) {
+         _currentChain.removeRange(chainIndex + 1, _currentChain.length);
+      }
+
+      List<String> newIds = [widget.categoryId];
+      for (var cat in _currentChain) {
+        newIds.add(cat.id.toString());
+      }
+      _currentCategoryIds = newIds;
+
+      // Fetch
+      CategoryModel? targetCat = _currentChain.isNotEmpty ? _currentChain.last : null;
+      int targetId = targetCat?.id ?? int.tryParse(widget.categoryId) ?? 0;
+
+      context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
+          categoryId: targetId,
+          search: searchController.text
+      );
+    });
+  }
+
   void _showDynamicFilterBottomSheet(int chainIndex) {
     // Determine the Parent ID to fetch siblings from.
     // Index 0 in chain corresponds to Level 1 (Rent). Its parent is Level 0 (Property).
-    // _currentCategoryIds: [PropertyID, RentID, ResID, AptID]
-
-    // Check bounds
-    if (_currentCategoryIds.length <= chainIndex) return;
-
-    var parentId = _currentCategoryIds[chainIndex];
+    
+    // Robust way:
+    String parentId;
+    if (chainIndex == 0) {
+      // Index 0 in chain is Level 1 (e.g., Rent). Its parent is Level 0 (Property).
+      // Level 0 ID is stored at index 0 of the full ID list passed to this screen.
+      parentId = widget.categoryIds.isNotEmpty ? widget.categoryIds[0] : "0";
+    } else {
+      // Parent is the previous item in the chain
+      if (chainIndex - 1 < _currentChain.length) {
+         parentId = _currentChain[chainIndex - 1].id.toString();
+      } else {
+         return; // Error state
+      }
+    }
 
     _chipFilterCubit.fetchSubCategories(categoryId: int.tryParse(parentId) ?? 0);
 
@@ -413,50 +458,146 @@ class ItemsListState extends State<ItemsList> {
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) {
-        return Container(
-          decoration: BoxDecoration(
-              color: context.color.secondaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20))
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Select Category", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: context.color.textDefaultColor)),
-              const SizedBox(height: 16),
-              BlocProvider.value(
-                value: _chipFilterCubit,
-                child: BlocBuilder<FetchSubCategoriesCubit, FetchSubCategoriesState>(
-                  builder: (context, state) {
-                    if (state is FetchSubCategoriesInProgress) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (state is FetchSubCategoriesSuccess) {
-                      return Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: state.categories.map((cat) {
-                          bool isSelected = _currentChain.length > chainIndex && cat.id == _currentChain[chainIndex].id;
-                          return ActionChip(
-                            label: Text(cat.name ?? ""),
-                            backgroundColor: isSelected ? context.color.territoryColor.withOpacity(0.1) : context.color.primaryColor,
-                            side: BorderSide(color: isSelected ? context.color.territoryColor : context.color.borderColor),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              _updateSelection(chainIndex, cat);
-                            },
+        CategoryModel? selectedCategory;
+        // Initialize with current selection if available
+        if (_currentChain.length > chainIndex) {
+          selectedCategory = _currentChain[chainIndex];
+        }
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: context.color.secondaryColor,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20))),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Select Category",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: context.color.textDefaultColor)),
+                       GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(Icons.close, color: context.color.textDefaultColor),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  BlocProvider.value(
+                    value: _chipFilterCubit,
+                    child: BlocBuilder<FetchSubCategoriesCubit,
+                        FetchSubCategoriesState>(
+                      builder: (context, state) {
+                        if (state is FetchSubCategoriesInProgress) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (state is FetchSubCategoriesSuccess) {
+                          return Container(
+                            constraints: BoxConstraints(
+                              maxHeight: MediaQuery.of(context).size.height * 0.5,
+                            ),
+                            child: SingleChildScrollView(
+                               child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: state.categories.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.9,
+                                ),
+                                itemBuilder: (context, index) {
+                                  CategoryModel cat = state.categories[index];
+                                  bool isSelected = selectedCategory?.id == cat.id;
+
+                                  return InkWell(
+                                    onTap: () {
+                                      setModalState(() {
+                                        selectedCategory = cat;
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? context.color.territoryColor
+                                                .withOpacity(0.1)
+                                            : context.color.backgroundColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? context.color.territoryColor
+                                              : context.color.borderColor,
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: UiUtils.imageType(
+                                              cat.url ?? "",
+                                              color: isSelected
+                                                  ? context.color.territoryColor
+                                                  : context.color.textDefaultColor,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            cat.name ?? "",
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: isSelected
+                                                  ? context.color.territoryColor
+                                                  : context.color.textDefaultColor,
+                                              fontWeight: isSelected
+                                                  ? FontWeight.w600
+                                                  : FontWeight.normal,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           );
-                        }).toList(),
-                      );
+                        }
+                        return Text("No options available");
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  UiUtils.buildButton(context, onPressed: () {
+                    if (selectedCategory != null) {
+                      Navigator.pop(context);
+                      _updateSelection(chainIndex, selectedCategory!);
                     }
-                    return Text("No options available");
                   },
-                ),
+                      buttonTitle: "Show Results",
+                      textColor: context.color.secondaryColor,
+                      buttonColor: context.color.territoryColor,
+                      radius: 10)
+                ],
               ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -464,32 +605,83 @@ class ItemsListState extends State<ItemsList> {
 
   void _updateSelection(int chainIndex, CategoryModel newSelection) {
     final oldId = _currentChain.length > chainIndex ? _currentChain[chainIndex].id : -1;
-    if (oldId == newSelection.id) return; // No change
+    // If selection is same AND All Fields is NOT selected, then no change.
+    // If All Fields IS selected, we must proceed to deactivate it and restore this selection.
+    if (oldId == newSelection.id && !_isAllFieldsSelected) return;
 
     setState(() {
-      // Update the chain at this index
+      _isAllFieldsSelected = false; // Reset All Fields flag
+
+      // 1. Save History for the OLD item being replaced
+      if (_currentChain.length > chainIndex) {
+         int currentOldId = _currentChain[chainIndex].id!;
+         // If there are children (tail), save them
+         if (_currentChain.length > chainIndex + 1) {
+            _selectionHistory[currentOldId] = List.from(_currentChain.sublist(chainIndex + 1));
+         }
+      }
+
+      // 2. Update the chain at this index
       if (_currentChain.length > chainIndex) {
         _currentChain[chainIndex] = newSelection;
       } else {
         _currentChain.add(newSelection);
       }
 
-      // Truncate logic: If I changed Level 1 (Rent -> Sale), Level 2 (Res) might be invalid or need reset.
+      // 3. Truncate any existing children (since we changed the parent)
       if (_currentChain.length > chainIndex + 1) {
         _currentChain.removeRange(chainIndex + 1, _currentChain.length);
       }
 
-      // Re-calculate categoryIds chain
-      List<String> newIds = [_currentCategoryIds[0]];
+      // 4. Restore History for the NEW item (if we visited it before)
+      if (_selectionHistory.containsKey(newSelection.id)) {
+         _currentChain.addAll(_selectionHistory[newSelection.id]!);
+      }
+
+      // 5. Re-calculate categoryIds chain
+      // Note: We use widget.categoryIds[0] as the Root Base if chainIndex 0 starts from Level 1
+      List<String> newIds = [];
+      if (widget.categoryIds.isNotEmpty) newIds.add(widget.categoryIds[0]);
+      
+      // Add current chain IDs
       for (var cat in _currentChain) {
         newIds.add(cat.id.toString());
       }
+      // Note: If original widget.categoryIds had more depth, we are replacing it dynamically.
+      // But we must assume widget.categoryIds[0] is the only fixed Root Context.
+      // Actually, my previous logic `List<String> newIds = [_currentCategoryIds[0]];` 
+      // relied on `_currentCategoryIds[0]` being preserved.
+      // Here, `widget.categoryIds[0]` is safer/constant.
+      
+      // Let's stick to using widget.categoryIds[0] as ROOT.
+      // But verify if widget.categoryIds is empty (e.g. from Search? Not PropertyFilter).
+      // This flow is for PropertyFilter mostly.
+      
+       if (newIds.isEmpty && _currentChain.isNotEmpty) {
+           // Fallback if no root is passed? Should not happen in this flow.
+           // Maybe _currentChain[0] is root?
+           // No, Rent is Level 1.
+           // We'll stick to newIds logic.
+       }
+       
+       // Just to be safe, if we duplicated the Root ID?
+       // `widget.categoryIds` might be `[PropertyID, RentID...]`.
+       // `_currentChain` starts with Rent. 
+       // So `newIds` = `[PropertyID, RentID, ResID...]`. Correct.
+       
+       // Wait, what if widget.categoryIds comes as `[PropertyID]` only?
+       // `newIds` = `[PropertyID, RentID...]`. Correct.
+       
+       // What if `_currentChain` contains Property (Level 0)?
+       // No, `accumulatedModels` logic in PropertyScreen added Tab(Rent) as first item.
+       // So Chain starts at Level 1.
+       
+       _currentCategoryIds = newIds;
 
-      _currentCategoryIds = newIds;
-
-      // Trigger API refresh
+      // 6. Trigger API refresh
+      // Fetch using the LAST item in the chain (Most specific filter)
       context.read<FetchItemFromCategoryCubit>().fetchItemFromCategory(
-          categoryId: newSelection.id!,
+          categoryId: _currentChain.last.id!,
           search: searchController.text
       );
     });
@@ -631,11 +823,12 @@ class ItemsListState extends State<ItemsList> {
             child: Column(
               children: [
                 SizedBox(height: 8,),
-                searchBarWidget(),
                 SizedBox(height: 8,),
-               // _buildFilterChips(),
-                _buildVerifiedToggle(),
-                SizedBox(height: 8,),
+                 searchBarWidget(),
+                 SizedBox(height: 8,),
+                 _buildFilterChips(),
+                 _buildVerifiedToggle(),
+                 SizedBox(height: 8,),
                 Expanded(child: fetchItems()),
               ],
             ),

@@ -336,7 +336,7 @@ class StatesScreenState extends State<StatesScreen> {
                               color: context.color.textDefaultColor),
                           const SizedBox(width: 6),
                           Text(
-                            "popularSearches".translate(context),
+                            "All States".translate(context),
                           )
                               .color(context.color.textDefaultColor)
                               .size(context.font.normal)
@@ -434,7 +434,11 @@ class StatesScreenState extends State<StatesScreen> {
                     "countryName": widget.countryName,
                     "countryId": widget.countryId
                   },
-                );
+                ).then((value) {
+                  if (value != null && widget.from == "addItem") {
+                    Navigator.pop(context, value);
+                  }
+                });
               }
             },
             buttonTitle: "continue".translate(context),

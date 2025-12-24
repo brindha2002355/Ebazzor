@@ -17,9 +17,11 @@ class SendMessageInProgress extends SendMessageState {}
 
 class SendMessageSuccess extends SendMessageState {
   final int messageId;
+  final Map<String, dynamic> responseData;
 
   SendMessageSuccess({
     required this.messageId,
+    required this.responseData,
   });
 }
 
@@ -71,7 +73,8 @@ class SendMessageCubit extends Cubit<SendMessageState> {
       print("chat result: messgae:${message0},\n itemid:${itemOfferId}",);
 
 
-      emit(SendMessageSuccess(messageId: result['data']['id']));
+      emit(SendMessageSuccess(
+          messageId: result['data']['id'], responseData: result['data']));
     } catch (e) {
 
       Logger.error(e.toString());

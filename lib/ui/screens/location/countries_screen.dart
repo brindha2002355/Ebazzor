@@ -190,7 +190,11 @@ class CountriesScreenState extends State<CountriesScreen> {
                       'area': place.subLocality,
                       'area_id': null,
                       'from': widget.from // Passing 'from' parameter
-                    })));
+                    }))).then((value) {
+                      if (value != null && widget.from == "addItem") {
+                        Navigator.pop(context, value);
+                      }
+                    });
           }
         }
       }
@@ -426,7 +430,11 @@ class CountriesScreenState extends State<CountriesScreen> {
                       "countryName": selectedCountry!.name!,
                       "from": widget.from
                     },
-                  );
+                  ).then((value) {
+                    if (value != null && widget.from == "addItem") {
+                      Navigator.pop(context, value);
+                    }
+                  });
                 }
               },
               buttonTitle: "continue".translate(context),
@@ -496,9 +504,7 @@ class CountriesScreenState extends State<CountriesScreen> {
                                     size: 18,
                                     color: context.color.textDefaultColor),
                                 const SizedBox(width: 6),
-                                Text(
-                                  "yourLastSearches".translate(context),
-                                )
+                                Text("Your Last Searches".translate(context))
                                     .color(context.color.textDefaultColor)
                                     .size(context.font.normal)
                                     .bold(weight: FontWeight.bold),
@@ -551,7 +557,7 @@ class CountriesScreenState extends State<CountriesScreen> {
                                   color: context.color.textDefaultColor),
                               const SizedBox(width: 6),
                               Text(
-                                "popularSearches".translate(context),
+                                "All Countries".translate(context),
                               )
                                   .color(context.color.textDefaultColor)
                                   .size(context.font.normal)

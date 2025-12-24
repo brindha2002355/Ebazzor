@@ -97,7 +97,7 @@ class _ItemCardState extends State<ItemCard> {
         );
       },
       child: Container(
-        width: widget.width ?? 170,
+        width: widget.width ?? 160,
         decoration: BoxDecoration(
           color: context.color.secondaryColor,
           borderRadius: BorderRadius.circular(18),
@@ -139,15 +139,16 @@ class _ItemCardState extends State<ItemCard> {
                           .size(context.font.large)
                           .color(context.color.territoryColor),
 
-                      const SizedBox(height: 1),
+                      const SizedBox(height: 5),
 
                       /// ITEM NAME
                       Text(widget.item?.name ?? "")
+                      .bold()
                           .firstUpperCaseWidget()
                           .setMaxLines(lines: 1)
-                          .size(context.font.large),
+                          .size(context.font.small),
 
-                      const SizedBox(height: 1),
+                      const SizedBox(height: 5),
 
                       /// LOCATION (compact)
                       if ((widget.item?.address ?? "").isNotEmpty)

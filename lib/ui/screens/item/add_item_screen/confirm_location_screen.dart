@@ -455,7 +455,7 @@ class _ConfirmLocationScreenState extends CloudState<ConfirmLocationScreen>
                 SizedBox(
                   height: 20,
                 ),
-                Expanded(
+                  Expanded(
                   child: Stack(
                     children: <Widget>[
                       Container(
@@ -469,18 +469,13 @@ class _ConfirmLocationScreenState extends CloudState<ConfirmLocationScreen>
                                 _cameraPosition = position;
                               },
                               onCameraIdle: () async {
-                                if (markerMove == false) {
-                                  if (LatLng(latitude!, longitude!) ==
-                                      LatLng(_cameraPosition!.target.latitude,
-                                          _cameraPosition!.target.longitude)) {
-                                  } else {
+                                if (markerMove == false) { // Assuming markerMove logic is relevant or can be removed if unused
                                     getLocationFromLatitudeLongitude();
-                                  }
                                 }
                               },
                               initialCameraPosition: _cameraPosition!,
-                              markers: _markers,
-                              zoomControlsEnabled: false,
+                              markers: {}, // We using center pointer
+                              zoomControlsEnabled: true,
                               minMaxZoomPreference:
                                   const MinMaxZoomPreference(0, 16),
                               compassEnabled: true,
@@ -488,7 +483,13 @@ class _ConfirmLocationScreenState extends CloudState<ConfirmLocationScreen>
                               mapToolbarEnabled: true,
                               myLocationButtonEnabled: true,
                               mapType: MapType.normal,
-                              gestureRecognizers: getMapGestureRecognizers(),
+                              scrollGesturesEnabled: true,
+                              zoomGesturesEnabled: true,
+                              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                              Factory<EagerGestureRecognizer>(
+                                () => EagerGestureRecognizer(),
+                              ),
+                             },
                               onMapCreated: (GoogleMapController controller) {
                                 Future.delayed(
                                         const Duration(milliseconds: 500))
@@ -499,23 +500,21 @@ class _ConfirmLocationScreenState extends CloudState<ConfirmLocationScreen>
                                       _cameraPosition!,
                                     ),
                                   );
-                                  //preFillLocationWhileEdit();
                                 });
                               },
                               onTap: (latLng) {
-                                setState(() {
-                                  _markers.clear(); // Clear existing markers
-                                  _markers.add(Marker(
-                                    markerId: MarkerId('selectedLocation'),
-                                    position: latLng,
-                                  ));
-                                  latitude = latLng.latitude;
-                                  longitude = latLng.longitude;
-
-                                  getLocationFromLatitudeLongitude(
-                                      latLng: latLng); // Get location details
-                                });
+                                 // Optional tap logic
                               }),
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 40), // Adjust to align tip of pin
+                          child: Icon(
+                            Icons.location_on,
+                            size: 45,
+                            color: context.color.territoryColor,
+                          ),
                         ),
                       ),
                       PositionedDirectional(
@@ -551,7 +550,6 @@ class _ConfirmLocationScreenState extends CloudState<ConfirmLocationScreen>
                               zoom: 14.4746,
                               bearing: 0,
                             );
-                            getLocationFromLatitudeLongitude();
 
                             _mapController.animateCamera(
                               CameraUpdate.newCameraPosition(_cameraPosition!),

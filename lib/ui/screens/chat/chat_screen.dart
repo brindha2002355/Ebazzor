@@ -595,7 +595,7 @@ class _ChatScreenState extends State<ChatScreen>
                                         _socketService.typingStop(widget.itemOfferId);
                                       });
 
-                                  },
+                                    },
                                     cursorColor:
                                     context.color.territoryColor,
                                     onTap: () {

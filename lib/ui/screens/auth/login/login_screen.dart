@@ -348,8 +348,9 @@ class LoginScreenState extends State<LoginScreen> {
 
                     if (state is LoginFailure) {
                       ////////
+                      debugPrint("Login Failure: ${state.errorMessage}");
                       HelperUtils.showSnackBarMessage(
-                          context, state.errorMessage.toString());
+                          context, "Login Failed");
                     }
                   },
                   child: BlocConsumer<AuthenticationCubit, AuthenticationState>(
@@ -389,23 +390,30 @@ class LoginScreenState extends State<LoginScreen> {
                       }
 
                       if (state is AuthenticationFail) {
-                        if (state is AuthenticationFail) {
-                          Widgets.hideLoder(context);
+                        Widgets.hideLoder(context);
 
-                          // 🔴 EXACT LOGIN ERROR PRINT HERE
-                          debugPrint('========== LOGIN ERROR ==========');
-                          debugPrint('ERROR OBJ : ${state.error}');
+                        // 🔴 EXACT LOGIN ERROR PRINT HERE
+                        debugPrint('========== LOGIN ERROR ==========');
+                        debugPrint('ERROR OBJ : ${state.error}');
+                        
+                        String message = "Login Failed"; // Default friendly message
 
-                          if (state.error is FirebaseAuthException) {
-                            final e = state.error as FirebaseAuthException;
-                            debugPrint('FIREBASE CODE : ${e.code}');
-                            debugPrint('FIREBASE MSG  : ${e.message}');
+                        if (state.error is FirebaseAuthException) {
+                          final e = state.error as FirebaseAuthException;
+                          debugPrint('FIREBASE CODE : ${e.code}');
+                          debugPrint('FIREBASE MSG  : ${e.message}');
+                          
+                          if (e.code == 'credential-already-in-use' || 
+                              e.code == 'account-exists-with-different-credential' || 
+                              e.code == 'email-already-in-use') {
+                            message = "Account already used";
                           }
-
-                          debugPrint('=================================');
                         }
 
-                        Widgets.hideLoder(context);
+                        debugPrint('=================================');
+                        
+                        // Show friendly message in SnackBar
+                        HelperUtils.showSnackBarMessage(context, message, type: MessageType.error);
                       }
 
                       if (state is AuthenticationInProcess) {

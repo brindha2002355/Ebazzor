@@ -69,8 +69,8 @@ List<ScrollController> controllerList = [
 //
 class MainActivity extends StatefulWidget {
   final String from;
-  static final GlobalKey<MainActivityState> globalKey =
-      GlobalKey<MainActivityState>();
+   static final GlobalKey<MainActivityState> globalKey =
+       GlobalKey<MainActivityState>();
 
   MainActivity({Key? key, required this.from}) : super(key: globalKey);
 

@@ -20,6 +20,9 @@ class CustomFieldDropdown extends CustomField {
       if (parameters['value'] != null) {
         if ((parameters['value'] as List).isNotEmpty) {
           selected = parameters['value'][0].toString();
+          AbstractField.fieldsData.addAll({
+            parameters['id'].toString(): [selected],
+          });
         }
       }
     } else {

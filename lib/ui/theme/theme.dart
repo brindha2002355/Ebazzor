@@ -41,10 +41,13 @@ const Color pendingButtonColor = Color(0xff0C5D9C);
 const Color soldOutButtonColor = Color(0xffFFBB33);
 const Color deactivateButtonColor = Color(0xffFE0000);
 const Color activateButtonColor = Color(0xFF02AD11);
+const Color bannerBlue=Color(0xFF52A6FF);
+
 
 //Button text color
 const Color buttonTextColor = Colors.white;
 
+///Advance
 ///Advance
 //Theme settings
 extension ColorPrefs on ColorScheme {
@@ -103,6 +106,8 @@ extension ColorPrefs on ColorScheme {
   Color get shimmerContentColor => brightness == Brightness.light
       ? Colors.white.withOpacity(0.85)
       : Colors.white.withOpacity(0.7);
+
+  Color get bannerColor => bannerBlue;
 }
 
 // 10pt: Smaller

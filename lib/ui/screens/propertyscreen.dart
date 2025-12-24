@@ -119,7 +119,7 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
                 });
               },
               child: Text(
-                "lblReset".translate(context),
+                "Reset".translate(context),
                 style: TextStyle(
                     color: context.color.textDefaultColor.withOpacity(0.5)),
               ),
@@ -471,15 +471,22 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
     // 4. SubType (Apartment / Villa)
 
     List<String> accumulatedIds = [...widget.categoryIds];
+    List<CategoryModel> accumulatedModels = []; // We need this for the chips!
+
+    // We don't have the parent models of widget.categoryList here easily without fetching or passing them.
+    // However, we have the current selections.
 
     if (_currentTabCategory != null) {
       accumulatedIds.add(_currentTabCategory!.id.toString());
+      accumulatedModels.add(_currentTabCategory!);
     }
     if (_selectedPropertyType != null) {
       accumulatedIds.add(_selectedPropertyType!.id.toString());
+      accumulatedModels.add(_selectedPropertyType!);
     }
     if (_selectedSubCategory != null) {
       accumulatedIds.add(_selectedSubCategory!.id.toString());
+      accumulatedModels.add(_selectedSubCategory!);
     }
 
     // Determine the "final" category to show in the header or as main context
@@ -489,7 +496,8 @@ class _PropertyFilterScreenState extends State<PropertyFilterScreen> {
     Navigator.pushNamed(context, Routes.itemsList, arguments: {
       'catID': targetCat.id.toString(),
       'catName': targetCat.name,
-      "categoryIds": accumulatedIds // Passing the full chain
+      "categoryIds": accumulatedIds, // Passing the full chain IDs
+      "selectedCategoryChain": accumulatedModels // Passing the full chain Models
     });
   }
 }

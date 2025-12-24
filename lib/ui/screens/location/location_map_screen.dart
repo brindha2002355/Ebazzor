@@ -30,6 +30,8 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   AddressComponent? formatedAddress;
   double? latitude, longitude;
   TextEditingController searchController = TextEditingController();
+  FocusNode searchFocusNode = FocusNode();
+  Timer? _searchDebounce;
 
   bool _initialLocationSet = false;
 
@@ -39,12 +41,23 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   }
 
   @override
+  void dispose() {
+    searchController.dispose();
+    searchFocusNode.dispose();
+    _searchDebounce?.cancel();
+    super.dispose();
+  }
+
+  String? from;
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_initialLocationSet) {
       Map? arguments = ModalRoute.of(context)?.settings.arguments as Map?;
-      if (arguments != null &&
-          arguments.containsKey('latitude') &&
+      if (arguments != null) {
+        from = arguments['from'];
+        if (arguments.containsKey('latitude') &&
           arguments.containsKey('longitude') &&
           arguments['latitude'] != null &&
           arguments['longitude'] != null) {
@@ -88,6 +101,9 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
         setState(() {
           _isFetchingLocation = false;
         });
+      } else {
+        _getCurrentLocation();
+      }
       } else {
         _getCurrentLocation();
       }
@@ -172,7 +188,12 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
          if (formatedAddress!.country != null) {
            addressString += "${formatedAddress!.country}";
          }
-         searchController.text = addressString;
+         if (formatedAddress!.country != null) {
+           addressString += "${formatedAddress!.country}";
+         }
+         if (!searchFocusNode.hasFocus) {
+           searchController.text = addressString;
+         }
       }
       setState(() {});
     } catch (e) {
@@ -257,26 +278,39 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
               children: [
                 _cameraPosition == null
                     ? Center(child: UiUtils.progress())
-                    : GoogleMap(
-                  initialCameraPosition: _cameraPosition!,
-                  onMapCreated: _onMapCreated,
-                  markers: _markers,
-                  myLocationButtonEnabled: false,
-                  myLocationEnabled: true,
-                  zoomControlsEnabled: false,
-                  onTap: (latLng) {
-                    setState(() {
-                      _markers.clear();
-                      _markers.add(Marker(
-                        markerId: const MarkerId('selectedLocation'),
-                        position: latLng,
-                      ));
-                      latitude = latLng.latitude;
-                      longitude = latLng.longitude;
-                      getLocationFromLatitudeLongitude(latLng: latLng);
-                    });
-                  },
-                ),
+                      :GoogleMap(
+                    initialCameraPosition: _cameraPosition!,
+                    onMapCreated: _onMapCreated,
+                    // markers: _markers, // No markers for center pin mode
+                    markers: {},
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: true,
+                    mapToolbarEnabled: false,
+                    onCameraMove: (position) {
+                      _cameraPosition = position;
+                    },
+                    onCameraIdle: () {
+                      getLocationFromLatitudeLongitude(
+                        latLng: _cameraPosition!.target
+                      );
+                      latitude = _cameraPosition!.target.latitude;
+                      longitude = _cameraPosition!.target.longitude;
+                    },
+                    onTap: (latLng) {
+                      // Optional: Tap logic if needed, but center pin is primary
+                    },
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 40),
+                      child: Icon(
+                        Icons.location_on,
+                        size: 45,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
                 Positioned(
                     top: 20,
                     left: 20,
@@ -295,6 +329,13 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                       ),
                       child: TextField(
                         controller: searchController,
+                        focusNode: searchFocusNode,
+                        onChanged: (query) {
+                          if (_searchDebounce?.isActive ?? false) _searchDebounce!.cancel();
+                          _searchDebounce = Timer(const Duration(milliseconds: 1000), () {
+                            _searchLocation(query);
+                          });
+                        },
                         textInputAction: TextInputAction.search,
                         onSubmitted: _searchLocation,
                         decoration: InputDecoration(
@@ -341,7 +382,19 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
                 UiUtils.buildButton(
                   context,
                   onPressed: () {
-                    if (formatedAddress != null) {
+                    if (from == "addItem") {
+                       if (formatedAddress != null) {
+                         Navigator.pop(context, {
+                           "area_id": formatedAddress!.areaId,
+                           "area": formatedAddress!.area,
+                           "city": formatedAddress!.city,
+                           "state": formatedAddress!.state,
+                           "country": formatedAddress!.country,
+                           "latitude": latitude,
+                           "longitude": longitude,
+                         });
+                       }
+                    } else if (formatedAddress != null) {
                       HiveUtils.setLocation(
                           city: formatedAddress!.city,
                           state: formatedAddress!.state,

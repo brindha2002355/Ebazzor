@@ -46,6 +46,7 @@ import 'package:Ebozor/ui/screens/home/widgets/home_sections_adapter.dart';
 import 'package:Ebozor/ui/screens/home/widgets/home_shimmers.dart';
 import 'package:Ebozor/ui/screens/home/widgets/location_widget.dart';
 import 'package:Ebozor/ui/screens/home/slider_widget.dart';
+import 'package:Ebozor/ui/screens/home/widgets/verification_banner.dart';
 
 const double sidePadding = 18;
 
@@ -211,6 +212,8 @@ class HomeScreenState extends State<HomeScreen>
                           const HomeSearchField(),
                           const SliderWidget(),
                           const CategoryWidgetHome(),
+                          if(HiveUtils.isUserAuthenticated() && HiveUtils.getUserDetails().isVerified != 1)
+                          const VerificationBanner(),
                           ...List.generate(state.sections.length, (index) {
                             HomeScreenSection section = state.sections[index];
                             if (state.sections.isNotEmpty) {

@@ -20,6 +20,10 @@ class NotificationsRepository {
         },
       ).toList();
 
+      print("///////////////////////////");
+      print("notification response:${response}");
+    print("///////////////////////////");
+
       return DataOutput(total: response['data']['total'], modelList: modelList);
     } catch (e) {
       rethrow;
