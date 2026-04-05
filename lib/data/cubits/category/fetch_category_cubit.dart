@@ -67,7 +67,7 @@ class FetchCategorySuccess extends FetchCategoryState {
       hasError: map['hasError'] as bool,
       categories: List<CategoryModel>.from(
         (map['categories']).map<CategoryModel>(
-          (x) => CategoryModel.fromJson(x as Map<String, dynamic>),
+              (x) => CategoryModel.fromJson(x as Map<String, dynamic>),
         ),
       ),
     );
@@ -101,7 +101,7 @@ class FetchCategoryCubit extends Cubit<FetchCategoryState>{
       emit(FetchCategoryInProgress());
 
       DataOutput<CategoryModel> categories =
-          await _categoryRepository.fetchCategories(page: 1);
+      await _categoryRepository.fetchCategories(page: 1);
 
 
       emit(FetchCategorySuccess(
@@ -131,7 +131,7 @@ class FetchCategoryCubit extends Cubit<FetchCategoryState>{
         }
         emit((state as FetchCategorySuccess).copyWith(isLoadingMore: true));
         DataOutput<CategoryModel> result =
-            await _categoryRepository.fetchCategories(
+        await _categoryRepository.fetchCategories(
           page: (state as FetchCategorySuccess).page + 1,
         );
 
@@ -139,7 +139,7 @@ class FetchCategoryCubit extends Cubit<FetchCategoryState>{
         categoryState.categories.addAll(result.modelList);
 
         List<String> list =
-            categoryState.categories.map((e) => e.url!).toList();
+        categoryState.categories.map((e) => e.url!).toList();
         await HelperUtils.precacheSVG(list);
 
         emit(FetchCategorySuccess(

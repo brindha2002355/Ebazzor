@@ -33,12 +33,13 @@ import 'dart:ui' as ui;
 
 class UiUtils {
   static SvgPicture getSvg(String path,
-      {Color? color, BoxFit? fit, double? width, double? height}) {
+      {Color? color, BoxFit? fit, double? width, double? height,  Key? key,}) {
     return SvgPicture.asset(
       path,
       colorFilter:
           color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
       fit: fit ?? BoxFit.contain,
+      key: key,
       width: width,
       height: height,
     );

@@ -29,35 +29,53 @@ class ApiException implements Exception {
 }
 
 class Api {
-  static Map<String, dynamic> headers() {
-    if (!HiveUtils.isUserAuthenticated()) {
-      if (HiveUtils.getLanguage() != null ||
-          HiveUtils.getLanguage()?['data'] != null) {
-        return {
-          "Accept": "application/json",
-          "Content-Language": HiveUtils.getLanguage()['code'] ?? ""
-        };
-      } else {
-        return {};
-      }
-    } else {
-
-      //here token written
-      String? jwtToken = HiveUtils.getJWT();
-
-
-      print("jwt token****$jwtToken");
-
-
-      return {
-        "Authorization": "Bearer $jwtToken",
-        "Accept": "application/json",
-        "Content-Language": HiveUtils.getLanguage()['code'] ?? ""
-      };
-    }
-  }
+  // static Map<String, dynamic> headers() {
+  //   if (!HiveUtils.isUserAuthenticated()) {
+  //     if (HiveUtils.getLanguage() != null &&
+  //         HiveUtils.getLanguage()?['data'] != null) {
+  //       return {
+  //         "Accept": "application/json",
+  //         "Content-Language": HiveUtils.getLanguage()['code'] ?? ""
+  //       };
+  //     } else {
+  //       return {};
+  //     }
+  //   } else {
+  //
+  //     //here token written
+  //     String? jwtToken = HiveUtils.getJWT();
+  //
+  //
+  //     print("jwt token****$jwtToken");
+  //
+  //
+  //     return {
+  //       "Authorization": "Bearer $jwtToken",
+  //       "Accept": "application/json",
+  //       "Content-Language": HiveUtils.getLanguage()['code'] ?? ""
+  //     };
+  //   }
+  // }
 
 //Place API
+  static Map<String, dynamic> headers() {
+    final language = HiveUtils.getLanguage();
+    final jwtToken = HiveUtils.getJWT();
+
+    print("jwt token****$jwtToken");
+    print("language****$language");
+
+    Map<String, dynamic> header = {
+      "Accept": "application/json",
+      "Content-Language": language?['code'] ?? ""
+    };
+
+    if (HiveUtils.isUserAuthenticated() && jwtToken != null) {
+      header["Authorization"] = "Bearer $jwtToken";
+    }
+
+    return header;
+  }
   static const String _placeApiBaseUrl =
       "https://maps.googleapis.com/maps/api/place/";
   static String placeApiKey = "key";

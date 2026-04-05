@@ -203,7 +203,7 @@ class LoginScreenState extends State<SignUpMainScreen> {
                 statusBarColor: context.color.backgroundColor,
               ),
               child: Scaffold(
-                backgroundColor: context.color.backgroundColor,
+                backgroundColor: Colors.white,
                 bottomNavigationBar: termAndPolicyTxt(),
                 body: Builder(builder: (context) {
                   return Form(

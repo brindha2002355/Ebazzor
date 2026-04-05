@@ -4,6 +4,7 @@ import 'package:Ebozor/firebase_options.dart';
 import 'package:Ebozor/main.dart';
 import 'package:Ebozor/ui/screens/widgets/errors/something_went_wrong.dart';
 import 'package:Ebozor/utils/LocalStoreage/hive_keys.dart';
+import 'package:Ebozor/utils/LocalStoreage/hive_utils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -49,26 +50,55 @@ void initApp() async {
       .registerFactory('listTile', factoryExample);*/
 
 
+  // var box = await Hive.openBox('languageBox');
+  // await Hive.initFlutter();
+  // await Hive.openBox(HiveKeys.userDetailsBox);
+  // await Hive.openBox(HiveKeys.authBox);
+  // await box.clear();
+  // await Hive.openBox(HiveKeys.languageBox);
+  // await Hive.openBox(HiveKeys.themeBox);
+  // await Hive.openBox(HiveKeys.svgBox);
+  // await Hive.openBox(HiveKeys.jwtToken);
+  // //Hive.registerAdapter(ItemModelAdapter()); // Register your adapter
+  // await Hive.openBox(HiveKeys.historyBox);
+  //
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+  //   (_) async {
+  //     SystemChrome.setSystemUIOverlayStyle(
+  //         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  //
+  //     runApp(const EntryPoint());
+  //   },
+  // );
 
-  await Hive.initFlutter();
-  await Hive.openBox(HiveKeys.userDetailsBox);
-  await Hive.openBox(HiveKeys.authBox);
-  await Hive.openBox(HiveKeys.languageBox);
-  await Hive.openBox(HiveKeys.themeBox);
-  await Hive.openBox(HiveKeys.svgBox);
-  await Hive.openBox(HiveKeys.jwtToken);
-  //Hive.registerAdapter(ItemModelAdapter()); // Register your adapter
-  await Hive.openBox(HiveKeys.historyBox);
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (_) async {
-      SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-      runApp(const EntryPoint());
-    },
-  );
-}
+
+
+
+
+    // ✅ Hive Init
+    await Hive.initFlutter();
+
+    // ✅ Open and clear boxes properly
+    var languageBox = await Hive.openBox(HiveKeys.languageBox);
+    await languageBox.clear(); // clear old language data
+
+    await Hive.openBox(HiveKeys.userDetailsBox);
+    await Hive.openBox(HiveKeys.authBox);
+    await Hive.openBox(HiveKeys.themeBox);
+    await Hive.openBox(HiveKeys.svgBox);
+    await Hive.openBox(HiveKeys.jwtToken);
+    await Hive.openBox(HiveKeys.historyBox);
+
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+          (_) async {
+        SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+        runApp(const EntryPoint());
+      },
+    );
+  }
+
 
 
 

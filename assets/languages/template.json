@@ -243,7 +243,9 @@
   "resendCodeBtnLbl": "Resend code",
   "resendMessageApi": "Resend code in",
   "resendMessageApiDuration": " Sec",
-  "searchHintLbl": "Search any item..",
+
+
+  "searchHintLbl": "Search %s",
   "seeAll": "See All",
   "selectLocation": "Select Location",
   "selectLocationOptional": "Select Location(optional)",
@@ -260,6 +262,7 @@
   "listedBy": "Listed By",
   "noChats": "No chat found",
   "loading": "Loading...",
+  "search": "search",
   "change": "Change",
   "changeItemStatus": "Change Item Status",
   "sold": "Sold",

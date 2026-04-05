@@ -48,7 +48,7 @@ import 'package:Ebozor/ui/screens/home/widgets/location_widget.dart';
 import 'package:Ebozor/ui/screens/home/slider_widget.dart';
 import 'package:Ebozor/ui/screens/home/widgets/verification_banner.dart';
 
-const double sidePadding = 18;
+const double sidePadding =12;
 
 class HomeScreen extends StatefulWidget {
   final String? from;
@@ -186,7 +186,7 @@ class HomeScreenState extends State<HomeScreen>
                     : const SizedBox.shrink()),*/
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
         ),*/
-        backgroundColor: context.color.backgroundColor,
+        backgroundColor: Colors.white,
         body: RefreshIndicator(
           key: _refreshIndicatorKey,
 
@@ -209,7 +209,7 @@ class HomeScreenState extends State<HomeScreen>
                         mainAxisSize: MainAxisSize.min,
                         children: [
      // seach widget at home scree
-                          const HomeSearchField(),
+                      const    HomeSearchField(),
                           const SliderWidget(),
                           const CategoryWidgetHome(),
                           if(HiveUtils.isUserAuthenticated() && HiveUtils.getUserDetails().isVerified != 1)

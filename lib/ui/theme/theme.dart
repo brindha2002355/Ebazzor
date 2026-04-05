@@ -84,7 +84,7 @@ extension ColorPrefs on ColorScheme {
       lightColor: lightTextColor, darkColor: lightTextColorDarkTheme);
 
   Color get borderColor => _getColor(brightness,
-      lightColor: widgetsBorderColorLight, darkColor: secondaryColorDark.withOpacity(0.2));
+      lightColor: widgetsBorderColorLight, darkColor: secondaryColorDark.withOpacity(0.5));
 
   Color get chatSenderColor => _getColor(brightness,
       lightColor: senderChatColor, darkColor: darkSenderChatColor);

@@ -141,7 +141,7 @@ class FetchSubCategoriesCubit extends Cubit<FetchSubCategoriesState>
         categoryState.categories.addAll(result.modelList);
 
         List<String> list = categoryState.categories.map((e) => e.url!).toList();
-        await HelperUtils.precacheSVG(list);
+        await HelperUtils. precacheSVG(list);
 
         emit(FetchSubCategoriesSuccess(
             isLoadingMore: false,
