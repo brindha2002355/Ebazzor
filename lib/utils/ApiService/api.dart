@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Ebozor/ui/screens/home/widgets/subCategoryFilterScreen.dart';
 import 'package:dio/dio.dart';
 import 'package:Ebozor/data/cubits/system/user_details.dart';
 import 'package:Ebozor/utils/constant.dart';
@@ -88,12 +89,14 @@ class Api {
 //
 
   static String stripeIntentAPI = "https://api.stripe.com/v1/payment_intents";
-
+  static String SubCategoryFilterScreen = "http://143.110.251.34/api/get-category-filters?";
 //api fun
   static String loginApi = "user-signup";
   static String updateProfileApi = "update-profile";
   static String getSliderApi = "get-slider";
-  static String getCategoriesApi = "get-categories";
+  static String getCategoriesApi =
+      "front_categories";
+    //  "get-categories";
   static String getItemApi = "get-item";
   static String getMyItemApi = "my-items";
   static String getNotificationListApi = "get-notification-list";
@@ -270,7 +273,8 @@ class Api {
     dynamic parameter,
     Options? options,
     bool? useBaseUrl,
-  }) async {
+  }) async
+  {
     try {
       final Dio dio = Dio();
       dio.interceptors.add(NetworkRequestInterseptor());
@@ -372,7 +376,8 @@ class Api {
   static Future<Map<String, dynamic>> delete(
       {required String url,
       Map<String, dynamic>? queryParameters,
-      bool? useBaseUrl}) async {
+      bool? useBaseUrl}) async
+  {
     try {
 //
       final Dio dio = Dio();

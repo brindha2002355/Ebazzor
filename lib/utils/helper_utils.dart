@@ -162,7 +162,6 @@ class HelperUtils {
     }
   }
 
-
   static int comparableVersion(String version) {
     //removing dot from version and parsing it into int
     String plain = version.replaceAll(".", "");

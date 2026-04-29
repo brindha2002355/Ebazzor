@@ -1,6 +1,7 @@
 import 'package:Ebozor/app/routes.dart';
 import 'package:Ebozor/data/cubits/category/fetch_category_cubit.dart';
 import 'package:Ebozor/ui/screens/main_activity.dart';
+import 'package:Ebozor/ui/screens/sub_category/sub_category_filter_screen.dart';
 import 'package:Ebozor/ui/theme/theme.dart';
 import 'package:Ebozor/utils/app_icon.dart';
 import 'package:Ebozor/utils/extensions/extensions.dart';
@@ -53,36 +54,95 @@ class CategoryWidgetHome extends StatelessWidget {
                 // }
 
                 final category = state.categories[index];
+                print("BUILDING CATEGORY 👉 ${category.name} | ${category.url}");
+                print("IMAGE URL 👉 ${category.url}");
 
                 return CategoryHomeCard(
-                  title: category.name!,
-                  url: category.url!,
-                  onTap: () {
-                    if (category.children!.isNotEmpty) {
-                      Navigator.pushNamed(
-                        context,
 
-                        ///////// categories egga send aguthu
-                        Routes.subCategoryScreen,
-                        arguments: {
-                          "categoryList": category.children,
-                          "catName": category.name,
-                          "catId": category.id,
-                          "categoryIds": [category.id.toString()],
-                        },
-                      );
-                    } else {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.itemsList,
-                        arguments: {
-                          "catID": category.id.toString(),
-                          "catName": category.name,
-                          "categoryIds": [category.id.toString()],
-                        },
-                      );
+                 title: category.name ?? "",
+                 url: category.url ?? "",
+                 // title: "Test",
+                 // url: "https://upload.wikimedia.org/wikipedia/commons/6/6b/Bitmap_VS_SVG.svg",
+                 //   print("CARD IMAGE 👉 $url");
+                 //  onTap: () {
+                 //
+                 //    if (category.children!.isNotEmpty) {
+                 //
+                 //      Navigator.pushNamed(
+                 //        context,
+                 //
+                 //        ///////// categories egga send aguthu
+                 //        Routes.subCategoryScreen,
+                 //        arguments: {
+                 //          "categoryList": category.children,
+                 //          "catName": category.name,
+                 //          "catId": category.id,
+                 //          "categoryIds": [category.id.toString()],
+                 //        },
+                 //      );
+                 //    } else {
+                 //      Navigator.pushNamed(
+                 //        context,
+                 //        Routes.itemsList,
+                 //        arguments: {
+                 //          "catID": category.id.toString(),
+                 //          "catName": category.name,
+                 //          "categoryIds": [category.id.toString()],
+                 //        },
+                 //      );
+                 //
+                 //    }
+                 //  },
+
+                    onTap: () {
+
+                      const filterCategoryIds = [65, 68, 139, 143];
+
+                      /// ✅ FILTER PAGE
+                      if (filterCategoryIds.contains(category.id)) {
+
+                        Navigator.pushNamed(
+                          context,
+                          Routes.filterpage,
+                          arguments: category,
+                          // arguments: {
+                          //   "categoryList": category.children,
+                          //   "catName": category.name,
+                          //   "catId": category.id,
+                          // },
+                        );
+                      }
+
+                      /// ✅ SUB CATEGORY
+                      else if (category.children != null &&
+                          category.children!.isNotEmpty) {
+
+                        Navigator.pushNamed(
+                          context,
+                          Routes.subCategoryScreen,
+                          arguments: {
+                            "categoryList": category.children,
+                            "catName": category.name,
+                            "catId": category.id,
+                            "categoryIds": [category.id.toString()],
+                          },
+                        );
+                      }
+
+                      /// ✅ ITEM LIST
+                      else {
+
+                        Navigator.pushNamed(
+                          context,
+                          Routes.itemsList,
+                          arguments: {
+                            "catID": category.id.toString(),
+                            "catName": category.name,
+                            "categoryIds": [category.id.toString()],
+                          },
+                        );
+                      }
                     }
-                  },
                 );
               },
             ),

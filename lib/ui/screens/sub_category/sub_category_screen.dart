@@ -191,85 +191,162 @@ class _CategoryListState extends State<SubCategoryScreenOne>
                       itemBuilder: (context, index) {
                         CategoryModel category =
                         widget.categoryList[index];
-
+                      //  final category = widget.categoryList[index];
                         return ListTile(
                           onTap: () {
-                            if (widget.categoryList[index].children!
-                                .isEmpty &&
-                                widget.categoryList[index]
-                                    .subcategoriesCount ==
-                                    0) {
+                            final children = category.children ?? [];
+                            final subCount = category.subcategoriesCount ?? 0;
+
+                            if (children.isEmpty && subCount == 0) {
                               Navigator.pushNamed(
-                                  context, Routes.itemsList,
-                                  arguments: {
-                                    'catID': widget.categoryList[index].id
-                                        .toString(),
-                                    'catName':
-                                    widget.categoryList[index].name,
-                                    "categoryIds": [
-                                      ...widget.categoryIds,
-                                      widget.categoryList[index].id
-                                          .toString()
-                                    ]
-                                  });
+                                context,
+                                Routes.itemsList,
+                                arguments: {
+                                  'catID': category.id?.toString() ?? "",
+                                  'catName': category.name ?? "",
+                                  "categoryIds": [
+                                    ...widget.categoryIds,
+                                    category.id?.toString() ?? ""
+                                  ]
+                                },
+                              );
                             } else {
                               Navigator.pushNamed(
-                                  context, Routes.subCategoryScreen,
-                                  arguments: {
-                                    "categoryList": widget
-                                        .categoryList[index].children,
-                                    "catName":
-                                    widget.categoryList[index].name,
-                                    "catId":
-                                    widget.categoryList[index].id,
-                                    "categoryIds": [
-                                      ...widget.categoryIds,
-                                      widget.categoryList[index].id
-                                          .toString()
-                                    ]
-                                  });
+                                context,
+                                Routes.subCategoryScreen,
+                                arguments: {
+                                  "categoryList": children,
+                                  "catName": category.name ?? "",
+                                  "catId": category.id ?? 0,
+                                  "categoryIds": [
+                                    ...widget.categoryIds,
+                                    category.id?.toString() ?? ""
+                                  ]
+                                },
+                              );
                             }
                           },
+
                           leading: FittedBox(
                             child: Container(
-                                width: 40,
-                                height: 40,
-                                clipBehavior: Clip.antiAlias,
-                                padding: const EdgeInsets.all(0),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: context.color.territoryColor
-                                        .withOpacity(0.1)),
-                                child: ClipRRect(
-                                  child: UiUtils.imageType(
-                                    category.url!,
-                                    color: context.color.territoryColor,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )),
+                              width: 40,
+                              height: 40,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: context.color.territoryColor.withOpacity(0.1),
+                              ),
+                              child: ClipRRect(
+                                child: UiUtils.imageType(
+                                  category.url ?? "", // ✅ FIX
+                                  color: context.color.territoryColor,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
                           ),
+
                           title: Text(
-                            category.name!,
-                            textAlign: TextAlign.start,
+                            category.name ?? "No Name", // ✅ FIX
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           )
                               .color(context.color.textDefaultColor)
                               .size(context.font.normal),
+
                           trailing: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: context.color.borderColor
-                                      .darken(10)),
-                              child: Icon(
-                                Icons.chevron_right_outlined,
-                                color: context.color.textDefaultColor,
-                              )),
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: context.color.borderColor.darken(10),
+                            ),
+                            child: Icon(
+                              Icons.chevron_right_outlined,
+                              color: context.color.textDefaultColor,
+                            ),
+                          ),
                         );
+                        //   ListTile(
+                        //   onTap: () {
+                        //     if (widget.categoryList[index].children!
+                        //         .isEmpty &&
+                        //         widget.categoryList[index]
+                        //             .subcategoriesCount ==
+                        //             0) {
+                        //       Navigator.pushNamed(
+                        //           context, Routes.itemsList,
+                        //           arguments: {
+                        //             'catID': widget.categoryList[index].id
+                        //                 .toString(),
+                        //             'catName':
+                        //             widget.categoryList[index].name,
+                        //             "categoryIds": [
+                        //               ...widget.categoryIds,
+                        //               widget.categoryList[index].id
+                        //                   .toString()
+                        //             ]
+                        //           });
+                        //     } else {
+                        //       Navigator.pushNamed(
+                        //           context, Routes.subCategoryScreen,
+                        //           arguments: {
+                        //             "categoryList": widget
+                        //                 .categoryList[index].children,
+                        //             "catName":
+                        //             widget.categoryList[index].name,
+                        //             "catId":
+                        //             widget.categoryList[index].id,
+                        //             "categoryIds": [
+                        //               ...widget.categoryIds,
+                        //               widget.categoryList[index].id
+                        //                   .toString()
+                        //             ]
+                        //           });
+                        //     }
+                        //   },
+                        //   leading: FittedBox(
+                        //     child: Container(
+                        //         width: 40,
+                        //         height: 40,
+                        //         clipBehavior: Clip.antiAlias,
+                        //         padding: const EdgeInsets.all(0),
+                        //         decoration: BoxDecoration(
+                        //             shape: BoxShape.circle,
+                        //             color: context.color.territoryColor
+                        //                 .withOpacity(0.1)),
+                        //         child: ClipRRect(
+                        //           child: UiUtils.imageType(
+                        //             category.url!,
+                        //             color: context.color.territoryColor,
+                        //             width: double.infinity,
+                        //             height: double.infinity,
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //         )),
+                        //   ),
+                        //   title: Text(
+                        //     category.name!,
+                        //     textAlign: TextAlign.start,
+                        //     maxLines: 2,
+                        //     overflow: TextOverflow.ellipsis,
+                        //   )
+                        //       .color(context.color.textDefaultColor)
+                        //       .size(context.font.normal),
+                        //   trailing: Container(
+                        //       width: 32,
+                        //       height: 32,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(8),
+                        //           color: context.color.borderColor
+                        //               .darken(10)),
+                        //       child: Icon(
+                        //         Icons.chevron_right_outlined,
+                        //         color: context.color.textDefaultColor,
+                        //       )),
+                        // );
                       },
                     )
                         : fetchSubCategoriesData()

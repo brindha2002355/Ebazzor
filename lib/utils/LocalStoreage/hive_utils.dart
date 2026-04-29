@@ -13,7 +13,7 @@ class HiveUtils {
   ///private constructor
   HiveUtils._();
 
-  static String getJWT() {
+  static String? getJWT() {
     return Hive.box(HiveKeys.userDetailsBox).get(HiveKeys.jwtToken);
   }
 

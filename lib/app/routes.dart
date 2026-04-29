@@ -4,6 +4,7 @@ import 'package:Ebozor/ui/screens/home/widgets/postedSinceFilter.dart';
 import 'package:Ebozor/ui/screens/home/widgets/subCategoryFilterScreen.dart';
 import 'package:Ebozor/ui/screens/item/add_item_screen/widgets/pdf_viewer.dart';
 import 'package:Ebozor/ui/screens/item/viewAll.dart';
+import 'package:Ebozor/ui/screens/sub_category/sub_category_filter_screen.dart';
 import 'package:Ebozor/ui/screens/sub_category/sub_category_screen.dart';
 import 'package:Ebozor/ui/screens/auth/login/forgot_password.dart';
 import 'package:Ebozor/ui/screens/auth/sign_up/signup_main_screen.dart';
@@ -69,7 +70,7 @@ import 'package:Ebozor/data/model/item/item_model.dart';
 class Routes {
   //private constructor
   //Routes._();
-
+  static const filterpage = 'filterpage';
   static const splash = 'splash';
   static const onboarding = 'onboarding';
   static const login = 'login';
@@ -310,6 +311,8 @@ class Routes {
         return NearbyLocationScreen.route(routeSettings);
       case myReviewsScreen:
         return MyReviewScreen.route(routeSettings);
+      case filterpage:
+        return FiltersPage.route(routeSettings);
 
       /*case payStackWebViewScreen:
         return PaystackWebView.route(routeSettings);*/
